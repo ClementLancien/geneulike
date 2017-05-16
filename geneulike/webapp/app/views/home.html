@@ -1,0 +1,179 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+
+<div ng-if="msg" class="alert alert-warning">
+    {{msg}}
+</div>
+<link href="styles/justified-nav.css" rel="stylesheet">
+<div class="well">
+
+  <legend><h1 style="text-align: center">Welcome to GeneULike</h1></legend>
+  <p>GeneULike repository provides a flexible and open design that facilitates online submission by the community, storage and retrieval of genes's lists,
+          defined as the description of physiological, cellular, molecular or (transcript-/epigen-)omics effects on individuals or their descendants, after exposure to single or combined environmental factors,
+          including chemical (e.g. pesticides, plasticizers, drugs, endocrine disruptors), physical (e.g. radiations, temperature) or biological (e.g. pathogens, parasites) factors.
+          GeneULike also intends to serve as a warehouse for omics tools which could lean on the deposited genes lists deposited by the community.</p>
+
+
+</div>
+
+
+ <div id="page-wrapper">
+
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-eye fa-2x"></i>
+                                </div>
+                                <div class="col-md-10 text-right">
+                                    <div class="huge">GeneULike Overview</div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#/tutorials/overview">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-user-md fa-2x"></i>
+                                </div>
+                                <div class="col-xs-10 text-right">
+                                    <div class="huge">About us</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#/about">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-puzzle-piece fa-2x"></i>
+                                </div>
+                                <div class="col-md-10 text-right">
+                                    <div class="huge">Get involved</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#/involved">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-support fa-2x"></i>
+                                </div>
+                                <div class="col-md-10 text-right">
+                                    <div class="huge"></div>
+                                    <div>Help, tutorials and FAQ</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+
+<div class="well">
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-default" style="margin-top:20px;">
+        <div class="panel-heading">
+            Last Projects
+        </div>
+        <div class="panel-body fixed-panel">
+          <div ng-repeat="sign in last_sign">
+            <h4>{{sign.id}} - {{sign.title}}</h4>
+            <ul>
+              <li><b>Description :</b> {{sign.description}}</li>
+              <li><b>Studies :</b> <span ng-repeat="stud in sign.studies.split(',')"><a href="#/browse?dataset={{stud}}">{{stud}}</a> </span></li>
+              <li><b>Signatures :</b> <span ng-repeat="sig in sign.signatures.split(',')"><a href="#/browse?dataset={{sig}}">{{sig}}</a> </span></li>
+              <li>(<a href="#/browse?dataset={{sign.id}}">view</a>)</li>
+            </ul>
+            <hr>
+
+          </div>
+        
+        </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-default" style="margin-top:20px;">
+        <div class="panel-heading">
+            Top project like
+        </div>
+        <div class="panel-body fixed-panel">
+          <div ng-repeat="sign in last_sign">
+            <h4>{{sign.id}} - {{sign.title}}</h4>
+            <ul>
+              <li><b>Description :</b> {{sign.description}}</li>
+              <li><b>Studies :</b> <span ng-repeat="stud in sign.studies.split(',')"><a href="#/browse?dataset={{stud}}">{{stud}}</a> </span></li>
+              <li><b>Signatures :</b> <span ng-repeat="sig in sign.signatures.split(',')"><a href="#/browse?dataset={{sig}}">{{sig}}</a> </span></li>
+              <li>(<a href="#/browse?dataset={{sign.id}}">view</a>)</li>
+            </ul>
+            <hr>
+
+          </div>
+        
+        </div>
+    </div>
+  </div>
+<div class="col-md-4">
+    <div class="panel panel-default" style="margin-top:20px;">
+        <div class="panel-heading">
+            ???
+        </div>
+        <div class="panel-body fixed-panel">
+          <div ng-repeat="sign in last_sign">
+            <h4>{{sign.id}} - {{sign.title}}</h4>
+            <ul>
+              <li><b>Description :</b> {{sign.description}}</li>
+              <li><b>Studies :</b> <span ng-repeat="stud in sign.studies.split(',')"><a href="#/browse?dataset={{stud}}">{{stud}}</a> </span></li>
+              <li><b>Signatures :</b> <span ng-repeat="sig in sign.signatures.split(',')"><a href="#/browse?dataset={{sig}}">{{sig}}</a> </span></li>
+              <li>(<a href="#/browse?dataset={{sign.id}}">view</a>)</li>
+            </ul>
+            <hr>
+
+          </div>
+        
+        </div>
+    </div>
+  </div>
+</div>
