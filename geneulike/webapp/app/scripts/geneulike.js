@@ -12,7 +12,7 @@ var app = angular.module('geneulike', [
     'ngSanitize',
     'ngCookies',
     'angular-js-xlsx',
-    'ngRoute','angular-venn',
+    'ngRoute','angular-venn','angularFileUpload',
     'ui.bootstrap',
     'datatables',
     'ui.tree',
@@ -1541,8 +1541,8 @@ app.controller('compareCtrl',
 });
 
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location,Auth, User,Upload,ngDialog) {
-        //$scope.uploader = new fileUploader();
+    function ($scope, $rootScope, $routeParams, $location,Auth, User,Upload,FileUploader,ngDialog) {
+        $scope.uploader = new FileUploader();
 
 });
 
