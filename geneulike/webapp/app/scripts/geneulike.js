@@ -1541,10 +1541,201 @@ app.controller('compareCtrl',
 });
 
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location,Auth, User,Upload,FileUploader,ngDialog) {
-        $scope.uploader = new FileUploader();
+    function ($scope, $rootScope, $routeParams, $location,Auth, User,Upload,FileUploader,ngDialog, $timeout) {
 
+        // $scope.listOfFiles=[];
+        // console.info('length is : ', $scope.listOfFiles.length, $scope.listOfFiles);
+        var user;
+        User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+             user = data;
+            console.log(user);
+        });
+
+        $scope.auth_user = Auth.getUser();
+        console.log(user);
+
+        var uploader = $scope.uploader = new FileUploader({
+
+        });
+
+        uploader.onBeforeUploadItem = function(){
+            
+             //item.formData = [{ uid: $scope.user.id }];
+            url:'/user/create_Excel'
+        //     //formData = [{  'file' : item }];
+        //     //$timeout(console.log('alert'),1750);
+              
+         };
+        uploader.onSuccessItem = function(fileItem){
+            console.log("Selected file has been uploaded successfully");
+            console.info(fileItem);
+        };
+        uploader.onAfterAddingFile = function(fileItem){
+
+            console.info('onAfterAddingFile', fileItem);
+        };
+        uploader.onErrorItem = function(item,response, status, headers){
+            console.info(status);
+            console.info(response);
+        };
 });
+//         $scope.add = function(filesToAdd){
+//             //console.info('ici' , filesToAdd.length);
+//             //return console.info('la' , $scope.listOfFiles.length, $scope.listOfFiles);
+//             var len = $scope.listeOfFiles;
+//             console.info('la longueur de la liste est de ', len);
+//             if(len == null){
+//                 len=0;
+//             }
+//             console.log(filesToAdd);
+
+//             if(len == 0 && filesToAdd.length == 1){
+                
+//                $scope.listOfFiles.push({'id' : 1 , 'file' : filesToAdd[0], 'filename' : filesToAdd[0]['name']});
+//                console.info('' , i);
+//             }
+//             else if (len == 0 && filesToAdd.length >= 1 ){
+
+//                 console.info('else if');
+//                 for(var i = 0; i < filesToAdd.length ; i++){
+//                     $scope.listOfFiles.push({'id' : len+i+1 , 'file' : filesToAdd[i], 'filename' : filesToAdd[i]['name']});
+//                 }
+//             }
+//             else{
+//                 console.info('else' , filesToAdd.length);
+//                 for(var i = 0; i < filesToAdd.length ; i++){
+//                     console.info('len ' , len);
+//                     $scope.listOfFiles.push({'id' : len + i + 1 , 'file': filesToAdd[i], 'filename' : filesToAdd[i]['name']});
+//                 }
+//             };
+//         };
+    
+// });
+    
+
+        // console.log(uploader);
+        // uploader.onBeforeUploadItem = function(){
+            
+        //     //item.formData = [{ uid: $scope.user.id }];
+        //     //url:'/user/create_Excel',
+        //     //formData = [{  'file' : item }];
+        //     //$timeout(console.log('alert'),1750);
+              
+        // };
+        // // }.$promise.then(function(data){
+        // //     $scope.message=data;
+        // // });
+        // uploader.onBeforeUploadItem = function (item) {
+        //     //item.formData.push(JSON.stringify(this.data));
+        //     //console.info(JSON.stringify(item));
+           
+        // };
+
+        // uploader.onSuccessItem = function(fileItem){
+        //     console.log("Selected file has been uploaded successfully");
+        //     console.info(getType(item));
+        // };
+        // uploader.onAfterAddingFile = function(fileItem){
+
+        //     console.info('onAfterAddingFile', fileItem);
+        // };
+        // uploader.onErrorItem = function(item, response, status, headers){
+        //     console.info(status);
+        //     console.info(response);
+        // };
+
+        // $scope.upExcel = function (file){
+        //     User.project_save({'uid': $scope.user.id, 'file': file}).$promise.then(function(data){
+        //         alert(data.msg);
+        //     });
+
+        //   console.log(file['headers']);
+        //     ngDialog.open({ template: 'saving', className: 'ngdialog-theme-default'})
+        //     User.project_save({'uid': $scope.user.id, 'file': obj}).$promise.then(function(data){
+        //         alert(data.msg);
+        //         ngDialog.close();
+        // });
+      
+
+
+
+
+
+        //$scope.user = 'null'
+        // User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+        //    var user = data;
+        //    //console.log('is :', $scope.user.id)
+        //  });
+        // var uploader = $scope.uploader = new FileUploader();
+
+
+        // uploader.onAfterAddingFile = function(fileItem) {
+        //     url:'/upload/'+user['id']+'/excelupload';
+        //     console.info('onAfterAddingFile', fileItem['_file']),
+        //     console.info('onAfterAddingFile', uploader.isFile(fileItem['_file'])),
+        //     console.info(fileItem['file']);
+        // };
+        // uploader.onBeforeUploadItem = function(fileItem){
+        //     url:'/upload/'+user['id']+'/excelupload';
+        //     uploader.success(function(data){
+        //         $scope.danger=data;
+        //     });
+        // };
+        // var uploader = $scope.uploader = new FileUploader(
+        //     {
+        //     url: '/var/' //set default url
+        //     });
+        // $scope.user = null;
+
+        // User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+        //     $scope.user = data;
+        // });
+        // $scope.message=uploader;
+
+        //INSERT FUNCTION UPLOAD EXCEL FILE
+        //use user id to upload en read excel file
+         // $scope.upload = function() {
+         //    for (var i = uploader.length - 1; i >= 0; i--) {
+         //        console.log(uploader[i]);
+         //    };};
+            ////console.log(signature_file);
+      //       var resultInfo={'error':"",'critical':""};
+      //       Upload.upload({
+      //           url: '/upload/'+$scope.user.id+'/excelupload',
+      //           fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+      //           file: excel_file
+      //       }).progress(function (evt) {
+      //           var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      //           ngDialog.open({ template: 'checking', className: 'ngdialog-theme-default'})
+      //           console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+      //       }).success(function (data, status, headers, config) {
+      //           if(data.status == '0'){
+      //             console.log('file ' + config.file.name + ' uploaded.');
+      //             console.log(data.error_assay);
+      //             resultInfo['error_p'] = data.error_project;
+      //             resultInfo['error_s'] = data.error_study;
+      //             resultInfo['error_a'] = data.error_assay;
+      //             resultInfo['error_f'] = data.error_factor;
+      //             resultInfo['error_sig'] = data.error_signature;
+      //             resultInfo['critical'] = data.critical;
+      //             resultInfo['file'] = data.file;
+      //             ngDialog.close();
+      //             ngDialog.open({ template: 'firstDialogId', scope: $scope, className: 'ngdialog-theme-default',data: resultInfo})
+      //           }
+      //           if (data.status == '1'){
+      //             alert(data.msg);
+      //           }
+                
+                
+      //       }).error(function (data, status, headers, config) {
+      //           ////console.log('error status: ' + status);
+      //       })
+      //       console.log(resultInfo);
+            
+      // };
+
+
+// });
 
 
 

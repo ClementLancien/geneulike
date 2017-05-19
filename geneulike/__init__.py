@@ -71,6 +71,7 @@ def main(global_config, **settings):
     config.add_route('update_dataset','update')
     config.add_route('ontologies','ontologies')
     config.add_route('search', '/search')
+
     config.add_route('convert', '/convert')
     config.add_route('run', '/run')
     config.add_route('1', '/1')
@@ -82,10 +83,14 @@ def main(global_config, **settings):
     config.add_route('getjob','/getjob')
     config.add_route('readresult','/readresult')
     config.add_route('download', '/dataset/{dataset}/download')
-    config.add_route('excel_upload', '/upload/{id}/excelupload')
+    #config.add_route('excel_upload', '/upload/{id}/excelupload')
+    config.add_route('createExcel', '/user/create_Excel')
+    
+
     config.add_route('file_upload','/upload/{uid}/{sid}/file_upload')
     config.add_route('file_signature', '/signature/{project}/{signature}/{file}/download')
     config.add_route('file_dataset','/dataset_download/{dir}/{file}')
+   
 
 
     #config.add_route('dataset_signature_download', '/user/{uid}/dataset/{dataset}/study/{treatment}/download/{signature}')

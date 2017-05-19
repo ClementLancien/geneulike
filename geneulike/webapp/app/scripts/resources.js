@@ -162,6 +162,10 @@
                 method: 'POST',
                 isArray: false,
                 cache: false
+            },
+            create_Excel: {
+                url: '/user/create_Excel',
+                method: 'POST',
             }
         });
     }
