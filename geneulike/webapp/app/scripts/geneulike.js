@@ -1558,26 +1558,26 @@ app.controller('createCtrl',
 
         });
 
-        uploader.onBeforeUploadItem = function(){
+        // uploader.onBeforeUploadItem = function(){
             
-             //item.formData = [{ uid: $scope.user.id }];
-            url:'/user/create_Excel'
-        //     //formData = [{  'file' : item }];
-        //     //$timeout(console.log('alert'),1750);
+        //      //item.formData = [{ uid: $scope.user.id }];
+        //     url:'/user/create_Excel'
+        // //     //formData = [{  'file' : item }];
+        // //     //$timeout(console.log('alert'),1750);
               
-         };
-        uploader.onSuccessItem = function(fileItem){
-            console.log("Selected file has been uploaded successfully");
-            console.info(fileItem);
-        };
-        uploader.onAfterAddingFile = function(fileItem){
+        //  };
+        // uploader.onSuccessItem = function(fileItem){
+        //     console.log("Selected file has been uploaded successfully");
+        //     console.info(fileItem);
+        // };
+        // uploader.onAfterAddingFile = function(fileItem){
 
-            console.info('onAfterAddingFile', fileItem);
-        };
-        uploader.onErrorItem = function(item,response, status, headers){
-            console.info(status);
-            console.info(response);
-        };
+        //     console.info('onAfterAddingFile', fileItem);
+        // };
+        // uploader.onErrorItem = function(item,response, status, headers){
+        //     console.info(status);
+        //     console.info(response);
+        // };
 });
 //         $scope.add = function(filesToAdd){
 //             //console.info('ici' , filesToAdd.length);
