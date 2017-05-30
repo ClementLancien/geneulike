@@ -1543,20 +1543,94 @@ app.controller('compareCtrl',
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location,Auth, User,Upload,FileUploader,ngDialog, $timeout) {
 
+
+
+        $scope.user = null;
+
+        User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+            $scope.user = data;
+        });
+
+      $scope.auth_user = Auth.getUser();
+
+      $scope.upExcel = function (obj){
+        console.log(obj);
+        ngDialog.open({ template: 'saving', className: 'ngdialog-theme-default'})
+        User.project_save({'uid': $scope.user.id, 'file': obj}).$promise.then(function(data){
+                alert(data.msg);
+                ngDialog.close();
+        });
+      }
+
+
+      $scope.openDefault = function () {
+        ngDialog.open({
+          template: 'firstDialogId',
+          className: 'ngdialog-theme-default'
+        });
+      };
+     
+
+      //INSERT FUNCTION UPLOAD EXCEL FILE
+      //use user id to upload en read excel file
+      $scope.signature_upload = function(excel_file) {
+            ////console.log(signature_file);
+            var resultInfo={'error':"",'critical':""};
+            Upload.upload({
+                url: '/upload/'+$scope.user.id+'/excelupload',
+                fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+                file: excel_file
+            }).progress(function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                ngDialog.open({ template: 'checking', className: 'ngdialog-theme-default'})
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+            }).success(function (data, status, headers, config) {
+                if(data.status == '0'){
+                  console.log('file ' + config.file.name + ' uploaded.');
+                  console.log('is' + data.error_idList);
+                  console.log(data);
+                  resultInfo['error_p'] = data.error_project;
+                  resultInfo['error_s'] = data.error_study;
+                  resultInfo['error_a'] = data.error_strategy;
+                  resultInfo['error_l'] = data.error_list;
+                  resultInfo['error_idList'] = data.error_idList;
+                  resultInfo['critical'] = data.critical;
+                  resultInfo['file'] = data.file;
+                  ngDialog.close();
+                  ngDialog.open({ template: 'firstDialogId', scope: $scope, className: 'ngdialog-theme-default',data: resultInfo})
+                }
+                if (data.status == '1'){
+                  alert(data.msg);
+                }
+                
+                
+            }).error(function (data, status, headers, config) {
+                ////console.log('error status: ' + status);
+            })
+            console.log(resultInfo);
+            
+      };
+
+      //INSERT PREVALIDATION FILE VISUALISATION
+      //show to user a preview of his project and need validation to upload
+      //user modal
+
+
+        
         // $scope.listOfFiles=[];
         // console.info('length is : ', $scope.listOfFiles.length, $scope.listOfFiles);
-        var user;
-        User.get({'uid': $routeParams['id']}).$promise.then(function(data){
-             user = data;
-            console.log(user);
-        });
+        // var user;
+        // User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+        //      user = data;
+        //     console.log(user);
+        // });
 
-        $scope.auth_user = Auth.getUser();
-        console.log(user);
+        // $scope.auth_user = Auth.getUser();
+        // console.log(user);
 
-        var uploader = $scope.uploader = new FileUploader({
+        // var uploader = $scope.uploader = new FileUploader({
 
-        });
+        // });
 
         // uploader.onBeforeUploadItem = function(){
             

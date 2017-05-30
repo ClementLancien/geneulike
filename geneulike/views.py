@@ -1012,312 +1012,595 @@ def excel_signature_upload(request):
         return {'msg':'An error occurred while uploading your file. If the error persists please contact TOXsIgN support ','status':'1'}
 
     #Create error list
-    project_error = {'Critical':[],'Warning':[],'Info':[]}
-    study_error = {'Critical':[],'Warning':[],'Info':[]}
-    strategy_error = {'Critical':[],'Warning':[],'Info':[]}
-    lists_error = {'Critical':[],'Warning':[],'Info':[]}
-    idList_error = {'Critical':[],'Warning':[],'Info':[]}
+    projects_errors = {'Critical':[],'Warning':[],'Info':[]}
+    studies_errors = {'Critical':[],'Warning':[],'Info':[]}
+    strategies_errors = {'Critical':[],'Warning':[],'Info':[]}
+    lists_errors = {'Critical':[],'Warning':[],'Info':[]}
+    idLists_errors = {'Critical':[],'Warning':[],'Info':[]}
+
+    projects_identifiers=[]
+    studies_identifiers=[]
+    strategies_identifiers = []
+    lists_identifiers = []
+    idLists_identifiers = []
+
+    global critical
+    critical=0
+
+
+
     zorro = 1
+    
+
+#Project sheet
+    # def is_project_identifier(row_value_identifier):
+    #     return row_value_identifier == ""
+    
+    # def is_project_title(row_value_title):
+    #     return row_value_title == ""
+        
+    # def is_project_description(row_value_description):
+    #     return row_value_description == ""        
+        
+    # def is_project_pubmed(row_value_pubmed):
+    #     return row_value_pubmed == ""
+    
+    # def is_project_contributor(row_value_contributor):
+    #     return row_value_contributor == ""
+
+    def is_project_error(identifier, title, description, pubmed, contributor, row_number):
+        """Si il existe des erreurs, c'est erreurs sont consignés dans le dico projects_errors"""
+        global critical
+        if not identifier:
+            print True
+            projects_errors['Critical'].append("Line " + str(row_number+1) + " - no ProjectID")
+            critical += 1
+        if not title:
+            projects_errors['Critical'].append("Line " + str(row_number+1) + " -  no Title")
+            critical += 1
+        if not description:
+            projects_errors['Warning'].append("Line " + str(row_number+1) + " -  no Description")
+        if not pubmed:
+            projects_errors['Warning'].append("Line " + str(row_number+1) + " - no PubMed DOI")
+        if not contributor:
+            projects_errors['Info'].append("Line " + str(row_number+1) + " - no Contributor(s)")
+        
+    def is_project_row(row_value, row_number):
+        
+        is_project_error(   str(row_value[0]),\
+                            str(row_value[1]),\
+                            str(row_value[2]),\
+                            str(row_value[3]),\
+                            str(row_value[4]),\
+                            row_number)
+                            
+        if str(row_value[0]):
+            projects_identifiers.append(str(row_value[0]))
+               
+    def projects_sheet(projects):
+        
+        #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
+        #projects = 
+        for row_number in range(5, projects.nrows):
+            is_project_row(projects.row_values(row_number, start_colx=0, end_colx=None) , row_number)
+
+
+#Studies sheet
+
+    # def is_study_identifier(row_value_identifier):
+    #     return row_value_identifier == ""
+    
+    def is_study_associated_project_identifier(row_value_associated_project_identifier):
+        return str(row_value_associated_project_identifier) not in projects_identifiers
+
+    # def is_study_title(row_value_title):
+    #     return row_value_title == ""
+    
+    # def is_study_description(row_value_description):
+    #     return row_value_description == ""
+    
+    # def is_study_phenotype_desease(row_value_phenotype_desease):
+    #     return row_value_phenotype_desease == ""
+
+    # def is_study_go_terms(row_value_go_terms):
+    #     return row_value_go_terms == ""
+    
+    # def is_study_organism(row_value_organism):
+    #     return row_value_organism == ""
+    
+    # def is_study_development_stage(row_value_development_stage):
+    #     return row_value_development_stage == ""
+
+    # def is_study_pubmed(row_value_pubmed):
+    #     return row_value_pubmed == ""
+    
+    def is_study_error(identifier, associated_project_identifier, title, description, \
+                        phenotype_desease, go_terms, organism, development_stage, pubmed, row_number):
+        
+        global critical
+
+        if not identifier:
+            studies_errors['Critical'].append("Line " + str(row_number+1) + " - no StudyID")
+            critical += 1
+        if(associated_project_identifier):
+            studies_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated ProjectID")
+            critical += 1
+        if not title:
+            studies_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
+            critical += 1
+        if not description:
+            studies_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
+        if not phenotype_desease:
+            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Phenotype/Desease")
+        if not go_terms:
+            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Go terms")
+        if not organism:
+            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Organism")
+        if not development_stage:
+            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Development Stage")
+        if not pubmed:
+            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Pubmed")
+
+            
+    def is_study_row(row_value, row_number):
+            
+        is_study_error( str(row_value[0]),\
+                        is_study_associated_project_identifier(str(row_value[1])),\
+                        str(row_value[2]),\
+                        str(row_value[3]),\
+                        str(row_value[4]),\
+                        str(row_value[5]),\
+                        str(row_value[6]),\
+                        str(row_value[7]),\
+                        str(row_value[8]),\
+                        row_number)
+                            
+        if(str(row_value[0])):
+            studies_identifiers.append(str(row_value[0]))
+    
+    def studies_sheet(studies):
+        #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
+        #studies = wb.sheet_by_index(1)
+        #print studies
+        for row_number in range(5, studies.nrows):
+            is_study_row(studies.row_values(row_number, start_colx=0, end_colx=None), row_number)
+    
+
+
+
+
+#Strategies sheet
+
+    # def is_strategy_identifier(row_value_identifier):
+    #     return row_value_identifier == ""
+    
+    def is_strategy_associated_study_identifier(row_value_associated_study_identifier):
+        return row_value_associated_study_identifier not in studies_identifiers
+    
+    # def is_strategy_title(row_value_title):
+    #     return row_value_title == ""
+    
+    # def is_strategy_description(row_value_description):
+    #     return row_value_description == ""
+    
+    # def is_strategy_type_of_experiment(row_value_type_of_experiment):
+    #     return row_value_type_of_experiment == ""
+    
+    # def is_strategy_technology(row_value_technology):
+    #     return row_value_technology == ""
+    
+    # def is_strategy_process(row_value_process):
+    #     return row_value_process == ""
+    
+    
+    def is_strategy_error(identifier, associated_study_identifier, title, description,\
+                            type_of_experiment, technology, process, row_number):
+        global critical
+        if not identifier:
+            strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no StrategyID")
+            critical += 1
+        if(associated_study_identifier):
+            strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated StudyID")
+            critical += 1
+        if not title:
+            strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
+            critical += 1
+        if not description:
+            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
+        if not type_of_experiment:
+            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Type of Experiment")
+        if not technology:
+            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Technology")
+        if not process:
+            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Process")
+    
+    def is_strategy_row(row_value, row_number):
+        
+        is_strategy_error(  str(row_value[0]),\
+                            is_strategy_associated_study_identifier(str(row_value[1])),\
+                            str(row_value[2]),\
+                            str(row_value[3]),\
+                            str(row_value[4]),\
+                            str(row_value[5]),\
+                            str(row_value[6]),\
+                            row_number)
+                                
+        if(str(row_value[0])):
+            strategies_identifiers.append(str(row_value[0]))
+    
+    def strategies_sheet(strategies):
+
+        for row_number in range(5, strategies.nrows):
+            is_strategy_row(strategies.row_values(row_number, start_colx=0, end_colx=None), row_number)
+
+
+
+#lists sheet
+    # def is_list_identifier(row_value_identifier):
+    #     return row_value_identifier == ""
+    
+    def is_list_associated_strategy_identifier(row_value_associated_strategy_identifier):
+        return row_value_associated_strategy_identifier not in strategies_identifiers
+    
+    # def is_list_title(row_value_title):
+    #     return row_value_title == ""
+    
+    # def is_list_description(row_value_description):
+    #     return row_value_description == ""
+    
+    # def is_list_type_of_identifier(row_value_type_of_identifier):
+    #     return row_value_type_of_identifier == ""
+    
+    def is_list_extended_type_of_identifier(row_value_extended_type_of_identifier, row_value_type_of_identifier):
+        return (row_value_extended_type_of_identifier == "" and row_value_type_of_identifier[:3] == "GPL")
+    
+    # def is_list_parent_list_identifier(row_value_parent_list_identifier):
+    #     return row_value_parent_list_identifier == ""
+    
+    # def is_list_child_list_identifier(row_value_child_list_identifier):
+    #     return row_value_child_list_identifier == ""
+    
+    def is_list_error(identifier, associated_study_identifier, title, description,\
+                        type_of_identifier,extended_type_of_identifier,\
+                        parent_list_identifier, child_list_identifier, row_number):
+        print "here"
+        global critical
+        if not identifier:
+            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no ListID")
+            critical += 1
+        if(associated_study_identifier):
+            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated StrategyID")
+            critical += 1
+        if not title:
+            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
+            critical += 1
+        if not description:
+            lists_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
+        if not type_of_identifier:
+            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Type of identifier")
+            critical += 1
+        if(extended_type_of_identifier):
+            lists_errors['Critical'].append("Line " + str(row_number+1) + "- no Extended Type of Identifier. ",\
+            + "This field is required since you have selected a GPL identifier in the previoyus column")
+            critical += 1
+        if not parent_list_identifier:
+            lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListParentID")
+        if not child_list_identifier:
+            lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListChildID")
+    
+    def is_list_row(row_value, row_number):
+        
+        is_list_error(  str(row_value[0]),\
+                        is_list_associated_strategy_identifier(str(row_value[1])),\
+                        str(row_value[2]),\
+                        str(row_value[3]),\
+                        str(row_value[4]),\
+                        is_list_extended_type_of_identifier(str(row_value[5]), str(row_value[4])),\
+                        str(row_value[6]),\
+                        str(row_value[7]),\
+                        row_number)
+        
+        if(str(row_value[0]) and str(row_value[8]) == "Yes"):
+            lists_identifiers.append(str(row_value[0]))
+      
+    def lists_sheet(lists):
+        for row_number in range(5, lists.nrows):
+            is_list_row(lists.row_values(row_number, start_colx=0, end_colx=None) , row_number)
+
+#idlist sheet
+
+    def is_idList_identifier(col_value_identifier):
+        return col_value_identifier not in lists_identifiers
+    
+    def is_idList_list(col_value_list):
+        return len(col_value_list) == 0
+        
+    def is_idList_error(identifier, idlist, col_number):
+        if(identifier):
+            idLists_error['Critical'].append("Column " + str(col_number) + " in your idLists Sheet has no known Identifier")
+            critical += 1
+        if(idList):
+            idLists_error['Critical'].append("Column " + str(col_number) + " in your idLists Sheet has no List associated with")
+    
+    def is_idList_row(col_value, col_number):
+        
+        is_idList_error(is_idList_identifier(str(col_value[0])),\
+                             is_idList_list(str(col_value[1:])), 
+                             col_number)
+        if(is_idList_identifier(col_value[0]) == False):
+            idLists_identifiers.append(str(col_value[0]))
+    
+    def get_absent_identifier_in_idLists():
+        absent_identifier_in_idList_sheet = []
+        for identifier in idLists_identifiers:
+            if identifier not in lists_identifiers:
+                absent_identifier_in_idList_sheet.append(identifier)
+                
+        return absent_identifier_in_idList_sheet
+        
+    def get_absent_identifier_in_Lists(): 
+        absent_identifier_in_lists_sheet = []
+        for identifier in lists_identifiers:
+            if identifier not in idLists_identifiers:
+                absent_identifier_in_lists_sheet.append(identifier)
+                
+        return absent_identifier_in_lists_sheet
+    
+    def is_absent_identifier_in_idLists(absent_identifier_in_idList_sheet):
+        return absent_identifier_in_idList_sheet.__len__() != 0
+    
+    def is_absent_identifier_in_lists(absent_identifier_in_lists_sheet):
+        return absent_identifier_in_lists_sheet.__len__() != 0
+    
+    def is_absent_error(bool_absent_identifier_in_idList_sheet,  absent_identifier_in_idList_sheet, bool_absent_identifier_in_lists_sheet, absent_identifier_in_lists_sheet):
+        global critical
+        if(bool_absent_identifier_in_idList_sheet):
+            for identifier in absent_identifier_in_idList_sheet:
+                idLists_errors['Critical'].append("IdList \"" + str(identifier) + "\" is present in your idList Sheet but is absent in your Lists Sheet ")
+                critical += 1
+        if(bool_absent_identifier_in_lists_sheet):
+            for identifier in absent_identifier_in_lists_sheet:
+                idLists_errors['Critical'].append("ListID \"" + str(identifier) + "\" is present in your Lists Sheet but is absent in your idList Sheet" )
+
+    def idLists_sheet(idLists):
+        #lists = wb.sheet_by_index(3)
+        for col_number in range(5, idLists.ncols):
+            is_strategy_row(idlists.col_values(col_number) , col_number)
+            
+        absent_list = get_absent_identifier_in_Lists()
+        absent_idList = get_absent_identifier_in_idLists()
+        
+        is_absent_error(is_absent_identifier_in_idLists(absent_idList), absent_idList, is_absent_identifier_in_lists(absent_list), absent_list)
+
     #Read excel file
+
+
+
     try :
+
         input_file.seek(0)
         wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1251")
         #Read project
-        sh = wb.sheet_by_index(0)
-        projects={}
-        critical = 0
-        for rownum in range(5, sh.nrows):
-            row_values = sh.row_values(rownum)
-            if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
-                continue
-            project_id = row_values[0]
-            project_title = ""
-            project_description = ""
-            project_pubmed = ""
-            project_contributors=""
-            project_crosslink = ""
-
-            if row_values[1] != "":
-                project_title = row_values[1]
-            else :
-                project_error['Critical'].append("No project title ("+project_id+")")
-                critical += 1
-
-            if row_values[2] != "":
-                project_description = row_values[2]
-            else :
-                project_error['Warning'].append("No project description ("+project_id+")")
-
-            if row_values[3] != "" :
-                if ';' in str(row_values[3]) or '|' in str(row_values[3]):
-                    project_error['Critical'].append("Use comma to separate your pubmed ids ("+project_id+")")
-                    critical += 1
-                else :
-                    project_pubmed = str(row_values[3])
-            else :
-                project_error['Info'].append("No associated pubmed Id(s)")
-
-            if row_values[4] != "" :
-                if ';' in row_values[4] or '|' in row_values[4]:
-                    project_error['Critical'].append("Use comma to separate your contributors ("+project_id+")")
-                    critical += 1
-                else :
-                    project_contributors = row_values[4]
-            else :
-                project_error['Info'].append("No associated contributors ("+project_id+")")
-
-            if row_values[5] != "" :
-                if ';' in row_values[5] or '|' in row_values[5]:
-                    project_error['Critical'].append("Use comma to separate your links ("+project_id+")")
-                    critical += 1
-                else :
-                    project_crosslink = row_values[5]
-            else :
-                project_error['Info'].append("No cross link(s) ("+project_id+")")
-
-
-            #After reading line add all info in dico project
-            dico ={
-                'title' : project_title,
-                'description' : project_description,
-                'pubmed' : str(project_pubmed.split(',')),
-                'contributor' : str(project_contributors.split(','))
-            }
-            projects[project_id] = dico
-
-        # Check studies
-        sh = wb.sheet_by_index(1)
-        studies={}
-        for rownum in range(6, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
-                    continue
-                study_id = row_values[0]
-                study_projects = ""
-                study_title = ""
-                study_description=""
-                study_phenotype_desease=""
-                study_organism=""
-                study_development_stage=""
-                study_pubmed=""
-
-                if row_values[1] != "":
-                    if row_values[1] in projects:
-                        study_projects = row_values[1]
-                    else :
-                        study_error['Critical'].append("Project doesn't exists ("+study_id+")")
-                        critical += 1
-                else :
-                    study_error['Critical'].append("No associated project ("+study_id+")")
-                    critical += 1
-
-                if row_values[2] != "":
-                    study_title = row_values[2]
-                else :
-                    study_error['Critical'].append("No study title ("+study_id+")")
-                    critical += 1
-
-                if row_values[3] != "":
-                    study_description = row_values[3]
-                else :
-                    study_error['Warning'].append("No study description ("+study_id+")")
-
-                if row_values[4] != "":
-                    study_phenotype_desease = row_values[4]
-                else :
-                    study_error['Warning'].append("No phenotype/desease ("+study_id+")")
-
-                if row_values[5] != "":
-                    study_organism = row_values[5]
-                else :
-                    study_error['Warning'].append("No organism ("+study_id+")")
-
-                if row_values[6] != "":
-                    study_development_stage = row_values[6]
-                else:
-                    study_error['Warning'].append("No Developement stage for ("+study_id+")" )
-
-                if row_values[7] !== "":
-                    study_pubmed = row_values[7]
-                else:
-                    study_error['info'].append("No pubmed associated with study ("+study_id+")")
-                
-
-
-                #After reading line add all info in dico project
-                dico ={
-                    'associated_project' : study_projects,
-                    'title' : study_title,
-                    'description' : study_description,
-                    'phenotype_desease' : study_phenotype_desease,
-                    'organism' : study_organism,
-                    'development_stage' : study_development_stage ,
-                    'pubmed' :  study_pubmed
-                }
-                studies[study_id] = dico
-
-        # Check assay
-        sh = wb.sheet_by_index(2)
-        strategies={}
-        for rownum in range(5, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
-                    continue
-
-                strategy_id = row_values[0]
-                strategy_study = ""
-                strategy_title = ""
-                strategy_description = ""
-                strategy_experimental_type=""
-                strategy_technology=""
-                strategy_process=""
-                
-
-                if row_values[1] != "":
-                    if row_values[1] in studies:
-                        strategy_study = row_values[1]
-                    else :
-                        assay_error['Critical'].append("Studies doesn't exists ("+strategy_id+")")
-                        critical += 1
-                else :
-                    study_error['Critical'].append("No associated study ("+strategy_id+")")
-                    critical += 1
-
-                if row_values[2] != "":
-                    assay_title = row_values[2]
-                else :
-                    strategy_error['Critical'].append("No study title ("+strategy_id+")")
-                    critical += 1
-                if row_values[3] != "":
-                    strategy_description = row_values[3]
-                else:
-                    strategy_error['Warning'].append("No description ("+ strategy_id+")")
-                if row_values[4] != "":
-                    strategy_experimental_type = row_values[4]
-                else:
-                    strategy_error['Warning'].append("No Type of Experiement ("+strategy_id+")")
-                if row_values[5] != "":
-                    strategy_technology = row_values[5]
-                else:
-                    strategy_error['Warning'].append("No technology ("+strategy_id+")")
-                if row_values[6] != "":
-                    strategy_process = row_values[6]
-                else:
-                    strategy_error['Warning'].append("No process ("+strategy_id")")
-
-                
-                #After reading line add all info in dico project
-                dico ={
-                    'associated_studies' : strategy_study,
-                    'title' : strategy_title,
-                    'description' : strategy_description,
-                    'experimental_type' : strategy_experimental_type,
-                    'technology' : strategy_technology,
-                    'process' : strategy_process
-    
-                }
-                strategies[strategy_id] = dico
-
-
-        # Check factor
-        sh = wb.sheet_by_index(3)
-        lists={}
-        for rownum in range(5, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" and row_values [4] =="" and row_values [5] =="" :
-                    continue
-                list_id = row_values[0]
-                list_strategy = ""
-                list_title = ""
-                list_description = ""
-                list_type_ID = ""
-                list_parent_ID = ""
-                list_child_ID = ""
-
-                if row_values[1] != "":
-                    if row_values[1] in  strategies:
-                        list_strategy = row_values[1]
-                    else: 
-                        list_error['Critical'].append("Assays doesn't exist ("+list_id+")")
-                        critical += 1
-                else:
-                    list_error['Critical'].append("No associated study ("+list_id+")")
-                    critical += 1
-
-                if row_values[2] != "":
-                    list_title = row_values[2]
-                else:
-                    list_error['Warning'].append("No Strategy Title ("+list_id+")")
-
-                if row_values[3] != "":
-                    list_description = row_values[3]
-                else:
-                    list_error['Warning'].append("No description ("+list_id+")")
-
-                if row_values[4] != "":
-                    if row_values[4][:3] == "GPL":
-                        if (row_values[5] != "" and row_values[5] != None):
-                            list_type_ID = row_values[4]
-                        else:
-                            list_error['Warning'].append("No Type of identifiant extended ("+list_id+")")
-                    else:
-                        list_type_ID = row_values[4]
-                else:
-                    list_error['Warning'].append("No Type of identifiant ("+list_id+")")
-
-                list_parent_ID = row_values[6]
-                list_child_ID = row_values[7]
-  
-
-                #After reading line add all info in dico project
-                dico={
-                'associated_strategy' : list_strategy,
-                'title' : list_title,
-                'description' : list_description,
-                'Type_of_id' : list_type_ID,
-                'node_parent_ID' : list_parent_ID,
-                'node_child_ID' : list_child_ID
-                }
-                lists[factor_id] = dico
-
-
-        # Check signatures
-        sh = wb.sheet_by_index(4)
-        idLists={}
-        for colnum in range(0, sh.ncols):
-                col_values = sh.row_values(colnum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" and row_values [4] =="" and row_values [5] =="" :
-                    continue
-
-                idList_id = col_values[0]
-                idList=[]
-                i=1
-                while(col_values[i] !=""):
-                    idList.append(col_values[i])
-                if idList_id not in lists:
-                    lists_error['Critical'].append("No found List id ("+idList_id+")")
-                    critical += 1
-
-                if len(idList) == 0 and idList_id != "":
-                    lists_error['Warning'].append("No list of identifiants ("+idlist_id+")")
-
-                if idList_id not in lists and len(idList) == 0 and idList_id != "":
-                    lists[idList]['list'] = idList
-
-
-        # Iterate through each row in worksheet and fetch values into dict
-
-        return {'msg':"File checked and uploded !", 'error_project':project_error, 'error_study':study_error, 'error_assay':assay_error, 'error_factor':factor_error, 'error_signature':signature_error, 'critical':str(critical),'file': os.path.join(upload_path, tmp_file_name),'status':'0' }
+        projects = wb.sheet_by_index(0)
+        studies = wb.sheet_by_index(1)
+        strategies = wb.sheet_by_index(2)
+        lists = wb.sheet_by_index(3)
+        idLists=wb.sheet_by_index(4)
+        print lists
+        projects_sheet(projects)
+        studies_sheet(studies)
+        strategies_sheet(strategies)
+        lists_sheet(lists)
+        idLists_sheet(idLists)
+        print idLists_errors
+        #add if
+        return {'msg':"File checked and uploded !",
+                'error_project': projects_errors,
+                'error_study':studies_errors,
+                'error_strategy':strategies_errors,
+                'error_list': lists_errors,
+                'error_idList':idLists_errors,
+                'critical':str(critical),
+                'file': os.path.join(upload_path, tmp_file_name),
+                'status':'0' }
     except:
         logger.warning("Error - Read excel file")
         logger.warning(sys.exc_info())
         return {'msg':'An error occurred while saving your file. If the error persists please contact TOXsIgN support ','status':'1'}
-    
 
 
+class Project:
 
+    compteur_project=0
+    def __init__(self,\
+        title,\
+        description,\
+        pubmed,\
+        contributors,\
+        crosslinks,\
+        last_update,\
+        submission_date,\
+        owner,\
+        author):
 
+        self.project_id = "GPR" + str(compteur_project)
+        self.studies_id=[]
+        self.strategies=[]
+        self.lists_id=[]
+        self.title = title
+        self.description = description
+        self.pubmed = pubmed
+        self.contributors = contributors
+        self.crosslinks = crosslinks
+        self.last_update = last_update
+        self.submission_date = submission_date
+        self.owner = owner
+        self.author = author
+        self.file_path = file_path
+        self.status= "private"
+        self.tags = []
+        compteur_project += 1
 
+    def get_project(self):
+        return {'project_id' : self.project_id,
+                'studies_id' : self.studies_id,
+                'strategies_id' : self.strategies_id,
+                'lists_id' : self.lists_id,
+                'title' : self.title,
+                'description' : self.description,
+                'pubmed' : self.pubmed,
+                'contributors' : self.contributors,
+                'crosslinks' : self.crosslinks,
+                'last_update' : self.last_update,
+                'submission_date' : self.submission_date,
+                'owner' : self.owner,
+                'author' : self.author,
+                'file_path' : self.file_path,
+                'tags' : self.tags
+    }
+
+class Study:
+
+    compteur_study=0
+    def __init__(self,\
+        title,\
+        description,\
+        phenotype_desease,\
+        go_term,\
+        organism,\
+        development_stage,\
+        pubmed,\
+        add_info,\
+        last_update):
+
+        self.project_id = ""
+        self.studies_id="GST" + str(compteur_study)
+        self.strategies=""
+        self.lists_id=""
+        self.title = title
+        self.description = description
+        self.phenotype_desease = phenotype_desease
+        self.go_term = go_term
+        self.organism = organism
+        self.development_stage = development_stage
+        self.pubmed = pubmed
+        self.add_info = add_info
+        self.last_update = last_update
+        self.status = "private"
+        self.tags = []
+        compteur_study += 1
+
+    def get_study(self):
+        return {'project_id' : self.project_id,
+                'studies_id' : self.studies_id,
+                'strategies_id' : self.strategies_id,
+                'lists_id' : self.lists_id,
+                'title' : self.title,
+                'description' : self.description,
+                'phenotype_desease' : self.phenotype_desease,
+                'go_term' : self.go_term,
+                'organism' : self.organism,
+                'development_stage' : self.development_stage,
+                'pubmed' : self.pubmed,
+                'last_update' : self.last_update,
+                'status' : self.status,
+                'tags' : self.tags
+        }
+
+class Strategy:
+
+    compteur_strategy=0
+    def __init__(self,\
+        title,\
+        description,\
+        phenotype_desease,\
+        organism,\
+        development_stage,\
+        pubmed,\
+        add_info,\
+        last_update):
+
+        self.project_id = ""
+        self.studies_id=""
+        self.strategies="GSR" + str(compteur_strategy)
+        self.lists_id=""
+        self.title = title
+        self.description = description
+        self.type_of_experiment = phenotype_desease
+        self.technology = organism
+        self.process = crosslinks
+        self.add_info = add_info
+        self.last_update = last_update
+        self.status = "private"
+        self.tags = []
+        compteur_strategy += 1
+
+    def get_strategy(self):
+        return {'project_id' : self.project_id,
+                'studies_id' : self.studies_id,
+                'strategies_id' : self.strategies_id,
+                'lists_id' : self.lists_id,
+                'title' : self.title,
+                'description' : self.description,
+                'type_of_experiment' : self.type_of_experiment,
+                'technology' : self.technology,
+                'process' : self.process,
+                'last_update' : self.last_update,
+                'status' : self.status,
+                'tags' : self.tags
+        }
+
+class List:
+
+    compteur_list=0
+    def __init__(self,\
+        title,\
+        description,\
+        identifiant,\
+        identifier_extended,\
+        list_parent_id,\
+        list_child_id,\
+        comparable,\
+        list,\
+        add_info,\
+        last_update):
+
+        self.project_id = ""
+        self.studies_id=""
+        self.strategies=""
+        self.lists_id="GUL" + str(compteur_list)
+        self.title = title
+        self.description = description
+        self.identifiant = identifiant
+        self.identifier_extended = identifier_extended
+        self.list_parent_id = list_parent_id
+        self.list_child_id = list_child_id
+        self.comparable = comparable
+        self.list = list
+        self.add_info = add_info
+        self.last_update = last_update
+        self.status = "private"    
+        self.tags = []
+
+        compteur_list += 1
+
+    def get_list(self):
+        return {'project_id' : self.project_id,
+                'studies_id' : self.studies_id,
+                'strategies_id' : self.strategies_id,
+                'lists_id' : self.lists_id,
+                'title' : self.title,
+                'description' : self.description,
+                'identifiant' : self.identifiant,
+                'identifier_extended' : self.identifier_extended,
+                'list_parent_id' : self.process,
+                'list_child_id' : self.list_child_id,
+                'comparable' : self.comparable,
+                'list' : self.list
+                'last_update' : self.last_update,
+                'status' : self.status,
+                'tags' : self.tags
+        }
 
 
 
@@ -1346,1269 +1629,1341 @@ def save_excel(request):
     #Read excel file
     wb = xlrd.open_workbook(input_file,encoding_override="cp1251")
     #Read project
-    sh = wb.sheet_by_index(0)
-    projects={}
-    critical = 0
+
+    projects=[]
+    studies=[]
+    strategies=[]
+    lists=[]
+
     dt = datetime.datetime.utcnow()
-    sdt = time.mktime(dt.timetuple())
+    date = time.mktime(dt.timetuple())
+    
 
-    try :
-        for rownum in range(5, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
-                    continue
-                project_error = {'Critical':[],'Warning':[],'Info':[]}
+    def add_project(project_sheet):
+        for row_number in range(5, project_sheet.nrow):
+            row_value = projects.row_values(row_number, start_colx=0, end_colx=None)
+            projects.add(Project(   str(row_value[1]),\
+                                    str(row_value[2]),\
+                                    str(row_value[3]),\
+                                    str(row_value[4]),\
+                                    str(row_value[5]),\
+                                    str(date),\
+                                    str(date),\
+                                    str(user),\
+                                    str(user)
+                                ))
 
-                project_id = row_values[0]
-                project_title = ""
-                project_description = ""
-                project_pubmed = ""
-                project_contributors=""
-                project_crosslink = ""
+    def add_study(study_sheet):
+        for row_number in range(5, study_sheet.nrow):
+            row_value = study_sheet.row_values(row_number, start_colx=0, end_colx=None)
+            studies.add(Study(  str(row_value[2]),\
+                                str(row_value[3]),\
+                                str(row_value[4]),\
+                                str(row_value[5]),\
+                                str(row_value[6]),\
+                                str(row_value[7]),\
+                                str(row_value[8]),\
+                                str(row_value[9]),\
+                                str(date)
+                            ))
 
-                if row_values[1] != "":
-                    project_title = row_values[1]
-                else :
-                    project_error['Critical'].append("No project title ("+project_id+")")
-                    critical += 1
+    def add_strategy(strategy_sheet):
+        for row_number in range(5, strategy_sheet.nrow):
+            row_value = strategy_sheet.row_values(row_number, start_colx=0, end_colx=None)
+            strategies.add(Strategy(str(row_value[2]),\
+                                    str(row_value[3]),\
+                                    str(row_value[4]),\
+                                    str(row_value[5]),\
+                                    str(row_value[6]),\
+                                    str(row_value[7]),\
+                                    str(date)
+                                    ))
 
-                if row_values[2] != "":
-                    project_description = row_values[2]
-                else :
-                    project_error['Warning'].append("No project description ("+project_id+")")
+    def get_Col_List(header_col, list_headers):
+        for header in list_headers:
+            if header_col == header: 
+                return  list_headers.index(header_col)
 
-                if row_values[3] != "" :
-                    if ';' in str(row_values[3]) or '|' in str(row_values[3]):
-                        project_error['Critical'].append("Use comma to separate your pubmed ids ("+project_id+")")
-                        critical += 1
-                    else :
-                        project_pubmed = str(row_values[3])
-                else :
-                    project_error['Info'].append("No associated pubmed Id(s)")
+    def add_list(list_sheet, idList_sheet):
+        idLists = [str(list_ID) for list_ID in idList_sheet.row_values(0, start_colx=0, end_colx=None)]
+        for row_number in range(5, list_sheet.nrow):
+            row_value = list_sheet.row_values(row_number, start_colx=0, end_colx=None)
+            index_list_identifiants =  get_Col_List(str(row_value[0]), idLists)
+            list_identifiants = ",".join(str(name_idenfiant) for id in list_sheet.row_values(index_list_identifiants, start_rowx=1, end_rowx=None))
+            lists.add(List( str(row_value[2]),\
+                            str(row_value[3]),\
+                            str(row_value[4]),\
+                            str(row_value[5]),\
+                            str(row_value[6]),\
+                            str(row_value[7]),\
+                            str(row_value[8]),\
+                            list_identifiants,\
+                            str(row_value[9]),\
+                            str(date)
+                        ))
 
-                if row_values[4] != "" :
-                    if ';' in row_values[4] or '|' in row_values[4]:
-                        project_error['Critical'].append("Use comma to separate your contributors ("+project_id+")")
-                        critical += 1
-                    else :
-                        project_contributors = row_values[4]
-                else :
-                    project_error['Info'].append("No associated contributors ("+project_id+")")
+    # sh = wb.sheet_by_index(0)
+    # projects={}
+    # critical = 0
+    
 
-                if row_values[5] != "" :
-                    if ';' in row_values[5] or '|' in row_values[5]:
-                        project_error['Critical'].append("Use comma to separate your links ("+project_id+")")
-                        critical += 1
-                    else :
-                        project_crosslink = row_values[5]
-                else :
-                    project_error['Info'].append("No cross link(s) ("+project_id+")")
+    # try :
+    #     for rownum in range(5, sh.nrows):
+    #             row_values = sh.row_values(rownum)
+    #             if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
+    #                 continue
+    #             project_error = {'Critical':[],'Warning':[],'Info':[]}
 
+    #             project_id = row_values[0]
+    #             project_title = ""
+    #             project_description = ""
+    #             project_pubmed = ""
+    #             project_contributors=""
+    #             project_crosslink = ""
 
-                #After reading line add all info in dico project
-                request.registry.db_mongo['project'].update({'id': 1}, {'$inc': {'val': 1}})
-                repos = request.registry.db_mongo['project'].find({'id': 1})
-                id_p = ""
-                for res in repos:
-                    id_p = res
+    #             if row_values[1] != "":
+    #                 project_title = row_values[1]
+    #             else :
+    #                 project_error['Critical'].append("No project title ("+project_id+")")
+    #                 critical += 1
 
-                #Excel id -> databas id
-                asso_id[project_id] = 'TSP'+str(id_p['val'])
-                reverse_asso[asso_id[project_id]] = project_id
+    #             if row_values[2] != "":
+    #                 project_description = row_values[2]
+    #             else :
+    #                 project_error['Warning'].append("No project description ("+project_id+")")
 
-                dico={
-                    'id' : asso_id[project_id],
-                    'title' : project_title,
-                    'description' : project_description,
-                    'pubmed' : project_pubmed,
-                    'contributor' : project_contributors,
-                    'assays' : "",
-                    'cross_link' : project_crosslink,
-                    'studies' : "",
-                    'factors' : "",
-                    'signatures' :"",
-                    'last_update' : str(sdt),
-                    'submission_date' : str(sdt),
-                    'status' : 'private' ,
-                    'owner' : user,
-                    'author' : user ,
-                    'tags' : "",
-                    'edges' : "",
-                    'info' : ','.join(project_error['Info']),
-                    'warnings' : ','.join(project_error['Warning']),
-                    'critical' : ','.join(project_error['Critical']),
-                    'excel_id' : project_id
-                }
-                projects[project_id] = dico
+    #             if row_values[3] != "" :
+    #                 if ';' in str(row_values[3]) or '|' in str(row_values[3]):
+    #                     project_error['Critical'].append("Use comma to separate your pubmed ids ("+project_id+")")
+    #                     critical += 1
+    #                 else :
+    #                     project_pubmed = str(row_values[3])
+    #             else :
+    #                 project_error['Info'].append("No associated pubmed Id(s)")
 
-        # Check studies
-        sh = wb.sheet_by_index(1)
-        studies={}
-        for rownum in range(6, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
-                    continue
-                study_error = {'Critical':[],'Warning':[],'Info':[]}
+    #             if row_values[4] != "" :
+    #                 if ';' in row_values[4] or '|' in row_values[4]:
+    #                     project_error['Critical'].append("Use comma to separate your contributors ("+project_id+")")
+    #                     critical += 1
+    #                 else :
+    #                     project_contributors = row_values[4]
+    #             else :
+    #                 project_error['Info'].append("No associated contributors ("+project_id+")")
 
-                study_id = row_values[0]
-                study_projects = ""
-                study_title = ""
-                study_description=""
-                study_experimental_design=""
-                study_results=""
-                study_type = ""
-                study_inclusion_periode = ""
-                study_inclusion = ""
-                study_exclusion = ""
-                study_followup = ""
-                study_pubmed = ""
-                study_pop_size = ""
-                study_pubmed = ""
-
-                if row_values[1] != "":
-                    if row_values[1] in projects:
-                        study_projects = row_values[1]
-                    else :
-                        study_error['Critical'].append("Project doesn't exists ("+study_id+")")
-                        critical += 1
-                else :
-                    study_error['Critical'].append("No associated project ("+study_id+")")
-                    critical += 1
-
-                if row_values[2] != "":
-                    study_title = row_values[2]
-                else :
-                    study_error['Critical'].append("No study title ("+study_id+")")
-                    critical += 1
-
-                if row_values[3] != "":
-                    study_description = row_values[3]
-                else :
-                    study_error['Warning'].append("No study description ("+study_id+")")
-
-                if row_values[4] != "":
-                    study_experimental_design = row_values[4]
-                else :
-                    study_error['Warning'].append("No experimental design description ("+study_id+")")
-
-                if row_values[5] != "":
-                    study_results = row_values[5]
-                else :
-                    study_error['Info'].append("No study results ("+study_id+")")
-
-                if row_values[6] != "":
-                    if row_values[6] == 'Interventional' or row_values[6] == 'Observational' :
-                        study_type = row_values[6]
-                    else :
-                        study_error['Critical'].append("Study type not available ("+study_id+")")
-                        critical += 1
-                else :
-                    study_error['Critical'].append("No study type selected ("+study_id+")")
-                    critical += 1
-
-                if study_type == "Observational" :
-                    if row_values[7] != "":
-                        study_inclusion_periode = row_values[7]
-                    else :
-                        study_error['Warning'].append("No inclusion period ("+study_id+")")
-
-                    if row_values[8] != "":
-                        study_inclusion = row_values[8]
-                    else :
-                        study_error['Warning'].append("No inclusion criteria ("+study_id+")")
-
-                    if row_values[9] != "":
-                        study_exclusion = row_values[9]
-                    else :
-                        study_error['Warning'].append("No exclusion criteria ("+study_id+")")
-
-                    if row_values[10] != "":
-                        study_followup = row_values[10]
-                    else :
-                        study_error['Warning'].append("No follow up ("+study_id+")")
-
-                    if row_values[11] != "":
-                        study_pop_size = row_values[11]
-                    else :
-                        study_error['Warning'].append("No population size ("+study_id+")")
-
-                    if row_values[12] != "":
-                        study_pubmed = row_values[12]
-                    else :
-                        study_error['Info'].append("No pubmed ("+study_id+")")
+    #             if row_values[5] != "" :
+    #                 if ';' in row_values[5] or '|' in row_values[5]:
+    #                     project_error['Critical'].append("Use comma to separate your links ("+project_id+")")
+    #                     critical += 1
+    #                 else :
+    #                     project_crosslink = row_values[5]
+    #             else :
+    #                 project_error['Info'].append("No cross link(s) ("+project_id+")")
 
 
-                #After reading line add all info in dico project
-                request.registry.db_mongo['study'].update({'id': 1}, {'$inc': {'val': 1}})
-                repos = request.registry.db_mongo['study'].find({'id': 1})
-                id_s = ""
-                for res in repos:
-                    id_s = res
+    #             #After reading line add all info in dico project
+    #             request.registry.db_mongo['project'].update({'id': 1}, {'$inc': {'val': 1}})
+    #             repos = request.registry.db_mongo['project'].find({'id': 1})
+    #             id_p = ""
+    #             for res in repos:
+    #                 id_p = res
+
+    #             #Excel id -> databas id
+    #             asso_id[project_id] = 'TSP'+str(id_p['val'])
+    #             reverse_asso[asso_id[project_id]] = project_id
+
+    #             dico={
+    #                 'id' : asso_id[project_id],
+    #                 'title' : project_title,
+    #                 'description' : project_description,
+    #                 'pubmed' : project_pubmed,
+    #                 'contributor' : project_contributors,
+    #                 'assays' : "",
+    #                 'cross_link' : project_crosslink,
+    #                 'studies' : "",
+    #                 'factors' : "",
+    #                 'signatures' :"",
+    #                 'last_update' : str(sdt),
+    #                 'submission_date' : str(sdt),
+    #                 'status' : 'private' ,
+    #                 'owner' : user,
+    #                 'author' : user ,
+    #                 'tags' : "",
+    #                 'edges' : "",
+    #                 'info' : ','.join(project_error['Info']),
+    #                 'warnings' : ','.join(project_error['Warning']),
+    #                 'critical' : ','.join(project_error['Critical']),
+    #                 'excel_id' : project_id
+    #             }
+    #             projects[project_id] = dico
+
+    #     # Check studies
+    #     sh = wb.sheet_by_index(1)
+    #     studies={}
+    #     for rownum in range(6, sh.nrows):
+    #             row_values = sh.row_values(rownum)
+    #             if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
+    #                 continue
+    #             study_error = {'Critical':[],'Warning':[],'Info':[]}
+
+    #             study_id = row_values[0]
+    #             study_projects = ""
+    #             study_title = ""
+    #             study_description=""
+    #             study_experimental_design=""
+    #             study_results=""
+    #             study_type = ""
+    #             study_inclusion_periode = ""
+    #             study_inclusion = ""
+    #             study_exclusion = ""
+    #             study_followup = ""
+    #             study_pubmed = ""
+    #             study_pop_size = ""
+    #             study_pubmed = ""
+
+    #             if row_values[1] != "":
+    #                 if row_values[1] in projects:
+    #                     study_projects = row_values[1]
+    #                 else :
+    #                     study_error['Critical'].append("Project doesn't exists ("+study_id+")")
+    #                     critical += 1
+    #             else :
+    #                 study_error['Critical'].append("No associated project ("+study_id+")")
+    #                 critical += 1
+
+    #             if row_values[2] != "":
+    #                 study_title = row_values[2]
+    #             else :
+    #                 study_error['Critical'].append("No study title ("+study_id+")")
+    #                 critical += 1
+
+    #             if row_values[3] != "":
+    #                 study_description = row_values[3]
+    #             else :
+    #                 study_error['Warning'].append("No study description ("+study_id+")")
+
+    #             if row_values[4] != "":
+    #                 study_experimental_design = row_values[4]
+    #             else :
+    #                 study_error['Warning'].append("No experimental design description ("+study_id+")")
+
+    #             if row_values[5] != "":
+    #                 study_results = row_values[5]
+    #             else :
+    #                 study_error['Info'].append("No study results ("+study_id+")")
+
+    #             if row_values[6] != "":
+    #                 if row_values[6] == 'Interventional' or row_values[6] == 'Observational' :
+    #                     study_type = row_values[6]
+    #                 else :
+    #                     study_error['Critical'].append("Study type not available ("+study_id+")")
+    #                     critical += 1
+    #             else :
+    #                 study_error['Critical'].append("No study type selected ("+study_id+")")
+    #                 critical += 1
+
+    #             if study_type == "Observational" :
+    #                 if row_values[7] != "":
+    #                     study_inclusion_periode = row_values[7]
+    #                 else :
+    #                     study_error['Warning'].append("No inclusion period ("+study_id+")")
+
+    #                 if row_values[8] != "":
+    #                     study_inclusion = row_values[8]
+    #                 else :
+    #                     study_error['Warning'].append("No inclusion criteria ("+study_id+")")
+
+    #                 if row_values[9] != "":
+    #                     study_exclusion = row_values[9]
+    #                 else :
+    #                     study_error['Warning'].append("No exclusion criteria ("+study_id+")")
+
+    #                 if row_values[10] != "":
+    #                     study_followup = row_values[10]
+    #                 else :
+    #                     study_error['Warning'].append("No follow up ("+study_id+")")
+
+    #                 if row_values[11] != "":
+    #                     study_pop_size = row_values[11]
+    #                 else :
+    #                     study_error['Warning'].append("No population size ("+study_id+")")
+
+    #                 if row_values[12] != "":
+    #                     study_pubmed = row_values[12]
+    #                 else :
+    #                     study_error['Info'].append("No pubmed ("+study_id+")")
+
+
+    #             #After reading line add all info in dico project
+    #             request.registry.db_mongo['study'].update({'id': 1}, {'$inc': {'val': 1}})
+    #             repos = request.registry.db_mongo['study'].find({'id': 1})
+    #             id_s = ""
+    #             for res in repos:
+    #                 id_s = res
                 
-                #Excel id -> databas id
-                asso_id[study_id] = 'TSE'+str(id_s['val'])
-                reverse_asso[asso_id[study_id]] = study_id
+    #             #Excel id -> databas id
+    #             asso_id[study_id] = 'TSE'+str(id_s['val'])
+    #             reverse_asso[asso_id[study_id]] = study_id
 
-                #Add studies id to associated project
-                p_stud = projects[study_projects]['studies'].split()
-                p_stud.append(asso_id[study_id])
-                projects[study_projects]['studies'] = ','.join(p_stud)
+    #             #Add studies id to associated project
+    #             p_stud = projects[study_projects]['studies'].split()
+    #             p_stud.append(asso_id[study_id])
+    #             projects[study_projects]['studies'] = ','.join(p_stud)
 
-                dico={
-                    'id' : asso_id[study_id],
-                    'owner' : user,
-                    'projects' : asso_id[study_projects],
-                    'assays' : "",
-                    'factors' : "",
-                    'signatures' : "",
-                    'title' : study_title,
-                    'description' : study_description,
-                    'experimental_design' : study_experimental_design,
-                    'results' : study_results,
-                    'study_type' : study_type,
-                    'last_update' : str(sdt),
-                    'inclusion_period': study_inclusion_periode,
-                    'inclusion': study_inclusion,
-                    'status' : 'private',
-                    'followup': study_followup,
-                    'exclusion' : study_exclusion,
-                    'pop_size' : study_pop_size,
-                    'pubmed' : study_pubmed,
-                    'tags' : "",
-                    'info' : ','.join(study_error['Info']),
-                    'warnings' : ','.join(study_error['Warning']),
-                    'critical' : ','.join(study_error['Critical']),
-                    'excel_id' : study_id
-                }      
-                studies[study_id]=dico
+    #             dico={
+    #                 'id' : asso_id[study_id],
+    #                 'owner' : user,
+    #                 'projects' : asso_id[study_projects],
+    #                 'assays' : "",
+    #                 'factors' : "",
+    #                 'signatures' : "",
+    #                 'title' : study_title,
+    #                 'description' : study_description,
+    #                 'experimental_design' : study_experimental_design,
+    #                 'results' : study_results,
+    #                 'study_type' : study_type,
+    #                 'last_update' : str(sdt),
+    #                 'inclusion_period': study_inclusion_periode,
+    #                 'inclusion': study_inclusion,
+    #                 'status' : 'private',
+    #                 'followup': study_followup,
+    #                 'exclusion' : study_exclusion,
+    #                 'pop_size' : study_pop_size,
+    #                 'pubmed' : study_pubmed,
+    #                 'tags' : "",
+    #                 'info' : ','.join(study_error['Info']),
+    #                 'warnings' : ','.join(study_error['Warning']),
+    #                 'critical' : ','.join(study_error['Critical']),
+    #                 'excel_id' : study_id
+    #             }      
+    #             studies[study_id]=dico
 
-        # List of TOXsIgN 'ontologies'
-        list_developmental_stage = ['Fetal','Embryonic','Larva','Neo-Natal','Juvenile','Pre-pubertal','Pubertal','Adulthood','Elderly','NA']
-        list_generation = ['f0','f1','f2','f3','f4','f5','f6','f7','f8','f9','f10']
-        list_experimental = ['in vivo','ex vivo','in vitro','other','NA']
-        list_sex = ['Male','Female','Both','Other','NA']
-        list_dose_unit = ['M','mM','µM','g/mL','mg/mL','µg/mL','ng/mL','mg/kg','µg/kg','µg/kg','ng/kg','%']
-        list_exposure_duration_unit = ['week','day','hour','minute','seconde']
-        list_exposition_factor = ['Chemical','Physical','Biological']
-        list_signature_type = ['Physiological','Genomic','Molecular']
-        list_observed_effect = ['Decrease','Increase','No effect','NA']
+    #     # List of TOXsIgN 'ontologies'
+    #     list_developmental_stage = ['Fetal','Embryonic','Larva','Neo-Natal','Juvenile','Pre-pubertal','Pubertal','Adulthood','Elderly','NA']
+    #     list_generation = ['f0','f1','f2','f3','f4','f5','f6','f7','f8','f9','f10']
+    #     list_experimental = ['in vivo','ex vivo','in vitro','other','NA']
+    #     list_sex = ['Male','Female','Both','Other','NA']
+    #     list_dose_unit = ['M','mM','µM','g/mL','mg/mL','µg/mL','ng/mL','mg/kg','µg/kg','µg/kg','ng/kg','%']
+    #     list_exposure_duration_unit = ['week','day','hour','minute','seconde']
+    #     list_exposition_factor = ['Chemical','Physical','Biological']
+    #     list_signature_type = ['Physiological','Genomic','Molecular']
+    #     list_observed_effect = ['Decrease','Increase','No effect','NA']
         
 
-        # Check assay
-        sh = wb.sheet_by_index(2)
-        assays={}
-        for rownum in range(12, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
-                    continue
-                assay_error = {'Critical':[],'Warning':[],'Info':[]}
+    #     # Check assay
+    #     sh = wb.sheet_by_index(2)
+    #     assays={}
+    #     for rownum in range(12, sh.nrows):
+    #             row_values = sh.row_values(rownum)
+    #             if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" :
+    #                 continue
+    #             assay_error = {'Critical':[],'Warning':[],'Info':[]}
 
-                assay_id = row_values[0]
-                assay_study = ""
-                assay_title = ""
-                assay_organism = ""
-                assay_organism_name = ""
-                assay_experimental_type = ""
-                assay_developmental_stage = "" 
-                assay_generation = ""
-                assay_sex = ""
-                assay_tissue = ""
-                assay_tissue_name = ""
-                assay_cell = ""
-                assay_cell_name = ""
-                assay_cell_line = ""
-                assay_cell_line_name = ""   
-                assay_additional_information = "" 
-                tag = [] 
-                assay_pop_age = ""
-                assay_location = ""
-                assay_reference = ""
-                assay_matrice = "" 
+    #             assay_id = row_values[0]
+    #             assay_study = ""
+    #             assay_title = ""
+    #             assay_organism = ""
+    #             assay_organism_name = ""
+    #             assay_experimental_type = ""
+    #             assay_developmental_stage = "" 
+    #             assay_generation = ""
+    #             assay_sex = ""
+    #             assay_tissue = ""
+    #             assay_tissue_name = ""
+    #             assay_cell = ""
+    #             assay_cell_name = ""
+    #             assay_cell_line = ""
+    #             assay_cell_line_name = ""   
+    #             assay_additional_information = "" 
+    #             tag = [] 
+    #             assay_pop_age = ""
+    #             assay_location = ""
+    #             assay_reference = ""
+    #             assay_matrice = "" 
 
 
-                if row_values[1] != "":
-                    if row_values[1] in studies:
-                        assay_study = row_values[1]
-                    else :
-                        assay_error['Critical'].append("Studies doesn't exists ("+assay_id+")")
-                        critical += 1
-                else :
-                    study_error['Critical'].append("No associated study ("+assay_id+")")
-                    critical += 1
+    #             if row_values[1] != "":
+    #                 if row_values[1] in studies:
+    #                     assay_study = row_values[1]
+    #                 else :
+    #                     assay_error['Critical'].append("Studies doesn't exists ("+assay_id+")")
+    #                     critical += 1
+    #             else :
+    #                 study_error['Critical'].append("No associated study ("+assay_id+")")
+    #                 critical += 1
 
-                if row_values[2] != "":
-                    assay_title = row_values[2]
-                else :
-                    assay_error['Critical'].append("No study title ("+assay_id+")")
-                    critical += 1
+    #             if row_values[2] != "":
+    #                 assay_title = row_values[2]
+    #             else :
+    #                 assay_error['Critical'].append("No study title ("+assay_id+")")
+    #                 critical += 1
 
-                if row_values[4] != "":
-                    data = request.registry.db_mongo['species.tab'].find_one({'id': row_values[4]})
-                    if data is None :
-                        if row_values[3] == "" :
-                            assay_organism = ""
-                            assay_error['Critical'].append("Please select an organism in the TOXsIgN ontologies list ("+assay_id+")")
-                            critical += 1
-                        else :
-                            assay_organism_name = row_values[3]
-                            tag.append(row_values[3])
-                    else :
-                        assay_organism = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[3] != "" :
-                            assay_organism_name = row_values[3]
-                            tag.append(row_values[3])
-                else :
-                    assay_error['Critical'].append("No organism selected ("+assay_id+")")
-                    critical += 1
+    #             if row_values[4] != "":
+    #                 data = request.registry.db_mongo['species.tab'].find_one({'id': row_values[4]})
+    #                 if data is None :
+    #                     if row_values[3] == "" :
+    #                         assay_organism = ""
+    #                         assay_error['Critical'].append("Please select an organism in the TOXsIgN ontologies list ("+assay_id+")")
+    #                         critical += 1
+    #                     else :
+    #                         assay_organism_name = row_values[3]
+    #                         tag.append(row_values[3])
+    #                 else :
+    #                     assay_organism = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[3] != "" :
+    #                         assay_organism_name = row_values[3]
+    #                         tag.append(row_values[3])
+    #             else :
+    #                 assay_error['Critical'].append("No organism selected ("+assay_id+")")
+    #                 critical += 1
 
-                if row_values[5] != "":
-                    if row_values[5] in  list_developmental_stage :
-                        assay_developmental_stage = row_values[5]
-                    else :
-                        assay_error['Warning'].append("Developmental stage not listed ("+assay_id+")")
-                else :
-                    assay_error['Info'].append("No developmental stage selected ("+assay_id+")")
+    #             if row_values[5] != "":
+    #                 if row_values[5] in  list_developmental_stage :
+    #                     assay_developmental_stage = row_values[5]
+    #                 else :
+    #                     assay_error['Warning'].append("Developmental stage not listed ("+assay_id+")")
+    #             else :
+    #                 assay_error['Info'].append("No developmental stage selected ("+assay_id+")")
                     
 
-                if row_values[6] != "":
-                    if row_values[6] in  list_generation :
-                        assay_generation = row_values[6]
-                    else :
-                        assay_error['Warning'].append("Generation not listed ("+assay_id+")")
-                else :
-                    assay_error['Info'].append("No generation selected ("+assay_id+")")
+    #             if row_values[6] != "":
+    #                 if row_values[6] in  list_generation :
+    #                     assay_generation = row_values[6]
+    #                 else :
+    #                     assay_error['Warning'].append("Generation not listed ("+assay_id+")")
+    #             else :
+    #                 assay_error['Info'].append("No generation selected ("+assay_id+")")
 
-                if row_values[7] != "":
-                    if row_values[7] in  list_sex :
-                        assay_sex = row_values[7]
-                    else :
-                        assay_error['Warning'].append("Sex not listed ("+assay_id+")")
-                else :
-                    assay_error['Info'].append("No sex selected ("+assay_id+")")
+    #             if row_values[7] != "":
+    #                 if row_values[7] in  list_sex :
+    #                     assay_sex = row_values[7]
+    #                 else :
+    #                     assay_error['Warning'].append("Sex not listed ("+assay_id+")")
+    #             else :
+    #                 assay_error['Info'].append("No sex selected ("+assay_id+")")
 
-                if row_values[9] != "":
-                    data = request.registry.db_mongo['tissue.tab'].find_one({'id': row_values[9]})
-                    if data is None :
-                        if row_values[8] != "":
-                            assay_tissue_name = row_values[8]
-                            tag.append(assay_tissue_name)
-                        else :
-                            assay_tissue = ""
-                            assay_error['Warning'].append("Please select a tissue in the TOXsIgN ontologies list ("+assay_id+")")
-                    else :
-                        assay_tissue = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[8] != "":
-                            assay_tissue_name = row_values[8]
-                            tag.append(assay_tissue_name)
+    #             if row_values[9] != "":
+    #                 data = request.registry.db_mongo['tissue.tab'].find_one({'id': row_values[9]})
+    #                 if data is None :
+    #                     if row_values[8] != "":
+    #                         assay_tissue_name = row_values[8]
+    #                         tag.append(assay_tissue_name)
+    #                     else :
+    #                         assay_tissue = ""
+    #                         assay_error['Warning'].append("Please select a tissue in the TOXsIgN ontologies list ("+assay_id+")")
+    #                 else :
+    #                     assay_tissue = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[8] != "":
+    #                         assay_tissue_name = row_values[8]
+    #                         tag.append(assay_tissue_name)
 
-                if row_values[11] != "":
-                    data = request.registry.db_mongo['cell.tab'].find_one({'id': row_values[11]})
-                    if data is None :
-                        if row_values[10] != "":
-                            assay_cell_name = row_values[10]
-                            tag.append(assay_cell_name)
-                        else :
-                            assay_cell = ""
-                            assay_error['Warning'].append("Please select a cell in the TOXsIgN ontologies list ("+assay_id+")")
-                    else :
-                        assay_cell = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[10] != "":
-                            assay_cell_name = row_values[10]
-                            tag.append(assay_cell_name)
-
-
-
-                if row_values[13] != "":
-                    data = request.registry.db_mongo['cell_line.tab'].find_one({'id': row_values[13]})
-                    if data is None :
-                        if row_values[12] != "":
-                            assay_cell_line_name = row_values[12]
-                            tag.append(assay_cell_line_name)
-                        else :
-                            assay_cell_line = ""
-                            assay_error['Warning'].append("Please select a cell line in the TOXsIgN ontologies list ("+assay_id+")")
-                    else :
-                        assay_cell_line = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[12] != "":
-                            assay_cell_line_name = row_values[12]
-                            tag.append(assay_cell_line_name)
-
-                # Check if at least tissue/cell or cell line are filled
-                if assay_cell_line == "" and assay_cell == "" and assay_tissue =="" :
-                    if studies[assay_study]['study_type'] !='Observational' :
-                        assay_error['Critical'].append("Please select at least a tissue, cell or cell line in the TOXsIgN ontologies list ("+assay_id+")")
-                        critical += 1
-
-                if row_values[14] != "":
-                    if row_values[14] in  list_experimental :
-                        assay_experimental_type = row_values[14]
+    #             if row_values[11] != "":
+    #                 data = request.registry.db_mongo['cell.tab'].find_one({'id': row_values[11]})
+    #                 if data is None :
+    #                     if row_values[10] != "":
+    #                         assay_cell_name = row_values[10]
+    #                         tag.append(assay_cell_name)
+    #                     else :
+    #                         assay_cell = ""
+    #                         assay_error['Warning'].append("Please select a cell in the TOXsIgN ontologies list ("+assay_id+")")
+    #                 else :
+    #                     assay_cell = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[10] != "":
+    #                         assay_cell_name = row_values[10]
+    #                         tag.append(assay_cell_name)
 
 
-                if studies[assay_study]['study_type'] =='Observational' :
-                    if row_values[15] != "":
-                        assay_pop_age = row_values[15]
-                    else :
-                        assay_error['Info'].append("No population age ("+assay_id+")")
 
-                    if row_values[16] != "":
-                        assay_location = row_values[16]
-                    else :
-                        assay_error['Info'].append("No geographical location ("+assay_id+")")
+    #             if row_values[13] != "":
+    #                 data = request.registry.db_mongo['cell_line.tab'].find_one({'id': row_values[13]})
+    #                 if data is None :
+    #                     if row_values[12] != "":
+    #                         assay_cell_line_name = row_values[12]
+    #                         tag.append(assay_cell_line_name)
+    #                     else :
+    #                         assay_cell_line = ""
+    #                         assay_error['Warning'].append("Please select a cell line in the TOXsIgN ontologies list ("+assay_id+")")
+    #                 else :
+    #                     assay_cell_line = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[12] != "":
+    #                         assay_cell_line_name = row_values[12]
+    #                         tag.append(assay_cell_line_name)
 
-                    if row_values[17] != "":
-                        assay_reference = row_values[17]
-                    else :
-                        assay_error['Info'].append("No controle / reference ("+assay_id+")")
+    #             # Check if at least tissue/cell or cell line are filled
+    #             if assay_cell_line == "" and assay_cell == "" and assay_tissue =="" :
+    #                 if studies[assay_study]['study_type'] !='Observational' :
+    #                     assay_error['Critical'].append("Please select at least a tissue, cell or cell line in the TOXsIgN ontologies list ("+assay_id+")")
+    #                     critical += 1
 
-                    if row_values[18] != "":
-                        assay_matrice = row_values[18]
-                    else :
-                        assay_error['Info'].append("No matrice("+assay_id+")")
+    #             if row_values[14] != "":
+    #                 if row_values[14] in  list_experimental :
+    #                     assay_experimental_type = row_values[14]
 
-                if row_values[19] != "":
-                    assay_additional_information = row_values[19]
 
-                #After reading line add all info in dico project
-                request.registry.db_mongo['assay'].update({'id': 1}, {'$inc': {'val': 1}})
-                repos = request.registry.db_mongo['assay'].find({'id': 1})
-                id_a = ""
-                for res in repos:
-                    id_a = res
+    #             if studies[assay_study]['study_type'] =='Observational' :
+    #                 if row_values[15] != "":
+    #                     assay_pop_age = row_values[15]
+    #                 else :
+    #                     assay_error['Info'].append("No population age ("+assay_id+")")
+
+    #                 if row_values[16] != "":
+    #                     assay_location = row_values[16]
+    #                 else :
+    #                     assay_error['Info'].append("No geographical location ("+assay_id+")")
+
+    #                 if row_values[17] != "":
+    #                     assay_reference = row_values[17]
+    #                 else :
+    #                     assay_error['Info'].append("No controle / reference ("+assay_id+")")
+
+    #                 if row_values[18] != "":
+    #                     assay_matrice = row_values[18]
+    #                 else :
+    #                     assay_error['Info'].append("No matrice("+assay_id+")")
+
+    #             if row_values[19] != "":
+    #                 assay_additional_information = row_values[19]
+
+    #             #After reading line add all info in dico project
+    #             request.registry.db_mongo['assay'].update({'id': 1}, {'$inc': {'val': 1}})
+    #             repos = request.registry.db_mongo['assay'].find({'id': 1})
+    #             id_a = ""
+    #             for res in repos:
+    #                 id_a = res
                 
-                #Excel id -> databas id
-                asso_id[assay_id] = 'TSA'+str(id_a['val'])
-                reverse_asso[asso_id[assay_id]] = assay_id
+    #             #Excel id -> databas id
+    #             asso_id[assay_id] = 'TSA'+str(id_a['val'])
+    #             reverse_asso[asso_id[assay_id]] = assay_id
 
-                #Add assay id to associated study
-                s_assay = studies[assay_study]['assays'].split()
-                s_assay.append(asso_id[assay_id])
-                studies[assay_study]['assays'] = ','.join(s_assay)
+    #             #Add assay id to associated study
+    #             s_assay = studies[assay_study]['assays'].split()
+    #             s_assay.append(asso_id[assay_id])
+    #             studies[assay_study]['assays'] = ','.join(s_assay)
 
-                #Add assay to the associated project
-                project_asso = reverse_asso[studies[assay_study]['projects']]
+    #             #Add assay to the associated project
+    #             project_asso = reverse_asso[studies[assay_study]['projects']]
 
-                p_assay = projects[project_asso]['assays'].split()
-                p_assay.append(asso_id[assay_id])
-                projects[project_asso]['assays'] = ','.join(p_assay)
+    #             p_assay = projects[project_asso]['assays'].split()
+    #             p_assay.append(asso_id[assay_id])
+    #             projects[project_asso]['assays'] = ','.join(p_assay)
 
-                #After reading line add all info in dico project
-                dico={
-                    'id' : asso_id[assay_id] ,
-                    'studies' : asso_id[assay_study],
-                    'factors' : "",
-                    'signatures' : "",
-                    'projects' : studies[assay_study]['projects'],
-                    'title' : assay_title,
-                    'organism' : assay_organism,
-                    'organism_name' : assay_organism_name,
-                    'experimental_type' : assay_experimental_type,
-                    'developmental_stage' : assay_developmental_stage,
-                    'generation' : assay_generation,
-                    'sex' : assay_sex,
-                    'tissue' : assay_tissue,
-                    'tissue_name' : assay_tissue_name,
-                    'cell' : assay_cell,
-                    'cell_name' : assay_cell_name,
-                    'status' : 'private',
-                    'last_update' : str(sdt),
-                    'cell_line' : assay_cell_line,
-                    'cell_line_name' : assay_cell_line_name,
-                    'additional_information' : assay_additional_information,
-                    'population_age' : assay_pop_age,
-                    'geographical_location':assay_location,
-                    'reference':assay_reference,
-                    'matrice':assay_matrice,
-                    'tags' : ','.join(tag),
-                    'owner' : user,
-                    'info' : ','.join(assay_error['Info']),
-                    'warnings' : ','.join(assay_error['Warning']),
-                    'critical' : ','.join(assay_error['Critical']),
-                    'excel_id' : assay_id
-                }
-                assays[assay_id] = dico
+    #             #After reading line add all info in dico project
+    #             dico={
+    #                 'id' : asso_id[assay_id] ,
+    #                 'studies' : asso_id[assay_study],
+    #                 'factors' : "",
+    #                 'signatures' : "",
+    #                 'projects' : studies[assay_study]['projects'],
+    #                 'title' : assay_title,
+    #                 'organism' : assay_organism,
+    #                 'organism_name' : assay_organism_name,
+    #                 'experimental_type' : assay_experimental_type,
+    #                 'developmental_stage' : assay_developmental_stage,
+    #                 'generation' : assay_generation,
+    #                 'sex' : assay_sex,
+    #                 'tissue' : assay_tissue,
+    #                 'tissue_name' : assay_tissue_name,
+    #                 'cell' : assay_cell,
+    #                 'cell_name' : assay_cell_name,
+    #                 'status' : 'private',
+    #                 'last_update' : str(sdt),
+    #                 'cell_line' : assay_cell_line,
+    #                 'cell_line_name' : assay_cell_line_name,
+    #                 'additional_information' : assay_additional_information,
+    #                 'population_age' : assay_pop_age,
+    #                 'geographical_location':assay_location,
+    #                 'reference':assay_reference,
+    #                 'matrice':assay_matrice,
+    #                 'tags' : ','.join(tag),
+    #                 'owner' : user,
+    #                 'info' : ','.join(assay_error['Info']),
+    #                 'warnings' : ','.join(assay_error['Warning']),
+    #                 'critical' : ','.join(assay_error['Critical']),
+    #                 'excel_id' : assay_id
+    #             }
+    #             assays[assay_id] = dico
 
-        # Check factor
-        sh = wb.sheet_by_index(3)
-        factors={}
-        for rownum in range(5, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" and row_values [4] =="" and row_values [5] =="" :
-                    continue
+    #     # Check factor
+    #     sh = wb.sheet_by_index(3)
+    #     factors={}
+    #     for rownum in range(5, sh.nrows):
+    #             row_values = sh.row_values(rownum)
+    #             if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" and row_values [4] =="" and row_values [5] =="" :
+    #                 continue
 
-                factor_error = {'Critical':[],'Warning':[],'Info':[]}
+    #             factor_error = {'Critical':[],'Warning':[],'Info':[]}
         
-                factor_id = row_values[0]
-                factor_type = ""
-                factor_assay = ""
-                factor_chemical = ""
-                factor_chemical_name = ""
-                factor_physical = ""
-                factor_biological = ""
-                factor_route = ""
-                factor_vehicle  = ""
-                factor_dose = ""
-                factor_dose_unit = ""
-                factor_exposure_duration = ""
-                factor_exposure_duration_unit = ""
-                factor_exposure_frequecies = ""
-                factor_additional_information = ""
-                tag = []
+    #             factor_id = row_values[0]
+    #             factor_type = ""
+    #             factor_assay = ""
+    #             factor_chemical = ""
+    #             factor_chemical_name = ""
+    #             factor_physical = ""
+    #             factor_biological = ""
+    #             factor_route = ""
+    #             factor_vehicle  = ""
+    #             factor_dose = ""
+    #             factor_dose_unit = ""
+    #             factor_exposure_duration = ""
+    #             factor_exposure_duration_unit = ""
+    #             factor_exposure_frequecies = ""
+    #             factor_additional_information = ""
+    #             tag = []
 
 
-                if row_values[1] != "":
-                    if row_values[1] in assays:
-                        factor_assay = row_values[1]
-                    else :
-                        factor_error['Critical'].append("Assay doesn't exists ("+factor_id+")")
-                        critical += 1
-                else :
-                    factor_error['Critical'].append("No associated study ("+factor_id+")")
-                    critical += 1
+    #             if row_values[1] != "":
+    #                 if row_values[1] in assays:
+    #                     factor_assay = row_values[1]
+    #                 else :
+    #                     factor_error['Critical'].append("Assay doesn't exists ("+factor_id+")")
+    #                     critical += 1
+    #             else :
+    #                 factor_error['Critical'].append("No associated study ("+factor_id+")")
+    #                 critical += 1
 
-                if row_values[2] != "":
-                    if row_values[2] in  list_exposition_factor :
-                        factor_type = row_values[2]
-                    else :
-                        factor_error['Critical'].append("Exposition factor not listed ("+factor_id+")")
-                        critical += 1
-                else :
-                    factor_error['Critical'].append("No exposition factor selected ("+factor_id+")")
-                    critical += 1
+    #             if row_values[2] != "":
+    #                 if row_values[2] in  list_exposition_factor :
+    #                     factor_type = row_values[2]
+    #                 else :
+    #                     factor_error['Critical'].append("Exposition factor not listed ("+factor_id+")")
+    #                     critical += 1
+    #             else :
+    #                 factor_error['Critical'].append("No exposition factor selected ("+factor_id+")")
+    #                 critical += 1
 
-                if row_values[4] != "":
-                    data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[4]})
-                    if data is None :
-                        if row_values[3] != "":
-                            factor_chemical_name = row_values[3]
-                            tag.append(factor_chemical_name)
-                        else :
-                            factor_chemical = ""
-                            factor_error['Warning'].append("Chemical not in the TOXsIgN ontologies list ("+factor_id+")")
-                    else :
-                        factor_chemical = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[3] != "":
-                            factor_chemical_name = row_values[3]
-                            tag.append(factor_chemical_name)      
-                else :
-                    assay_error['Warning'].append("No chemical selected ("+factor_id+")")
+    #             if row_values[4] != "":
+    #                 data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[4]})
+    #                 if data is None :
+    #                     if row_values[3] != "":
+    #                         factor_chemical_name = row_values[3]
+    #                         tag.append(factor_chemical_name)
+    #                     else :
+    #                         factor_chemical = ""
+    #                         factor_error['Warning'].append("Chemical not in the TOXsIgN ontologies list ("+factor_id+")")
+    #                 else :
+    #                     factor_chemical = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[3] != "":
+    #                         factor_chemical_name = row_values[3]
+    #                         tag.append(factor_chemical_name)      
+    #             else :
+    #                 assay_error['Warning'].append("No chemical selected ("+factor_id+")")
 
-                if row_values[5] != "":
-                    data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[5]})
-                    if data is None :
-                        data =  'false'
-                    else :
-                        data = 'true'
-                    if data == 'true' :
-                        factor_physical = row_values[5]
-                    else :
-                        a =1
-                        #factor_error['Warning'].append("Physical factor not in the TOXsIgN ontologies (not available yet) ("+factor_id+")")
-                else :
-                    a =1
-                    #factor_error['Warning'].append("No physical factor selected (not available yet) ("+factor_id+")")
+    #             if row_values[5] != "":
+    #                 data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[5]})
+    #                 if data is None :
+    #                     data =  'false'
+    #                 else :
+    #                     data = 'true'
+    #                 if data == 'true' :
+    #                     factor_physical = row_values[5]
+    #                 else :
+    #                     a =1
+    #                     #factor_error['Warning'].append("Physical factor not in the TOXsIgN ontologies (not available yet) ("+factor_id+")")
+    #             else :
+    #                 a =1
+    #                 #factor_error['Warning'].append("No physical factor selected (not available yet) ("+factor_id+")")
 
-                if row_values[6] != "":
-                    data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[6]})
-                    if data is None :
-                        data =  'false'
-                    else :
-                        data = 'true'
-                    if data == 'true' :
-                        factor_biological = row_values[6]
-                    else :
-                        a=1
-                        f#actor_error['Warning'].append("Biological factor notin the TOXsIgN ontologies (not available yet) ("+factor_id+")")
-                else :
-                    a=1
-                    #factor_error['Warning'].append("No biological factor selected (not available yet) ("+factor_id+")")
+    #             if row_values[6] != "":
+    #                 data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[6]})
+    #                 if data is None :
+    #                     data =  'false'
+    #                 else :
+    #                     data = 'true'
+    #                 if data == 'true' :
+    #                     factor_biological = row_values[6]
+    #                 else :
+    #                     a=1
+    #                     f#actor_error['Warning'].append("Biological factor notin the TOXsIgN ontologies (not available yet) ("+factor_id+")")
+    #             else :
+    #                 a=1
+    #                 #factor_error['Warning'].append("No biological factor selected (not available yet) ("+factor_id+")")
 
-                if row_values[7] != "":
-                    factor_route = row_values[7]
-                else :
-                    factor_error['Info'].append("No route ("+factor_id+")")
+    #             if row_values[7] != "":
+    #                 factor_route = row_values[7]
+    #             else :
+    #                 factor_error['Info'].append("No route ("+factor_id+")")
 
-                if row_values[8] != "":
-                    factor_vehicle = row_values[8]
-                else :
-                    factor_error['Info'].append("No vehicle ("+factor_id+")")
+    #             if row_values[8] != "":
+    #                 factor_vehicle = row_values[8]
+    #             else :
+    #                 factor_error['Info'].append("No vehicle ("+factor_id+")")
 
-                if row_values[9] != "":
-                    factor_dose = row_values[9]
-                else :
-                    factor_error['Critical'].append("Factor dose required ("+factor_id+")")
-                    critical += 1
-                try :
-                    if row_values[10] != "":
-                        if str(row_values[10]) in list_dose_unit :
-                            factor_dose_unit = str(row_values[10])
-                        else :
-                            factor_dose_unit = row_values[10]
-                except:
-                    factor_dose_unit = row_values[10]
+    #             if row_values[9] != "":
+    #                 factor_dose = row_values[9]
+    #             else :
+    #                 factor_error['Critical'].append("Factor dose required ("+factor_id+")")
+    #                 critical += 1
+    #             try :
+    #                 if row_values[10] != "":
+    #                     if str(row_values[10]) in list_dose_unit :
+    #                         factor_dose_unit = str(row_values[10])
+    #                     else :
+    #                         factor_dose_unit = row_values[10]
+    #             except:
+    #                 factor_dose_unit = row_values[10]
 
-                if row_values[11] != "":
-                    factor_exposure_duration = row_values[11]
-                else :
-                    factor_error['Critical'].append("Factor exposure duration required ("+factor_id+")")
-                    critical += 1
+    #             if row_values[11] != "":
+    #                 factor_exposure_duration = row_values[11]
+    #             else :
+    #                 factor_error['Critical'].append("Factor exposure duration required ("+factor_id+")")
+    #                 critical += 1
 
-                if row_values[12] != "":
-                    if row_values[12] in list_exposure_duration_unit :
-                        factor_exposure_duration_unit = row_values[12]
-                    else :
-                        factor_exposure_duration_unit = row_values[12]
+    #             if row_values[12] != "":
+    #                 if row_values[12] in list_exposure_duration_unit :
+    #                     factor_exposure_duration_unit = row_values[12]
+    #                 else :
+    #                     factor_exposure_duration_unit = row_values[12]
 
-                if row_values[13] != "":
-                    factor_exposure_frequecies = row_values[13]
+    #             if row_values[13] != "":
+    #                 factor_exposure_frequecies = row_values[13]
 
-                if row_values[14] != "":
-                    factor_additional_information = row_values[14]
+    #             if row_values[14] != "":
+    #                 factor_additional_information = row_values[14]
         
 
 
-                #After reading line add all info in dico project
-                request.registry.db_mongo['factor'].update({'id': 1}, {'$inc': {'val': 1}})
-                repos = request.registry.db_mongo['factor'].find({'id': 1})
-                id_a = ""
-                for res in repos:
-                    id_f = res
+    #             #After reading line add all info in dico project
+    #             request.registry.db_mongo['factor'].update({'id': 1}, {'$inc': {'val': 1}})
+    #             repos = request.registry.db_mongo['factor'].find({'id': 1})
+    #             id_a = ""
+    #             for res in repos:
+    #                 id_f = res
                 
-                #Excel id -> databas id
-                asso_id[factor_id] = 'TSF'+str(id_f['val'])
-                reverse_asso[asso_id[factor_id]] = factor_id
+    #             #Excel id -> databas id
+    #             asso_id[factor_id] = 'TSF'+str(id_f['val'])
+    #             reverse_asso[asso_id[factor_id]] = factor_id
 
-                #Add factor id to associated assay
-                a_factor = assays[factor_assay]['factors'].split()
-                a_factor.append(asso_id[factor_id])
-                assays[factor_assay]['factors'] = ','.join(a_factor)
+    #             #Add factor id to associated assay
+    #             a_factor = assays[factor_assay]['factors'].split()
+    #             a_factor.append(asso_id[factor_id])
+    #             assays[factor_assay]['factors'] = ','.join(a_factor)
 
-                #Add factor to the associated study
-                study_asso = reverse_asso[assays[factor_assay]['studies']]
+    #             #Add factor to the associated study
+    #             study_asso = reverse_asso[assays[factor_assay]['studies']]
 
-                s_factor = studies[study_asso]['factors'].split()
-                s_factor.append(asso_id[factor_id])
-                studies[study_asso]['factors'] = ','.join(s_factor)
+    #             s_factor = studies[study_asso]['factors'].split()
+    #             s_factor.append(asso_id[factor_id])
+    #             studies[study_asso]['factors'] = ','.join(s_factor)
 
-                #Add factor to the associated project
-                project_asso = reverse_asso[assays[factor_assay]['projects']]
+    #             #Add factor to the associated project
+    #             project_asso = reverse_asso[assays[factor_assay]['projects']]
 
-                p_factor = projects[project_asso]['factors'].split()
-                p_factor.append(asso_id[factor_id])
-                projects[project_asso]['factors'] = ','.join(p_factor)
+    #             p_factor = projects[project_asso]['factors'].split()
+    #             p_factor.append(asso_id[factor_id])
+    #             projects[project_asso]['factors'] = ','.join(p_factor)
 
-                #up factor tags to associated assy 
-                tag_assay = assays[factor_assay]['tags'].split(',')
-                tag_assay.extend(tag)
-                assays[factor_assay]['tags'] = ','.join(tag_assay)
+    #             #up factor tags to associated assy 
+    #             tag_assay = assays[factor_assay]['tags'].split(',')
+    #             tag_assay.extend(tag)
+    #             assays[factor_assay]['tags'] = ','.join(tag_assay)
 
-                #After reading line add all info in dico project
-                try :
-                    dico={
-                        'id' : asso_id[factor_id],
-                        'assays' : asso_id[factor_assay],
-                        'studies' : assays[factor_assay]['studies'],
-                        'project' : assays[factor_assay]['projects'],
-                        'type' : factor_type,
-                        'chemical' : factor_chemical,
-                        'chemical_name' : factor_chemical_name,
-                        'physical' : factor_physical,
-                        'biological' : factor_biological,
-                        'route' : factor_route,
-                        'last_update' : str(sdt),
-                        'status' : 'private',
-                        'vehicle' : factor_vehicle,
-                        'dose' : str(factor_dose) +" "+ factor_dose_unit,
-                        'exposure_duration' : str(factor_exposure_duration) +" "+ factor_exposure_duration_unit,
-                        'exposure_frequencies' : factor_exposure_frequecies,
-                        'additional_information' : factor_additional_information,
-                        'tags' : ','.join(tag),
-                        'owner' : user,
-                        'info' : ','.join(factor_error['Info']),
-                        'warnings' : ','.join(factor_error['Warning']),
-                        'critical' : ','.join(factor_error['Critical']),
-                        'excel_id' : factor_id
-                    }
-                except :
-                    dico={
-                        'id' : asso_id[factor_id],
-                        'assays' : asso_id[factor_assay],
-                        'studies' : assays[factor_assay]['studies'],
-                        'project' : assays[factor_assay]['projects'],
-                        'type' : factor_type,
-                        'chemical' : factor_chemical,
-                        'chemical_name' : factor_chemical_name,
-                        'physical' : factor_physical,
-                        'biological' : factor_biological,
-                        'route' : factor_route,
-                        'last_update' : str(sdt),
-                        'status' : 'private',
-                        'vehicle' : factor_vehicle,
-                        'dose' : factor_dose +" "+ factor_dose_unit,
-                        'exposure_duration' : factor_exposure_duration +" "+ factor_exposure_duration_unit,
-                        'exposure_frequencies' : factor_exposure_frequecies,
-                        'additional_information' : factor_additional_information,
-                        'tags' : ','.join(tag),
-                        'owner' : user,
-                        'info' : ','.join(factor_error['Info']),
-                        'warnings' : ','.join(factor_error['Warning']),
-                        'critical' : ','.join(factor_error['Critical']),
-                        'excel_id' : factor_id
-                    }
-                factors[factor_id] = dico
+    #             #After reading line add all info in dico project
+    #             try :
+    #                 dico={
+    #                     'id' : asso_id[factor_id],
+    #                     'assays' : asso_id[factor_assay],
+    #                     'studies' : assays[factor_assay]['studies'],
+    #                     'project' : assays[factor_assay]['projects'],
+    #                     'type' : factor_type,
+    #                     'chemical' : factor_chemical,
+    #                     'chemical_name' : factor_chemical_name,
+    #                     'physical' : factor_physical,
+    #                     'biological' : factor_biological,
+    #                     'route' : factor_route,
+    #                     'last_update' : str(sdt),
+    #                     'status' : 'private',
+    #                     'vehicle' : factor_vehicle,
+    #                     'dose' : str(factor_dose) +" "+ factor_dose_unit,
+    #                     'exposure_duration' : str(factor_exposure_duration) +" "+ factor_exposure_duration_unit,
+    #                     'exposure_frequencies' : factor_exposure_frequecies,
+    #                     'additional_information' : factor_additional_information,
+    #                     'tags' : ','.join(tag),
+    #                     'owner' : user,
+    #                     'info' : ','.join(factor_error['Info']),
+    #                     'warnings' : ','.join(factor_error['Warning']),
+    #                     'critical' : ','.join(factor_error['Critical']),
+    #                     'excel_id' : factor_id
+    #                 }
+    #             except :
+    #                 dico={
+    #                     'id' : asso_id[factor_id],
+    #                     'assays' : asso_id[factor_assay],
+    #                     'studies' : assays[factor_assay]['studies'],
+    #                     'project' : assays[factor_assay]['projects'],
+    #                     'type' : factor_type,
+    #                     'chemical' : factor_chemical,
+    #                     'chemical_name' : factor_chemical_name,
+    #                     'physical' : factor_physical,
+    #                     'biological' : factor_biological,
+    #                     'route' : factor_route,
+    #                     'last_update' : str(sdt),
+    #                     'status' : 'private',
+    #                     'vehicle' : factor_vehicle,
+    #                     'dose' : factor_dose +" "+ factor_dose_unit,
+    #                     'exposure_duration' : factor_exposure_duration +" "+ factor_exposure_duration_unit,
+    #                     'exposure_frequencies' : factor_exposure_frequecies,
+    #                     'additional_information' : factor_additional_information,
+    #                     'tags' : ','.join(tag),
+    #                     'owner' : user,
+    #                     'info' : ','.join(factor_error['Info']),
+    #                     'warnings' : ','.join(factor_error['Warning']),
+    #                     'critical' : ','.join(factor_error['Critical']),
+    #                     'excel_id' : factor_id
+    #                 }
+    #             factors[factor_id] = dico
 
 
-        # Check signatures
-        sh = wb.sheet_by_index(4)
-        signatures={}
-        for rownum in range(6, sh.nrows):
-                row_values = sh.row_values(rownum)
-                if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" and row_values [4] =="" and row_values [5] =="" :
-                    continue
+    #     # Check signatures
+    #     sh = wb.sheet_by_index(4)
+    #     signatures={}
+    #     for rownum in range(6, sh.nrows):
+    #             row_values = sh.row_values(rownum)
+    #             if row_values [1] == "" and row_values [2] == "" and row_values [3] =="" and row_values [4] =="" and row_values [5] =="" :
+    #                 continue
 
-                signature_error = {'Critical':[],'Warning':[],'Info':[]}
+    #             signature_error = {'Critical':[],'Warning':[],'Info':[]}
 
-                signature_id = row_values[0]
-                signature_associated_study = ""
-                signature_associated_assay = ""
-                signature_title = ""
-                signature_type = ""
-                signature_organism = ""
-                signature_organism_name = ""
-                signature_developmental_stage = ""
-                signature_generation = ""
-                signature_sex = ""
-                signature_tissue = ""
-                signature_tissue_name = ""
-                signature_cell = ""
-                signature_cell_name = "" 
-                signature_cell_line = ""
-                signature_cell_line_name = ""
-                signature_molecule = ""
-                signature_molecule_name = ""
-                signature_pathology = ""
-                signature_technology = ""
-                signature_technology_name = ""
-                signature_plateform = ""
-                signature_observed_effect = ""
-                signature_control_sample = ""
-                signature_treated_sample = ""
-                signature_pvalue = ""
-                signature_cutoff = "" 
-                signature_satistical_processing = ""
-                signature_additional_file = ""
-                signature_file_up = "" 
-                signature_file_down = ""
-                signature_file_interrogated = ""
-                signature_genes_identifier = ""
-                signature_study_type= ""
-                signature_description = ""
+    #             signature_id = row_values[0]
+    #             signature_associated_study = ""
+    #             signature_associated_assay = ""
+    #             signature_title = ""
+    #             signature_type = ""
+    #             signature_organism = ""
+    #             signature_organism_name = ""
+    #             signature_developmental_stage = ""
+    #             signature_generation = ""
+    #             signature_sex = ""
+    #             signature_tissue = ""
+    #             signature_tissue_name = ""
+    #             signature_cell = ""
+    #             signature_cell_name = "" 
+    #             signature_cell_line = ""
+    #             signature_cell_line_name = ""
+    #             signature_molecule = ""
+    #             signature_molecule_name = ""
+    #             signature_pathology = ""
+    #             signature_technology = ""
+    #             signature_technology_name = ""
+    #             signature_plateform = ""
+    #             signature_observed_effect = ""
+    #             signature_control_sample = ""
+    #             signature_treated_sample = ""
+    #             signature_pvalue = ""
+    #             signature_cutoff = "" 
+    #             signature_satistical_processing = ""
+    #             signature_additional_file = ""
+    #             signature_file_up = "" 
+    #             signature_file_down = ""
+    #             signature_file_interrogated = ""
+    #             signature_genes_identifier = ""
+    #             signature_study_type= ""
+    #             signature_description = ""
 
-                signature_controle = ""
-                signature_case = ""
-                signature_significance = ""
-                signature_stat_value = ""
-                signature_stat_adjust = ""
-                signature_stat_other = ""
-                signature_group = ""
-                signature_pop_age = ""
-                tag = []
+    #             signature_controle = ""
+    #             signature_case = ""
+    #             signature_significance = ""
+    #             signature_stat_value = ""
+    #             signature_stat_adjust = ""
+    #             signature_stat_other = ""
+    #             signature_group = ""
+    #             signature_pop_age = ""
+    #             tag = []
 
-                if row_values[1] != "":
-                    if row_values[1] in studies:
-                        signature_associated_study = row_values[1]
-                    else :
-                        signature_error['Critical'].append("Study doesn't exists ("+signature_id+")")
-                        critical += 1
-                else :
-                    signature_error['Critical'].append("No associated study ("+signature_id+")")
-                    critical += 1
+    #             if row_values[1] != "":
+    #                 if row_values[1] in studies:
+    #                     signature_associated_study = row_values[1]
+    #                 else :
+    #                     signature_error['Critical'].append("Study doesn't exists ("+signature_id+")")
+    #                     critical += 1
+    #             else :
+    #                 signature_error['Critical'].append("No associated study ("+signature_id+")")
+    #                 critical += 1
 
-                if row_values[2] != "":
-                    if row_values[2] in assays:
-                        signature_associated_assay = row_values[2]
-                    else :
-                        signature_error['Critical'].append("Assay doesn't exists ("+signature_id+")")
-                        critical += 1
-                else :
-                    signature_error['Critical'].append("No associated assay ("+signature_id+")")
-                    critical += 1
+    #             if row_values[2] != "":
+    #                 if row_values[2] in assays:
+    #                     signature_associated_assay = row_values[2]
+    #                 else :
+    #                     signature_error['Critical'].append("Assay doesn't exists ("+signature_id+")")
+    #                     critical += 1
+    #             else :
+    #                 signature_error['Critical'].append("No associated assay ("+signature_id+")")
+    #                 critical += 1
 
-                if row_values[3] != "":
-                    signature_title = row_values[3]
-                else :
-                    signature_error['Critical'].append("No signature title ("+signature_id+")")
-                    critical += 1
+    #             if row_values[3] != "":
+    #                 signature_title = row_values[3]
+    #             else :
+    #                 signature_error['Critical'].append("No signature title ("+signature_id+")")
+    #                 critical += 1
 
-                if row_values[4] != "":
-                    if row_values[4] in list_signature_type : 
-                        signature_type = row_values[4]
-                    else :
-                        signature_error['Critical'].append("Signature title not in the list ("+signature_id+")")
-                        critical += 1
-                else :
-                    signature_error['Critical'].append("No type of signature ("+signature_id+")")
-                    critical += 1
+    #             if row_values[4] != "":
+    #                 if row_values[4] in list_signature_type : 
+    #                     signature_type = row_values[4]
+    #                 else :
+    #                     signature_error['Critical'].append("Signature title not in the list ("+signature_id+")")
+    #                     critical += 1
+    #             else :
+    #                 signature_error['Critical'].append("No type of signature ("+signature_id+")")
+    #                 critical += 1
 
-                if row_values[6] != "":
-                    data = request.registry.db_mongo['species.tab'].find_one({'id': row_values[6]})
-                    if data is None :
-                        if row_values[5] != "":
-                            signature_organism_name = row_values[5]
-                            tag.append(signature_organism_name)
-                        else :
-                            signature_organism = ""
-                            signature_error['Critical'].append("Please select an organism in the TOXsIgN ontologies list ("+signature_id+")")
-                            critical += 1
-                    else :
-                        signature_organism = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[5] != "":
-                            signature_organism = row_values[5]
-                            tag.append(signature_organism_name)   
-                else :
-                    signature_error['Critical'].append("No organism selected ("+signature_id+")")
-                    critical += 1
+    #             if row_values[6] != "":
+    #                 data = request.registry.db_mongo['species.tab'].find_one({'id': row_values[6]})
+    #                 if data is None :
+    #                     if row_values[5] != "":
+    #                         signature_organism_name = row_values[5]
+    #                         tag.append(signature_organism_name)
+    #                     else :
+    #                         signature_organism = ""
+    #                         signature_error['Critical'].append("Please select an organism in the TOXsIgN ontologies list ("+signature_id+")")
+    #                         critical += 1
+    #                 else :
+    #                     signature_organism = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[5] != "":
+    #                         signature_organism = row_values[5]
+    #                         tag.append(signature_organism_name)   
+    #             else :
+    #                 signature_error['Critical'].append("No organism selected ("+signature_id+")")
+    #                 critical += 1
 
-                if row_values[7] != "":
-                    if row_values[7] in  list_developmental_stage :
-                        signature_developmental_stage = row_values[7]
-                    else :
-                        signature_error['Warning'].append("Developmental stage not listed ("+signature_id+")")
-                else :
-                    signature_error['Info'].append("No developmental stage selected ("+signature_id+")")
+    #             if row_values[7] != "":
+    #                 if row_values[7] in  list_developmental_stage :
+    #                     signature_developmental_stage = row_values[7]
+    #                 else :
+    #                     signature_error['Warning'].append("Developmental stage not listed ("+signature_id+")")
+    #             else :
+    #                 signature_error['Info'].append("No developmental stage selected ("+signature_id+")")
                     
 
-                if row_values[8] != "":
-                    if row_values[8] in  list_generation :
-                        signature_generation = row_values[8]
-                    else :
-                        signature_error['Warning'].append("Generation not listed ("+signature_id+")")
-                else :
-                    signature_error['Info'].append("No generation selected ("+signature_id+")")
+    #             if row_values[8] != "":
+    #                 if row_values[8] in  list_generation :
+    #                     signature_generation = row_values[8]
+    #                 else :
+    #                     signature_error['Warning'].append("Generation not listed ("+signature_id+")")
+    #             else :
+    #                 signature_error['Info'].append("No generation selected ("+signature_id+")")
 
-                if row_values[9] != "":
-                    if row_values[9] in  list_sex :
-                        signature_sex = row_values[9]
-                    else :
-                        signature_error['Warning'].append("Sex not listed ("+signature_id+")")
-                else :
-                    signature_error['Info'].append("No sex selected ("+signature_id+")")
+    #             if row_values[9] != "":
+    #                 if row_values[9] in  list_sex :
+    #                     signature_sex = row_values[9]
+    #                 else :
+    #                     signature_error['Warning'].append("Sex not listed ("+signature_id+")")
+    #             else :
+    #                 signature_error['Info'].append("No sex selected ("+signature_id+")")
 
-                if row_values[11] != "":
-                    data = request.registry.db_mongo['tissue.tab'].find_one({'id': row_values[1]})
-                    if data is None :
-                        if row_values[10] != "":
-                            signature_tissue_name = row_values[10]
-                            tag.append(signature_tissue_name)
-                        else :
-                            signature_tissue = ""
-                    else :
-                        signature_tissue = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[10] != "":
-                            signature_tissue_name = row_values[10]
-                            tag.append(signature_tissue_name)  
+    #             if row_values[11] != "":
+    #                 data = request.registry.db_mongo['tissue.tab'].find_one({'id': row_values[1]})
+    #                 if data is None :
+    #                     if row_values[10] != "":
+    #                         signature_tissue_name = row_values[10]
+    #                         tag.append(signature_tissue_name)
+    #                     else :
+    #                         signature_tissue = ""
+    #                 else :
+    #                     signature_tissue = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[10] != "":
+    #                         signature_tissue_name = row_values[10]
+    #                         tag.append(signature_tissue_name)  
 
-                if row_values[13] != "":
-                    data = request.registry.db_mongo['cell.tab'].find_one({'id': row_values[13]})
-                    if data is None :
-                        if row_values[12] != "":
-                            signature_cell_name = row_values[12]
-                            tag.append(signature_cell_name)
-                        else :
-                            signature_cell = ""
-                    else :
-                        signature_cell = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name']) 
-                        if row_values[12] != "":
-                            signature_cell_name = row_values[12]
-                            tag.append(signature_cell_name)  
+    #             if row_values[13] != "":
+    #                 data = request.registry.db_mongo['cell.tab'].find_one({'id': row_values[13]})
+    #                 if data is None :
+    #                     if row_values[12] != "":
+    #                         signature_cell_name = row_values[12]
+    #                         tag.append(signature_cell_name)
+    #                     else :
+    #                         signature_cell = ""
+    #                 else :
+    #                     signature_cell = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name']) 
+    #                     if row_values[12] != "":
+    #                         signature_cell_name = row_values[12]
+    #                         tag.append(signature_cell_name)  
 
-                if row_values[15] != "":
-                    data = request.registry.db_mongo['cell_line.tab'].find_one({'id': row_values[15]})
-                    if data is None :
-                        if row_values[14] != "":
-                            signature_cell_line_name = row_values[14]
-                            tag.append(signature_cell_line_name)
-                        else :
-                            signature_cell_line = ''
-                    else :
-                        signature_cell_line = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[14] != "":
-                            signature_cell_line_name = row_values[14]
-                            tag.append(signature_cell_line_name)   
+    #             if row_values[15] != "":
+    #                 data = request.registry.db_mongo['cell_line.tab'].find_one({'id': row_values[15]})
+    #                 if data is None :
+    #                     if row_values[14] != "":
+    #                         signature_cell_line_name = row_values[14]
+    #                         tag.append(signature_cell_line_name)
+    #                     else :
+    #                         signature_cell_line = ''
+    #                 else :
+    #                     signature_cell_line = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[14] != "":
+    #                         signature_cell_line_name = row_values[14]
+    #                         tag.append(signature_cell_line_name)   
 
-                # Check if at least tissue/cell or cell line are filled
-                if signature_cell_line == "" and signature_cell == "" and signature_tissue =="" :
-                    if studies[signature_associated_study]['study_type'] != 'Observational' :
-                        signature_error['Critical'].append("Please select at least a tissue, cell or cell line in the TOXsIgN ontologies list ("+signature_id+")")
-                        critical += 1
+    #             # Check if at least tissue/cell or cell line are filled
+    #             if signature_cell_line == "" and signature_cell == "" and signature_tissue =="" :
+    #                 if studies[signature_associated_study]['study_type'] != 'Observational' :
+    #                     signature_error['Critical'].append("Please select at least a tissue, cell or cell line in the TOXsIgN ontologies list ("+signature_id+")")
+    #                     critical += 1
 
-                if row_values[17] != "":
-                    data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[17]})
-                    if data is None :
-                        if row_values[16] != "" :
-                            signature_molecule_name = row_values[16]
-                            tag.append(signature_molecule_name)
-                        else :
-                            signature_molecule = ""
-                    else :
-                        signature_molecule = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[16] != "" :
-                            signature_molecule_name = row_values[16]
-                            tag.append(signature_molecule_name)   
-
-
-                if row_values[18] != "":
-                    signature_description = row_values[18]
-                    tag.extend(signature_description)
-
-                if row_values[19] != "":
-                    data = request.registry.db_mongo['disease.tab'].find_one({'id': row_values[19]})
-                    if data is None :
-                        signature_pathology = ""
-                        signature_error['Warning'].append("Pathology / disease not in TOXsIgN ontology ("+signature_id+")")
-                    else :
-                        signature_pathology = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
+    #             if row_values[17] != "":
+    #                 data = request.registry.db_mongo['chemical.tab'].find_one({'id': row_values[17]})
+    #                 if data is None :
+    #                     if row_values[16] != "" :
+    #                         signature_molecule_name = row_values[16]
+    #                         tag.append(signature_molecule_name)
+    #                     else :
+    #                         signature_molecule = ""
+    #                 else :
+    #                     signature_molecule = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[16] != "" :
+    #                         signature_molecule_name = row_values[16]
+    #                         tag.append(signature_molecule_name)   
 
 
-                if row_values[21] != "":
-                    data = request.registry.db_mongo['experiment.tab'].find_one({'id': row_values[21]})
-                    if data is None :
-                        if row_values[20] != "":
-                            signature_technology_name = row_values[20]
-                            tag.append(signature_technology_name)
-                        else :
-                            signature_technology = ""
-                            if signature_type == "Genomic":
-                                signature_error['Warning'].append("Technology not in TOXsIgN ontology ("+signature_id+")")
-                    else :
-                        signature_technology = data['name']
-                        tag.append(data['name'])
-                        tag.append(data['id'])
-                        tag.extend(data['synonyms'])
-                        tag.extend(data['direct_parent'])
-                        tag.extend(data['all_parent'])
-                        tag.extend(data['all_name'])
-                        if row_values[20] != "":
-                            signature_technology_name = row_values[20]
-                            tag.append(signature_technology_name)              
-                else :
-                    if signature_type == "Genomic":
-                        signature_error['Warning'].append("No technology selected ("+signature_id+")")
+    #             if row_values[18] != "":
+    #                 signature_description = row_values[18]
+    #                 tag.extend(signature_description)
 
-                if row_values[22] != "":
-                    signature_plateform = row_values[22]
-                else :
-                    if signature_type == "Genomic":
-                        signature_error['Info'].append("No plateform selected ("+signature_id+")")
+    #             if row_values[19] != "":
+    #                 data = request.registry.db_mongo['disease.tab'].find_one({'id': row_values[19]})
+    #                 if data is None :
+    #                     signature_pathology = ""
+    #                     signature_error['Warning'].append("Pathology / disease not in TOXsIgN ontology ("+signature_id+")")
+    #                 else :
+    #                     signature_pathology = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
 
 
-                if row_values[23] != "":
-                    signature_controle = row_values[23]
+    #             if row_values[21] != "":
+    #                 data = request.registry.db_mongo['experiment.tab'].find_one({'id': row_values[21]})
+    #                 if data is None :
+    #                     if row_values[20] != "":
+    #                         signature_technology_name = row_values[20]
+    #                         tag.append(signature_technology_name)
+    #                     else :
+    #                         signature_technology = ""
+    #                         if signature_type == "Genomic":
+    #                             signature_error['Warning'].append("Technology not in TOXsIgN ontology ("+signature_id+")")
+    #                 else :
+    #                     signature_technology = data['name']
+    #                     tag.append(data['name'])
+    #                     tag.append(data['id'])
+    #                     tag.extend(data['synonyms'])
+    #                     tag.extend(data['direct_parent'])
+    #                     tag.extend(data['all_parent'])
+    #                     tag.extend(data['all_name'])
+    #                     if row_values[20] != "":
+    #                         signature_technology_name = row_values[20]
+    #                         tag.append(signature_technology_name)              
+    #             else :
+    #                 if signature_type == "Genomic":
+    #                     signature_error['Warning'].append("No technology selected ("+signature_id+")")
+
+    #             if row_values[22] != "":
+    #                 signature_plateform = row_values[22]
+    #             else :
+    #                 if signature_type == "Genomic":
+    #                     signature_error['Info'].append("No plateform selected ("+signature_id+")")
 
 
-                if row_values[24] != "":
-                    signature_case = row_values[24]
+    #             if row_values[23] != "":
+    #                 signature_controle = row_values[23]
 
 
-                if row_values[25] != "":
-                    signature_group = row_values[25]
+    #             if row_values[24] != "":
+    #                 signature_case = row_values[24]
 
 
-                if row_values[26] != "":
-                    signature_group = row_values[26]
+    #             if row_values[25] != "":
+    #                 signature_group = row_values[25]
 
 
-                if row_values[27] != "":
-                    if row_values[27] in  list_observed_effect :
-                        signature_observed_effect= row_values[27]
-                    else :
-                        signature_error['Warning'].append("Observed effect not listed ("+signature_id+")")
-
-                if row_values[28] != "":
-                    signature_significance = row_values[28]
-                else :
-                    if studies[signature_associated_study]['study_type'] == 'Observational' :
-                        signature_error['Info'].append("No statistical significance ("+signature_id+")")
-
-                if row_values[29] != "":
-                    signature_stat_value = row_values[29]
-                else :
-                    if studies[signature_associated_study]['study_type'] == 'Observational' :
-                        signature_error['Info'].append("No statistical value ("+signature_id+")")
-
-                if row_values[30] != "":
-                    signature_stat_adjust = row_values[30]
-                else :
-                    if studies[signature_associated_study]['study_type'] == 'Observational' :
-                        signature_error['Info'].append("No statistical adjustment ("+signature_id+")")
-
-                if row_values[31] != "":
-                    signature_stat_other = row_values[31]
+    #             if row_values[26] != "":
+    #                 signature_group = row_values[26]
 
 
+    #             if row_values[27] != "":
+    #                 if row_values[27] in  list_observed_effect :
+    #                     signature_observed_effect= row_values[27]
+    #                 else :
+    #                     signature_error['Warning'].append("Observed effect not listed ("+signature_id+")")
+
+    #             if row_values[28] != "":
+    #                 signature_significance = row_values[28]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] == 'Observational' :
+    #                     signature_error['Info'].append("No statistical significance ("+signature_id+")")
+
+    #             if row_values[29] != "":
+    #                 signature_stat_value = row_values[29]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] == 'Observational' :
+    #                     signature_error['Info'].append("No statistical value ("+signature_id+")")
+
+    #             if row_values[30] != "":
+    #                 signature_stat_adjust = row_values[30]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] == 'Observational' :
+    #                     signature_error['Info'].append("No statistical adjustment ("+signature_id+")")
+
+    #             if row_values[31] != "":
+    #                 signature_stat_other = row_values[31]
 
 
 
-                if row_values[32] != "":
-                    signature_control_sample = row_values[32]
-                else :
-                    if studies[signature_associated_study]['study_type'] != 'Observational' :
-                        signature_error['Info'].append("No control sample ("+signature_id+")")
 
-                if row_values[33] != "":
-                    signature_treated_sample = row_values[33]
-                else :
-                    if studies[signature_associated_study]['study_type'] != 'Observational' :
-                        signature_error['Info'].append("No treated sample ("+signature_id+")")
 
-                if row_values[34] != "":
-                    signature_pvalue = row_values[34]
-                else :
-                    if studies[signature_associated_study]['study_type'] != 'Observational' :
-                        signature_error['Info'].append("No pvalue ("+signature_id+")")
+    #             if row_values[32] != "":
+    #                 signature_control_sample = row_values[32]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] != 'Observational' :
+    #                     signature_error['Info'].append("No control sample ("+signature_id+")")
 
-                if row_values[35] != "":
-                    signature_cutoff = row_values[36]
-                else :
-                    if studies[signature_associated_study]['study_type'] != 'Observational' :
-                        signature_error['Info'].append("No cutoff ("+signature_id+")")
+    #             if row_values[33] != "":
+    #                 signature_treated_sample = row_values[33]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] != 'Observational' :
+    #                     signature_error['Info'].append("No treated sample ("+signature_id+")")
 
-                if row_values[36] != "":
-                    signature_satistical_processing = row_values[36]
-                else :
-                    if studies[signature_associated_study]['study_type'] != 'Observational' :
-                        signature_error['Info'].append("No statistical processing ("+signature_id+")")
+    #             if row_values[34] != "":
+    #                 signature_pvalue = row_values[34]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] != 'Observational' :
+    #                     signature_error['Info'].append("No pvalue ("+signature_id+")")
 
-                if row_values[37] != "":
-                    signature_additional_file = row_values[37]
-                else :
-                    signature_error['Info'].append("No additional file ("+signature_id+")")
+    #             if row_values[35] != "":
+    #                 signature_cutoff = row_values[36]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] != 'Observational' :
+    #                     signature_error['Info'].append("No cutoff ("+signature_id+")")
 
-                if row_values[38] != "":
-                    signature_file_up = row_values[38]
-                else :
-                    if signature_type == "Genomic":
-                        signature_error['Critical'].append("No signature file (up genes) ("+signature_id+")")
-                        critical += 1
+    #             if row_values[36] != "":
+    #                 signature_satistical_processing = row_values[36]
+    #             else :
+    #                 if studies[signature_associated_study]['study_type'] != 'Observational' :
+    #                     signature_error['Info'].append("No statistical processing ("+signature_id+")")
 
-                if row_values[39] != "":
-                    signature_file_down = row_values[39]
-                else :
-                    if signature_type == "Genomic":
-                        signature_error['Critical'].append("No signature file (down genes) ("+signature_id+")")
-                        critical +=1
+    #             if row_values[37] != "":
+    #                 signature_additional_file = row_values[37]
+    #             else :
+    #                 signature_error['Info'].append("No additional file ("+signature_id+")")
 
-                if row_values[40] != "":
-                    signature_file_interrogated = row_values[40]
-                else :
-                    if signature_type == "Genomic":
-                        signature_error['Critical'].append("No signature file (interrogated genes) ("+signature_id+")")
-                        critical += 1
+    #             if row_values[38] != "":
+    #                 signature_file_up = row_values[38]
+    #             else :
+    #                 if signature_type == "Genomic":
+    #                     signature_error['Critical'].append("No signature file (up genes) ("+signature_id+")")
+    #                     critical += 1
 
-                if row_values[41] != "":
-                    signature_genes_identifier = row_values[41]
-                else :
-                    if signature_type == "Genomic":
-                        signature_error['Info'].append("No gene identifier selected ("+signature_id+")")
-                        critical += 1
+    #             if row_values[39] != "":
+    #                 signature_file_down = row_values[39]
+    #             else :
+    #                 if signature_type == "Genomic":
+    #                     signature_error['Critical'].append("No signature file (down genes) ("+signature_id+")")
+    #                     critical +=1
 
-                #After reading line add all info in dico project
-                #After reading line add all info in dico project
-                request.registry.db_mongo['signature'].update({'id': 1}, {'$inc': {'val': 1}})
-                repos = request.registry.db_mongo['signature'].find({'id': 1})
-                id_a = ""
-                for res in repos:
-                    id_si = res
+    #             if row_values[40] != "":
+    #                 signature_file_interrogated = row_values[40]
+    #             else :
+    #                 if signature_type == "Genomic":
+    #                     signature_error['Critical'].append("No signature file (interrogated genes) ("+signature_id+")")
+    #                     critical += 1
+
+    #             if row_values[41] != "":
+    #                 signature_genes_identifier = row_values[41]
+    #             else :
+    #                 if signature_type == "Genomic":
+    #                     signature_error['Info'].append("No gene identifier selected ("+signature_id+")")
+    #                     critical += 1
+
+    #             #After reading line add all info in dico project
+    #             #After reading line add all info in dico project
+    #             request.registry.db_mongo['signature'].update({'id': 1}, {'$inc': {'val': 1}})
+    #             repos = request.registry.db_mongo['signature'].find({'id': 1})
+    #             id_a = ""
+    #             for res in repos:
+    #                 id_si = res
                 
-                #Excel id -> databas id
-                asso_id[signature_id] = 'TSS'+str(id_si['val'])
-                reverse_asso[asso_id[signature_id]] = signature_id
+    #             #Excel id -> databas id
+    #             asso_id[signature_id] = 'TSS'+str(id_si['val'])
+    #             reverse_asso[asso_id[signature_id]] = signature_id
 
-                #Add signature id to associated assay
-                a_signature = assays[signature_associated_assay]['signatures'].split()
+    #             #Add signature id to associated assay
+    #             a_signature = assays[signature_associated_assay]['signatures'].split()
 
-                a_signature.append(asso_id[signature_id])
-                assays[signature_associated_assay]['signatures'] = ','.join(a_signature)
+    #             a_signature.append(asso_id[signature_id])
+    #             assays[signature_associated_assay]['signatures'] = ','.join(a_signature)
 
-                #Add factor to the associated study
+    #             #Add factor to the associated study
 
-                s_signature = studies[signature_associated_study]['signatures'].split()
-                s_signature.append(asso_id[signature_id])
-                studies[signature_associated_study]['signatures'] = ','.join(s_signature)
+    #             s_signature = studies[signature_associated_study]['signatures'].split()
+    #             s_signature.append(asso_id[signature_id])
+    #             studies[signature_associated_study]['signatures'] = ','.join(s_signature)
 
-                #Add factor to the associated project
-                project_asso = reverse_asso[studies[signature_associated_study]['projects']]
+    #             #Add factor to the associated project
+    #             project_asso = reverse_asso[studies[signature_associated_study]['projects']]
 
-                p_signature = projects[project_asso]['signatures'].split()
-                p_signature.append(asso_id[signature_id])
-                projects[project_asso]['signatures'] = ','.join(p_signature)
+    #             p_signature = projects[project_asso]['signatures'].split()
+    #             p_signature.append(asso_id[signature_id])
+    #             projects[project_asso]['signatures'] = ','.join(p_signature)
 
-                #get factors
-                tag.extend(assays[signature_associated_assay]['tags'].split(','))
-                myset = list(set(tag))
-                tag = myset
+    #             #get factors
+    #             tag.extend(assays[signature_associated_assay]['tags'].split(','))
+    #             myset = list(set(tag))
+    #             tag = myset
                 
-                signature_study_type = studies[signature_associated_study]['study_type']
-                dico ={
-                    'id' : asso_id[signature_id],
-                    'studies' : asso_id[signature_associated_study],
-                    'assays' : asso_id[signature_associated_assay],
-                    'projects' : studies[signature_associated_study]['projects'] ,
-                    'title' : signature_title,
-                    'type' : signature_type,
-                    'organism' : signature_organism,
-                    'organism_name' : signature_organism_name,
-                    'developmental_stage' : signature_developmental_stage,
-                    'generation' : signature_generation,
-                    'sex' : signature_sex,
-                    'last_update' : str(sdt),
-                    'tissue' : signature_tissue,
-                    'tissue_name' : signature_tissue_name,
-                    'cell' : signature_cell,
-                    'cell_name' : signature_cell_name,
-                    'status' : 'private',
-                    'cell_line' : signature_cell_line,
-                    'cell_line_name' : signature_cell_line_name,
-                    'molecule' : signature_molecule,
-                    'molecule_name' : signature_molecule_name,
-                    'pathology' : signature_pathology,
-                    'technology' : signature_technology,
-                    'description' : signature_description,
-                    'technology_name' : signature_technology_name,
-                    'plateform' : signature_plateform,
-                    'observed_effect' : signature_observed_effect,
-                    'control_sample' : str(signature_control_sample),
-                    'treated_sample' : str(signature_treated_sample),
-                    'pvalue' : str(signature_pvalue),
-                    'cutoff' : str(signature_cutoff),
-                    'statistical_processing' : signature_satistical_processing,
-                    'additional_file' : signature_additional_file,
-                    'file_up' : signature_file_up,
-                    'file_down' : signature_file_down,
-                    'file_interrogated' : signature_file_interrogated,
-                    'genes_identifier': signature_genes_identifier,
-                    'controle':signature_controle,
-                    'case':signature_case,
-                    'significance':signature_significance,
-                    'stat_val' : signature_stat_value,
-                    'stat_adjust' : signature_stat_adjust,
-                    'stat_other' : signature_stat_other,
-                    'study_type' :signature_study_type,
-                    'group' : signature_group,
-                    'pop_age' : signature_pop_age,
-                    'tags' : ','.join(tag),
-                    'owner' : user,
-                    'info' : ','.join(signature_error['Info']),
-                    'warnings' : ','.join(signature_error['Warning']),
-                    'critical' : ','.join(signature_error['Critical']),
-                    'excel_id' : signature_id,
-                    'genes_up' : "",
-                    'genes_down' : ""
-                }
-                signatures[signature_id] = dico
+    #             signature_study_type = studies[signature_associated_study]['study_type']
+    #             dico ={
+    #                 'id' : asso_id[signature_id],
+    #                 'studies' : asso_id[signature_associated_study],
+    #                 'assays' : asso_id[signature_associated_assay],
+    #                 'projects' : studies[signature_associated_study]['projects'] ,
+    #                 'title' : signature_title,
+    #                 'type' : signature_type,
+    #                 'organism' : signature_organism,
+    #                 'organism_name' : signature_organism_name,
+    #                 'developmental_stage' : signature_developmental_stage,
+    #                 'generation' : signature_generation,
+    #                 'sex' : signature_sex,
+    #                 'last_update' : str(sdt),
+    #                 'tissue' : signature_tissue,
+    #                 'tissue_name' : signature_tissue_name,
+    #                 'cell' : signature_cell,
+    #                 'cell_name' : signature_cell_name,
+    #                 'status' : 'private',
+    #                 'cell_line' : signature_cell_line,
+    #                 'cell_line_name' : signature_cell_line_name,
+    #                 'molecule' : signature_molecule,
+    #                 'molecule_name' : signature_molecule_name,
+    #                 'pathology' : signature_pathology,
+    #                 'technology' : signature_technology,
+    #                 'description' : signature_description,
+    #                 'technology_name' : signature_technology_name,
+    #                 'plateform' : signature_plateform,
+    #                 'observed_effect' : signature_observed_effect,
+    #                 'control_sample' : str(signature_control_sample),
+    #                 'treated_sample' : str(signature_treated_sample),
+    #                 'pvalue' : str(signature_pvalue),
+    #                 'cutoff' : str(signature_cutoff),
+    #                 'statistical_processing' : signature_satistical_processing,
+    #                 'additional_file' : signature_additional_file,
+    #                 'file_up' : signature_file_up,
+    #                 'file_down' : signature_file_down,
+    #                 'file_interrogated' : signature_file_interrogated,
+    #                 'genes_identifier': signature_genes_identifier,
+    #                 'controle':signature_controle,
+    #                 'case':signature_case,
+    #                 'significance':signature_significance,
+    #                 'stat_val' : signature_stat_value,
+    #                 'stat_adjust' : signature_stat_adjust,
+    #                 'stat_other' : signature_stat_other,
+    #                 'study_type' :signature_study_type,
+    #                 'group' : signature_group,
+    #                 'pop_age' : signature_pop_age,
+    #                 'tags' : ','.join(tag),
+    #                 'owner' : user,
+    #                 'info' : ','.join(signature_error['Info']),
+    #                 'warnings' : ','.join(signature_error['Warning']),
+    #                 'critical' : ','.join(signature_error['Critical']),
+    #                 'excel_id' : signature_id,
+    #                 'genes_up' : "",
+    #                 'genes_down' : ""
+    #             }
+    #             signatures[signature_id] = dico
         
 
 
-        # Create user project directory + move tmp
-        for proj in projects :
-            ID = projects[proj]['id']
-            projects[proj]['edges']  = {}
-            for stud in studies:
-                projects[proj]['edges'][studies[stud]['id']] = studies[stud]['assays'].split()
-            for ass in assays:
-                projects[proj]['edges'][assays[ass]['id']] = assays[ass]['signatures'].split()
+    #     # Create user project directory + move tmp
+    #     for proj in projects :
+    #         ID = projects[proj]['id']
+    #         projects[proj]['edges']  = {}
+    #         for stud in studies:
+    #             projects[proj]['edges'][studies[stud]['id']] = studies[stud]['assays'].split()
+    #         for ass in assays:
+    #             projects[proj]['edges'][assays[ass]['id']] = assays[ass]['signatures'].split()
 
-            projects[proj]['edges'] = json.dumps(projects[proj]['edges'])
-            upload_path = os.path.join(request.registry.upload_path, user, ID)
-            final_file = 'TOXsIgN_'+ID+'.xlsx'
-            if not os.path.exists(upload_path):
-                os.makedirs(upload_path)
-            os.rename(input_file, os.path.join(upload_path, final_file))
-            request.registry.db_mongo['projects'].insert(projects[proj])
+    #         projects[proj]['edges'] = json.dumps(projects[proj]['edges'])
+    #         upload_path = os.path.join(request.registry.upload_path, user, ID)
+    #         final_file = 'TOXsIgN_'+ID+'.xlsx'
+    #         if not os.path.exists(upload_path):
+    #             os.makedirs(upload_path)
+    #         os.rename(input_file, os.path.join(upload_path, final_file))
+    #         request.registry.db_mongo['projects'].insert(projects[proj])
 
-        for stud in studies:
-            request.registry.db_mongo['studies'].insert(studies[stud])
+    #     for stud in studies:
+    #         request.registry.db_mongo['studies'].insert(studies[stud])
 
-        for ass in assays:
-            request.registry.db_mongo['assays'].insert(assays[ass])
+    #     for ass in assays:
+    #         request.registry.db_mongo['assays'].insert(assays[ass])
 
-        for fac in factors:
-            request.registry.db_mongo['factors'].insert(factors[fac])
+    #     for fac in factors:
+    #         request.registry.db_mongo['factors'].insert(factors[fac])
 
-        for sign in signatures:
-            request.registry.db_mongo['signatures'].insert(signatures[sign])
+    #     for sign in signatures:
+    #         request.registry.db_mongo['signatures'].insert(signatures[sign])
 
 
-        return {'msg':"File checked and uploded !", 'status':'0'}
-    except:
-        logger.warning("Error - Save excel file")
-        logger.warning(sys.exc_info())
-        return {'msg':'An error occurred while uploading your file. If the error persists please contact TOXsIgN support ','status':'1'}
+    #     return {'msg':"File checked and uploded !", 'status':'0'}
+    # except:
+    #     logger.warning("Error - Save excel file")
+    #     logger.warning(sys.exc_info())
+    #     return {'msg':'An error occurred while uploading your file. If the error persists please contact TOXsIgN support ','status':'1'}
 
 
 

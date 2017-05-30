@@ -2251,3 +2251,183 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/elasticsearch/connection/http_urllib3.py", line 103, in perform_request
     raise ConnectionTimeout('TIMEOUT', str(e), e)
 ConnectionTimeout: ConnectionTimeout caused by - ReadTimeoutError(HTTPConnectionPool(host=u'localhost', port=9200): Read timed out. (read timeout=10))
+2017-05-29 14:46:23,895 :: WARNING :: Error - Read excel file
+2017-05-29 14:46:23,915 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f062817b1b8>)
+2017-05-29 14:46:36,702 :: WARNING :: Error - Read excel file
+2017-05-29 14:46:36,710 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f0628199710>)
+2017-05-29 14:50:39,960 :: WARNING :: Error - Read excel file
+2017-05-29 14:50:39,961 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f06281a7638>)
+2017-05-29 14:51:09,342 :: WARNING :: Error - Read excel file
+2017-05-29 14:51:09,343 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f0628138cb0>)
+2017-05-29 15:02:49,488 :: WARNING :: Error - Read excel file
+2017-05-29 15:02:49,489 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f0628150ef0>)
+2017-05-29 15:11:00,490 :: WARNING :: Error - Read excel file
+2017-05-29 15:11:00,491 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fcc756f0248>)
+2017-05-29 15:11:35,325 :: WARNING :: Error - Read excel file
+2017-05-29 15:11:35,330 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fba783d8c20>)
+2017-05-29 15:12:49,835 :: WARNING :: Error - Read excel file
+2017-05-29 15:12:49,836 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fbce4a186c8>)
+2017-05-29 15:13:31,095 :: WARNING :: Error - Read excel file
+2017-05-29 15:13:31,095 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fa7e6d28758>)
+2017-05-29 15:14:00,409 :: WARNING :: Error - Read excel file
+2017-05-29 15:14:00,410 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fd0b8d6d680>)
+2017-05-29 15:14:45,525 :: WARNING :: Error - Read excel file
+2017-05-29 15:14:45,526 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fdd38246d40>)
+2017-05-29 15:16:09,682 :: WARNING :: Error - Read excel file
+2017-05-29 15:16:09,683 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f43fffda638>)
+2017-05-29 15:17:14,296 :: WARNING :: Error - Read excel file
+2017-05-29 15:17:14,296 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f43ff7e5908>)
+2017-05-29 15:18:57,711 :: WARNING :: Error - Read excel file
+2017-05-29 15:18:57,711 :: WARNING :: (<type 'exceptions.KeyError'>, KeyError('info',), <traceback object at 0x7f43ff7f9710>)
+2017-05-29 15:21:07,257 :: WARNING :: Error - Read excel file
+2017-05-29 15:21:07,258 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Pierre Gaudriault, S\xe9verine Mazaud-Guittot, Vincent Lavou\xe9,  Isabelle Coiffec, Nathalie Dejucq-Rainsford, Martin Scholze, Andreas Kortenkamp , Bernard J\xe9gou ', 20, 21, 'ordinal not in range(128)'), <traceback object at 0x7f43f7f563f8>)
+2017-05-29 15:30:17,045 :: WARNING :: Error - Read excel file
+2017-05-29 15:30:17,046 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7f43fcbfc950>)
+2017-05-29 15:32:40,662 :: WARNING :: Error - Read excel file
+2017-05-29 15:32:40,663 :: WARNING :: (<type 'exceptions.AssertionError'>, AssertionError(), <traceback object at 0x7f4898e67638>)
+2017-05-29 15:36:11,491 :: WARNING :: Error - Read excel file
+2017-05-29 15:36:11,497 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'list_error' is not defined",), <traceback object at 0x7ff5501c4098>)
+2017-05-29 15:37:33,835 :: WARNING :: Error - Read excel file
+2017-05-29 15:37:33,836 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'factor_id' is not defined",), <traceback object at 0x7f618206ec20>)
+2017-05-29 15:46:03,606 :: WARNING :: Error - Read excel file
+2017-05-29 15:46:03,606 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f4a199ac878>)
+2017-05-29 15:47:28,262 :: WARNING :: Error - Read excel file
+2017-05-29 15:47:28,262 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f1501b425f0>)
+2017-05-29 15:48:22,692 :: WARNING :: Error - Read excel file
+2017-05-29 15:48:22,692 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'assay_error' is not defined",), <traceback object at 0x7f0598793290>)
+2017-05-29 15:50:46,119 :: WARNING :: Error - Save excel file
+2017-05-29 15:50:46,119 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7f8cbf3247e8>)
+2017-05-29 15:56:34,091 :: WARNING :: Error - Save excel file
+2017-05-29 15:56:34,092 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7f040645c518>)
+2017-05-29 16:12:48,548 :: WARNING :: Error - Read excel file
+2017-05-29 16:12:48,550 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7fe07b632e18>)
+2017-05-29 16:21:59,991 :: WARNING :: Error - Save excel file
+2017-05-29 16:21:59,991 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7fdad8b5e1b8>)
+2017-05-29 16:31:02,756 :: WARNING :: Error - Save excel file
+2017-05-29 16:31:02,756 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7f098465de60>)
+2017-05-29 17:02:06,726 :: WARNING :: Error - Save excel file
+2017-05-29 17:02:06,747 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7f9fa0e4d758>)
+2017-05-29 17:03:48,196 :: WARNING :: Error - Read excel file
+2017-05-29 17:03:48,196 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7f9fa0dfc368>)
+2017-05-29 17:05:39,718 :: WARNING :: Error - Read excel file
+2017-05-29 17:05:39,719 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7f7a890d6cb0>)
+2017-05-29 17:17:32,073 :: WARNING :: Error - Read excel file
+2017-05-29 17:17:32,074 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f7f1e426f38>)
+2017-05-29 17:28:33,779 :: WARNING :: Error - Read excel file
+2017-05-29 17:28:33,780 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7f7f1f0e0710>)
+2017-05-29 17:29:37,828 :: WARNING :: Error - Read excel file
+2017-05-29 17:29:37,828 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7f9fbce61f80>)
+2017-05-29 17:30:28,826 :: WARNING :: Error - Read excel file
+2017-05-29 17:30:28,827 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f4153d6f7a0>)
+2017-05-29 17:30:45,807 :: WARNING :: Error - Read excel file
+2017-05-29 17:30:45,808 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7f41535c93b0>)
+2017-05-29 17:32:45,759 :: WARNING :: Error - Read excel file
+2017-05-29 17:32:45,760 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'row_values' referenced before assignment",), <traceback object at 0x7fa77b66ddd0>)
+2017-05-30 09:00:15,550 :: WARNING :: Error - Read excel file
+2017-05-30 09:00:15,551 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f0b35eb70e0>)
+2017-05-30 09:01:14,413 :: WARNING :: Error - Read excel file
+2017-05-30 09:01:14,414 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f0b357ed0e0>)
+2017-05-30 09:04:31,021 :: WARNING :: Error - Save excel file
+2017-05-30 09:04:31,022 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7fd83fb88560>)
+2017-05-30 09:05:13,424 :: WARNING :: Error - Save excel file
+2017-05-30 09:05:13,425 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7fd83f6bc710>)
+2017-05-30 09:11:07,674 :: WARNING :: Error - Read excel file
+2017-05-30 09:11:07,678 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'row' is not defined",), <traceback object at 0x7f71db7b46c8>)
+2017-05-30 09:16:47,855 :: WARNING :: Error - Read excel file
+2017-05-30 09:16:47,856 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'Cell' is not defined",), <traceback object at 0x7faa72d94908>)
+2017-05-30 09:18:46,972 :: WARNING :: Error - Read excel file
+2017-05-30 09:18:46,973 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'Cell' object is not iterable",), <traceback object at 0x7f6ea6d15170>)
+2017-05-30 09:19:35,310 :: WARNING :: Error - Read excel file
+2017-05-30 09:19:35,312 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f75792cbcf8>)
+2017-05-30 09:21:39,529 :: WARNING :: Error - Read excel file
+2017-05-30 09:21:39,529 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f5e9de44ea8>)
+2017-05-30 09:28:15,694 :: WARNING :: Error - Read excel file
+2017-05-30 09:28:15,701 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f707f289fc8>)
+2017-05-30 09:33:09,859 :: WARNING :: Error - Read excel file
+2017-05-30 09:33:09,859 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("row_values() got an unexpected keyword argument 'start_rowx'",), <traceback object at 0x7f1d45254f80>)
+2017-05-30 09:36:23,358 :: WARNING :: Error - Read excel file
+2017-05-30 09:36:23,359 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'str' object has no attribute 'value'",), <traceback object at 0x7f42c53f9ea8>)
+2017-05-30 09:43:35,600 :: WARNING :: Error - Read excel file
+2017-05-30 09:43:35,601 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'unicode' object has no attribute 'value'",), <traceback object at 0x7fd4982eb488>)
+2017-05-30 09:43:59,600 :: WARNING :: Error - Read excel file
+2017-05-30 09:43:59,601 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'unicode' object has no attribute 'value'",), <traceback object at 0x7fc23e1062d8>)
+2017-05-30 09:44:24,529 :: WARNING :: Error - Read excel file
+2017-05-30 09:44:24,530 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'unicode' object has no attribute 'value'",), <traceback object at 0x7fdcc47c12d8>)
+2017-05-30 09:49:09,867 :: WARNING :: Error - Read excel file
+2017-05-30 09:49:09,868 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'NoneType' object is not iterable",), <traceback object at 0x7f47d318d3b0>)
+2017-05-30 10:07:40,149 :: WARNING :: Error - Read excel file
+2017-05-30 10:07:40,153 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'projects_identifiers' is not defined",), <traceback object at 0x7faeba2e21b8>)
+2017-05-30 10:08:27,415 :: WARNING :: Error - Read excel file
+2017-05-30 10:08:27,415 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'critical' referenced before assignment",), <traceback object at 0x7f18e54ca128>)
+2017-05-30 10:09:31,441 :: WARNING :: Error - Read excel file
+2017-05-30 10:09:31,442 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'critical' referenced before assignment",), <traceback object at 0x7f5c82b7e290>)
+2017-05-30 10:11:18,357 :: WARNING :: Error - Read excel file
+2017-05-30 10:11:18,357 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'critical' is not defined",), <traceback object at 0x7fa3093b5248>)
+2017-05-30 10:13:48,690 :: WARNING :: Error - Read excel file
+2017-05-30 10:13:48,691 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'critical' is not defined",), <traceback object at 0x7f339deaeb00>)
+2017-05-30 10:15:51,932 :: WARNING :: Error - Read excel file
+2017-05-30 10:15:51,933 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'critcial' is not defined",), <traceback object at 0x7f1bd52db368>)
+2017-05-30 10:17:05,412 :: WARNING :: Error - Read excel file
+2017-05-30 10:17:05,413 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'critical' referenced before assignment",), <traceback object at 0x7f3ba91c7440>)
+2017-05-30 10:18:18,589 :: WARNING :: Error - Read excel file
+2017-05-30 10:18:18,590 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'critical' is not defined",), <traceback object at 0x7fb83ab7bc20>)
+2017-05-30 10:19:33,839 :: WARNING :: Error - Read excel file
+2017-05-30 10:19:33,852 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'strategies_errors' is not defined",), <traceback object at 0x7f3d27ab89e0>)
+2017-05-30 10:29:25,647 :: WARNING :: Error - Read excel file
+2017-05-30 10:29:25,648 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'self' is not defined",), <traceback object at 0x7fb5f0ef7f80>)
+2017-05-30 10:30:30,655 :: WARNING :: Error - Read excel file
+2017-05-30 10:30:30,656 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f00ce496dd0>)
+2017-05-30 10:30:58,156 :: WARNING :: Error - Read excel file
+2017-05-30 10:30:58,156 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f7a1204dc68>)
+2017-05-30 10:31:43,267 :: WARNING :: Error - Read excel file
+2017-05-30 10:31:43,267 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f3879e4efc8>)
+2017-05-30 10:32:29,763 :: WARNING :: Error - Read excel file
+2017-05-30 10:32:29,763 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f79ea155b90>)
+2017-05-30 10:33:35,158 :: WARNING :: Error - Read excel file
+2017-05-30 10:33:35,159 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7ff1ae1c7f80>)
+2017-05-30 10:34:17,855 :: WARNING :: Error - Read excel file
+2017-05-30 10:34:17,856 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f04afa49ef0>)
+2017-05-30 10:34:59,868 :: WARNING :: Error - Read excel file
+2017-05-30 10:34:59,869 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7fc24e5b8a70>)
+2017-05-30 10:35:41,420 :: WARNING :: Error - Read excel file
+2017-05-30 10:35:41,420 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f3aa1bffcb0>)
+2017-05-30 10:38:28,849 :: WARNING :: Error - Read excel file
+2017-05-30 10:38:28,849 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f1462088f80>)
+2017-05-30 10:39:34,947 :: WARNING :: Error - Read excel file
+2017-05-30 10:39:34,948 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f6fd0d2cc68>)
+2017-05-30 10:40:45,938 :: WARNING :: Error - Read excel file
+2017-05-30 10:40:45,939 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7fa9269d0ef0>)
+2017-05-30 10:41:22,171 :: WARNING :: Error - Read excel file
+2017-05-30 10:41:22,172 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7efe5d68fa28>)
+2017-05-30 10:41:41,166 :: WARNING :: Error - Read excel file
+2017-05-30 10:41:41,167 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7eff97f34200>)
+2017-05-30 10:43:43,262 :: WARNING :: Error - Read excel file
+2017-05-30 10:43:43,263 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f27eaf46f38>)
+2017-05-30 10:44:41,554 :: WARNING :: Error - Read excel file
+2017-05-30 10:44:41,555 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f16caac9ea8>)
+2017-05-30 10:46:14,529 :: WARNING :: Error - Read excel file
+2017-05-30 10:46:14,530 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f2080e1bea8>)
+2017-05-30 10:48:11,846 :: WARNING :: Error - Read excel file
+2017-05-30 10:48:11,846 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f6a44586e60>)
+2017-05-30 10:50:00,614 :: WARNING :: Error - Read excel file
+2017-05-30 10:50:00,615 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f8a06c12fc8>)
+2017-05-30 10:52:29,650 :: WARNING :: Error - Read excel file
+2017-05-30 10:52:29,650 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'Sheet' object is not iterable",), <traceback object at 0x7ff55d4ce518>)
+2017-05-30 10:53:29,892 :: WARNING :: Error - Read excel file
+2017-05-30 10:53:29,892 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7f7f902c3ab8>)
+2017-05-30 10:55:15,190 :: WARNING :: Error - Read excel file
+2017-05-30 10:55:15,190 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'list' object is not callable",), <traceback object at 0x7fdc3be68dd0>)
+2017-05-30 11:01:50,178 :: WARNING :: Error - Read excel file
+2017-05-30 11:01:50,179 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'strategy_erro' is not defined",), <traceback object at 0x7f20bfa18cf8>)
+2017-05-30 11:39:02,308 :: WARNING :: Error - Read excel file
+2017-05-30 11:39:02,308 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f320d02aa28>)
+2017-05-30 11:39:39,985 :: WARNING :: Error - Read excel file
+2017-05-30 11:39:39,986 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f320c845e60>)
+2017-05-30 11:41:04,145 :: WARNING :: Error - Read excel file
+2017-05-30 11:41:04,146 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idLists_error' is not defined",), <traceback object at 0x7f886a505ef0>)
+2017-05-30 12:47:57,383 :: WARNING :: Error - Save excel file
+2017-05-30 12:47:57,383 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7fec20240200>)
+2017-05-30 12:48:17,080 :: WARNING :: Error - Save excel file
+2017-05-30 12:48:17,081 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7fec201cbf38>)
+2017-05-30 13:01:55,017 :: WARNING :: Error - Save excel file
+2017-05-30 13:01:55,018 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7f7a23b90cb0>)

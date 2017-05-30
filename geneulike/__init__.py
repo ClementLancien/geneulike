@@ -83,7 +83,7 @@ def main(global_config, **settings):
     config.add_route('getjob','/getjob')
     config.add_route('readresult','/readresult')
     config.add_route('download', '/dataset/{dataset}/download')
-    #config.add_route('excel_upload', '/upload/{id}/excelupload')
+    config.add_route('excel_upload', '/upload/{id}/excelupload')
     config.add_route('createExcel', '/user/create_Excel')
     
 
