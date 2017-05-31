@@ -6,6 +6,9 @@ from pyramid.security import remember, forget
 from pyramid.renderers import render_to_response
 from pyramid.response import Response, FileResponse
 
+import unicodedata
+import re
+
 import os
 import json
 from bson import json_util
@@ -1018,12 +1021,12 @@ def excel_signature_upload(request):
     lists_errors = {'Critical':[],'Warning':[],'Info':[]}
     idLists_errors = {'Critical':[],'Warning':[],'Info':[]}
 
-    projects_identifiers=[]
-    studies_identifiers=[]
+    projects_identifiers = []
+    studies_identifiers = []
     strategies_identifiers = []
     lists_identifiers = []
     idLists_identifiers = []
-
+    has_identifier =[]
     global critical
     critical=0
 
@@ -1052,7 +1055,7 @@ def excel_signature_upload(request):
         """Si il existe des erreurs, c'est erreurs sont consignés dans le dico projects_errors"""
         global critical
         if not identifier:
-            print True
+            #print True
             projects_errors['Critical'].append("Line " + str(row_number+1) + " - no ProjectID")
             critical += 1
         if not title:
@@ -1073,17 +1076,22 @@ def excel_signature_upload(request):
                             str(row_value[3]),\
                             str(row_value[4]),\
                             row_number)
-                            
+
         if str(row_value[0]):
             projects_identifiers.append(str(row_value[0]))
+            has_identifier.append([str(row_value[0]), "", "", ""])
                
     def projects_sheet(projects):
         
         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
         #projects = 
         for row_number in range(5, projects.nrows):
-            is_project_row(projects.row_values(row_number, start_colx=0, end_colx=None) , row_number)
+            is_project_row( get_unicode_to_str(projects.row_values(row_number, start_colx=0, end_colx=None)) , row_number)
 
+            
+# title = u"Klüft ć skräms inför på fédéral électoral große"
+
+# print str(unicodedata.normalize('NFKD', title).encode('ascii','ignore'))
 
 #Studies sheet
 
@@ -1113,7 +1121,25 @@ def excel_signature_upload(request):
 
     # def is_study_pubmed(row_value_pubmed):
     #     return row_value_pubmed == ""
-    
+
+    def get_unicode_to_str(_lists):
+        newList = []
+        strList = []
+        for x in _lists:
+            
+            if isinstance(x, unicode):
+                newList.append(unicodedata.normalize('NFKD', x).encode('ascii','ignore'))
+            
+            else:
+                newList.append(x)
+            x.replace('\u2018','\'')
+            x.replace('\u2019','\'')
+            print x      
+            strList.append(str(x))
+        print newList
+        print strList
+        return newList
+
     def is_study_error(identifier, associated_project_identifier, title, description, \
                         phenotype_desease, go_terms, organism, development_stage, pubmed, row_number):
         
@@ -1157,14 +1183,19 @@ def excel_signature_upload(request):
                             
         if(str(row_value[0])):
             studies_identifiers.append(str(row_value[0]))
-    
+            for i in range(len(has_identifier)):
+                if has_identifier[i][0] == str(row_value[1]):
+                    has_identifier[i][1] += str(row_value[0])
+
     def studies_sheet(studies):
         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
         #studies = wb.sheet_by_index(1)
         #print studies
         for row_number in range(5, studies.nrows):
-            is_study_row(studies.row_values(row_number, start_colx=0, end_colx=None), row_number)
-    
+            #print studies.row_values(row_number, start_colx=0, end_colx=None)
+            #is_study_row(studies.row_values(row_number, start_colx=0, end_colx=None), row_number)
+            #is_study_row([str(unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore')) for x in studies.row_values(row_number, start_colx=0, end_colx=None)], row_number)
+            is_study_row(get_unicode_to_str(studies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
 
 
 
@@ -1227,11 +1258,15 @@ def excel_signature_upload(request):
                                 
         if(str(row_value[0])):
             strategies_identifiers.append(str(row_value[0]))
-    
+            for i in range(len(has_identifier)):
+                if has_identifier[i][1] == str(row_value[1]):
+                    has_identifier[i][2] += str(row_value[0])
+
+
     def strategies_sheet(strategies):
 
         for row_number in range(5, strategies.nrows):
-            is_strategy_row(strategies.row_values(row_number, start_colx=0, end_colx=None), row_number)
+            is_strategy_row(get_unicode_to_str(strategies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
 
 
 
@@ -1263,8 +1298,9 @@ def excel_signature_upload(request):
     def is_list_error(identifier, associated_study_identifier, title, description,\
                         type_of_identifier,extended_type_of_identifier,\
                         parent_list_identifier, child_list_identifier, row_number):
-        print "here"
+        
         global critical
+
         if not identifier:
             lists_errors['Critical'].append("Line " + str(row_number+1) + " - no ListID")
             critical += 1
@@ -1302,6 +1338,9 @@ def excel_signature_upload(request):
         
         if(str(row_value[0]) and str(row_value[8]) == "Yes"):
             lists_identifiers.append(str(row_value[0]))
+            for i in range(len(has_identifier)):
+                if has_identifier[i][2] == str(row_value[1]):
+                    has_identifier[i][3] += str(row_value[0])
       
     def lists_sheet(lists):
         for row_number in range(5, lists.nrows):
@@ -1315,7 +1354,7 @@ def excel_signature_upload(request):
     def is_idList_list(col_value_list):
         return len(col_value_list) == 0
         
-    def is_idList_error(identifier, idlist, col_number):
+    def is_idList_error(identifier, idList, col_number):
         if(identifier):
             idLists_error['Critical'].append("Column " + str(col_number) + " in your idLists Sheet has no known Identifier")
             critical += 1
@@ -1323,9 +1362,9 @@ def excel_signature_upload(request):
             idLists_error['Critical'].append("Column " + str(col_number) + " in your idLists Sheet has no List associated with")
     
     def is_idList_row(col_value, col_number):
-        
+        #print col_value[1:]
         is_idList_error(is_idList_identifier(str(col_value[0])),\
-                             is_idList_list(str(col_value[1:])), 
+                             is_idList_list(col_value[1:]), 
                              col_number)
         if(is_idList_identifier(col_value[0]) == False):
             idLists_identifiers.append(str(col_value[0]))
@@ -1347,10 +1386,10 @@ def excel_signature_upload(request):
         return absent_identifier_in_lists_sheet
     
     def is_absent_identifier_in_idLists(absent_identifier_in_idList_sheet):
-        return absent_identifier_in_idList_sheet.__len__() != 0
+        return len(absent_identifier_in_idList_sheet) != 0
     
     def is_absent_identifier_in_lists(absent_identifier_in_lists_sheet):
-        return absent_identifier_in_lists_sheet.__len__() != 0
+        return len(absent_identifier_in_lists_sheet) != 0
     
     def is_absent_error(bool_absent_identifier_in_idList_sheet,  absent_identifier_in_idList_sheet, bool_absent_identifier_in_lists_sheet, absent_identifier_in_lists_sheet):
         global critical
@@ -1363,10 +1402,11 @@ def excel_signature_upload(request):
                 idLists_errors['Critical'].append("ListID \"" + str(identifier) + "\" is present in your Lists Sheet but is absent in your idList Sheet" )
 
     def idLists_sheet(idLists):
-        #lists = wb.sheet_by_index(3)
-        for col_number in range(5, idLists.ncols):
-            is_strategy_row(idlists.col_values(col_number) , col_number)
-            
+
+        for col_number in range(0, idLists.ncols):
+            _list = [str(element).split(".")[0] for element in idLists.col_values(col_number, start_rowx=0, end_rowx=None)]
+            is_idList_row(_list, col_number)
+
         absent_list = get_absent_identifier_in_Lists()
         absent_idList = get_absent_identifier_in_idLists()
         
@@ -1375,24 +1415,40 @@ def excel_signature_upload(request):
     #Read excel file
 
 
+    def is_absent():
+        global critical
+        for i in range(len(has_identifier)):
+            #print has_identifier[i]
+            if not has_identifier[i][1]:
+                projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no study associated with")
+                critical += 1
+            elif not has_identifier[i][2]:
+                projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no Strategy associated with")
+                critical += 1
+            elif not has_identifier[i][3]:
+                projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no Lists associated with")
+                critical += 1
 
     try :
-
         input_file.seek(0)
-        wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1251")
+        wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1252")
+        #print wb.biff_version, wb.codepage, wb.encoding
         #Read project
         projects = wb.sheet_by_index(0)
         studies = wb.sheet_by_index(1)
         strategies = wb.sheet_by_index(2)
         lists = wb.sheet_by_index(3)
         idLists=wb.sheet_by_index(4)
-        print lists
+        #print lists
         projects_sheet(projects)
         studies_sheet(studies)
         strategies_sheet(strategies)
         lists_sheet(lists)
         idLists_sheet(idLists)
-        print idLists_errors
+        is_absent()
+        #print idLists_errors
+        #print has_identifier
+        #print len(has_identifier)
         #add if
         return {'msg':"File checked and uploded !",
                 'error_project': projects_errors,
@@ -1408,7 +1464,7 @@ def excel_signature_upload(request):
         logger.warning(sys.exc_info())
         return {'msg':'An error occurred while saving your file. If the error persists please contact TOXsIgN support ','status':'1'}
 
-
+import pprint
 class Project:
 
     compteur_project=0
@@ -1421,11 +1477,13 @@ class Project:
         last_update,\
         submission_date,\
         owner,\
-        author):
+        author,\
+        file_path,\
+        id):
 
-        self.project_id = "GPR" + str(compteur_project)
+        self.project_id = "GPR" + str(Project.compteur_project)
         self.studies_id=[]
-        self.strategies=[]
+        self.strategies_id=[]
         self.lists_id=[]
         self.title = title
         self.description = description
@@ -1438,8 +1496,9 @@ class Project:
         self.author = author
         self.file_path = file_path
         self.status= "private"
-        self.tags = []
-        compteur_project += 1
+        self.tags = ""
+        Project.compteur_project += 1
+        self.id=[]
 
     def get_project(self):
         return {'project_id' : self.project_id,
@@ -1459,6 +1518,24 @@ class Project:
                 'tags' : self.tags
     }
 
+    def lire(self):
+        pprint.pprint({'project_id' : self.project_id,
+                'studies_id' : self.studies_id,
+                'strategies_id' : self.strategies_id,
+                'lists_id' : self.lists_id,
+                'title' : self.title,
+                'description' : self.description,
+                'pubmed' : self.pubmed,
+                'contributors' : self.contributors,
+                'crosslinks' : self.crosslinks,
+                'last_update' : self.last_update,
+                'submission_date' : self.submission_date,
+                'owner' : self.owner,
+                'author' : self.author,
+                'file_path' : self.file_path,
+                'tags' : self.tags
+    }, width=1)
+
 class Study:
 
     compteur_study=0
@@ -1471,11 +1548,13 @@ class Study:
         development_stage,\
         pubmed,\
         add_info,\
-        last_update):
+        last_update,\
+        file_path,\
+        id):
 
         self.project_id = ""
         self.studies_id="GST" + str(compteur_study)
-        self.strategies=""
+        self.strategies_id=""
         self.lists_id=""
         self.title = title
         self.description = description
@@ -1486,9 +1565,11 @@ class Study:
         self.pubmed = pubmed
         self.add_info = add_info
         self.last_update = last_update
+        self.file_path = file_path
         self.status = "private"
-        self.tags = []
-        compteur_study += 1
+        self.tags = ""
+        Study.compteur_study += 1
+        self.id=[]
 
     def get_study(self):
         return {'project_id' : self.project_id,
@@ -1504,6 +1585,7 @@ class Study:
                 'pubmed' : self.pubmed,
                 'last_update' : self.last_update,
                 'status' : self.status,
+                'file_path' : self.file_path,
                 'tags' : self.tags
         }
 
@@ -1518,11 +1600,13 @@ class Strategy:
         development_stage,\
         pubmed,\
         add_info,\
-        last_update):
+        last_update,\
+        file_path,\
+        id):
 
         self.project_id = ""
         self.studies_id=""
-        self.strategies="GSR" + str(compteur_strategy)
+        self.strategies_id="GSR" + str(compteur_strategy)
         self.lists_id=""
         self.title = title
         self.description = description
@@ -1531,9 +1615,11 @@ class Strategy:
         self.process = crosslinks
         self.add_info = add_info
         self.last_update = last_update
+        self.file_path = file_path
         self.status = "private"
-        self.tags = []
-        compteur_strategy += 1
+        self.tags = ""
+        Strategy.compteur_strategy += 1
+        self.id=[]
 
     def get_strategy(self):
         return {'project_id' : self.project_id,
@@ -1547,6 +1633,7 @@ class Strategy:
                 'process' : self.process,
                 'last_update' : self.last_update,
                 'status' : self.status,
+                'file_path' : self.file_path,
                 'tags' : self.tags
         }
 
@@ -1561,13 +1648,15 @@ class List:
         list_parent_id,\
         list_child_id,\
         comparable,\
-        list,\
+        _list,\
         add_info,\
-        last_update):
+        last_update,\
+        file_path,\
+        id):
 
         self.project_id = ""
         self.studies_id=""
-        self.strategies=""
+        self.strategies_id=""
         self.lists_id="GUL" + str(compteur_list)
         self.title = title
         self.description = description
@@ -1576,13 +1665,16 @@ class List:
         self.list_parent_id = list_parent_id
         self.list_child_id = list_child_id
         self.comparable = comparable
-        self.list = list
+        self.list = _list
         self.add_info = add_info
         self.last_update = last_update
+        self.file_path = file_path
         self.status = "private"    
-        self.tags = []
+        self.tags = ""
 
-        compteur_list += 1
+        List.compteur_list += 1
+
+        self.id = []
 
     def get_list(self):
         return {'project_id' : self.project_id,
@@ -1596,9 +1688,10 @@ class List:
                 'list_parent_id' : self.process,
                 'list_child_id' : self.list_child_id,
                 'comparable' : self.comparable,
-                'list' : self.list
+                'list' : self.list,
                 'last_update' : self.last_update,
                 'status' : self.status,
+                'file_path' : self.file_path,
                 'tags' : self.tags
         }
 
@@ -1635,28 +1728,37 @@ def save_excel(request):
     strategies=[]
     lists=[]
 
+    projects_id =[]
+    studies_id = []
+    strategies_id = []
+    lists_id = []
     dt = datetime.datetime.utcnow()
     date = time.mktime(dt.timetuple())
-    
+    print "date : " + str(datetime.datetime.utcnow())
+    print "date : " + str(date)
 
     def add_project(project_sheet):
-        for row_number in range(5, project_sheet.nrow):
-            row_value = projects.row_values(row_number, start_colx=0, end_colx=None)
-            projects.add(Project(   str(row_value[1]),\
-                                    str(row_value[2]),\
-                                    str(row_value[3]),\
-                                    str(row_value[4]),\
-                                    str(row_value[5]),\
-                                    str(date),\
-                                    str(date),\
-                                    str(user),\
-                                    str(user)
-                                ))
+        for row_number in range(5, project_sheet.nrows):
+            
+            row_value = project_sheet.row_values(row_number, start_colx=0, end_colx=None)
+            #print project_sheet.row_values(row_number, start_colx=0, end_colx=None)
+            # projects.append(Project(   str(row_value[1]),\
+            #                         str(row_value[2]),\
+            #                         str(row_value[3]),\
+            #                         str(row_value[4]),\
+            #                         str(row_value[5]),\
+            #                         str(date),\
+            #                         str(date),\
+            #                         str(user),\
+            #                         str(user),\
+            #                         str(input_file),\
+            #                         [str(row_value[0]), "", "",""]
+            #                     ))
 
     def add_study(study_sheet):
-        for row_number in range(5, study_sheet.nrow):
+        for row_number in range(5, study_sheet.nrows):
             row_value = study_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            studies.add(Study(  str(row_value[2]),\
+            studies.append(Study(  str(row_value[2]),\
                                 str(row_value[3]),\
                                 str(row_value[4]),\
                                 str(row_value[5]),\
@@ -1664,33 +1766,39 @@ def save_excel(request):
                                 str(row_value[7]),\
                                 str(row_value[8]),\
                                 str(row_value[9]),\
-                                str(date)
+                                str(date),\
+                                str(input_file),\
+                                [str(row_value[1]), str(row_value[0]), "", ""]
                             ))
 
     def add_strategy(strategy_sheet):
-        for row_number in range(5, strategy_sheet.nrow):
+        for row_number in range(5, strategy_sheet.nrows):
             row_value = strategy_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            strategies.add(Strategy(str(row_value[2]),\
+            strategies.append(Strategy(str(row_value[2]),\
                                     str(row_value[3]),\
                                     str(row_value[4]),\
                                     str(row_value[5]),\
                                     str(row_value[6]),\
                                     str(row_value[7]),\
-                                    str(date)
+                                    str(date),\
+                                    str(input_file),\
+                                    ["",str(row_value[1]), str(row_value[0]), ""]
                                     ))
 
     def get_Col_List(header_col, list_headers):
-        for header in list_headers:
-            if header_col == header: 
-                return  list_headers.index(header_col)
+        if header_col in list_headers:
+            return list_headers.index(header_col)
+        # for header in list_headers:
+        #     if header_col == header: 
+        #         return  list_headers.index(header_col)
 
     def add_list(list_sheet, idList_sheet):
         idLists = [str(list_ID) for list_ID in idList_sheet.row_values(0, start_colx=0, end_colx=None)]
-        for row_number in range(5, list_sheet.nrow):
+        for row_number in range(5, list_sheet.nrows):
             row_value = list_sheet.row_values(row_number, start_colx=0, end_colx=None)
             index_list_identifiants =  get_Col_List(str(row_value[0]), idLists)
-            list_identifiants = ",".join(str(name_idenfiant) for id in list_sheet.row_values(index_list_identifiants, start_rowx=1, end_rowx=None))
-            lists.add(List( str(row_value[2]),\
+            list_identifiants = ",".join(str(name_idenfiant) for name_identifiant in idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None))
+            _list = List( str(row_value[2]),\
                             str(row_value[3]),\
                             str(row_value[4]),\
                             str(row_value[5]),\
@@ -1699,8 +1807,60 @@ def save_excel(request):
                             str(row_value[8]),\
                             list_identifiants,\
                             str(row_value[9]),\
-                            str(date)
-                        ))
+                            str(date),\
+                            str(input_file),\
+                            ["", "", str(row_value[1]), str(row_value[0])]
+                        )
+            boolean = True
+            for obj in lists:
+                if obj.id == _list.id:
+                    obj.identifiant = obj.identifiant + " , " + _list.identifiant
+                    if not _list.identifier_extended:
+                        obj.identifier_extended = obj.identifier_extended + " , " + ""
+                    else:
+                        obj.identifier_extended = obj.identifier_extended + " , " + _list.identifier_extended
+                    boolean=False
+                    break
+            if boolean:
+                add_multiple_id(_list)
+                lists.append(_list)
+
+
+
+    def add_multiple_id(_list):
+        
+        for strategy in strategies:
+            if _list.id[2] == strategy.id[2]:
+                strategy.lists_id = strategy.lists_id + " , " + _list.lists_id
+                _list.strategies_id = strategy.strategies_id
+
+                for study in studies:
+                    if strategy.id[1] == study.id[1]:
+                        study.strategies_id = study.strategies_id + " , " + strategies_id
+                        study.lists_id = study.lists_id + " , " + _list.lists_id
+                        if not strategies.project_id:
+                            strategy.project_id = study.projects_id 
+                        for project in projects:
+                            if project.project_id == study.project_id:
+                                project.studies_id = project.studies_id + " , " + study.studies_id
+                                project.strategies_id = project.strategies_id + " , " + strategy.strategies_id
+                                project.lists_id = project.lists_id + " , " +  _list.lists_id
+                                return
+
+    try:
+        add_project(wb.sheet_by_index(0))
+        #for project in projects:
+         #   project.lire()
+        #add_study(wb.sheet_by_index(1))
+        #add_strategy(wb.sheet_by_index(2))
+        #add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
+
+        return {'msg':"File checked and uploded !", 'status':'0'}
+    except:
+        logger.warning("Error - Save excel file")
+        logger.warning(sys.exc_info())
+        return {'msg':'An error occurred while uploading your file. If the error persists please contact TOXsIgN support ','status':'1'}
+
 
     # sh = wb.sheet_by_index(0)
     # projects={}

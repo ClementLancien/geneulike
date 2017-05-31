@@ -2431,3 +2431,160 @@ ConnectionTimeout: ConnectionTimeout caused by - ReadTimeoutError(HTTPConnection
 2017-05-30 12:48:17,081 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7fec201cbf38>)
 2017-05-30 13:01:55,017 :: WARNING :: Error - Save excel file
 2017-05-30 13:01:55,018 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('string indices must be integers, not str',), <traceback object at 0x7f7a23b90cb0>)
+2017-05-31 10:40:05,035 :: WARNING :: Error - Read excel file
+2017-05-31 10:40:05,035 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'has_identifier' is not defined",), <traceback object at 0x7f65dcbe6560>)
+2017-05-31 11:06:14,517 :: WARNING :: Error - Read excel file
+2017-05-31 11:06:14,518 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'str' object has no attribute 'keys'",), <traceback object at 0x7f21c2f17c68>)
+2017-05-31 11:29:36,034 :: WARNING :: Error - Read excel file
+2017-05-31 11:29:36,035 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'dict' objects",), <traceback object at 0x7f71ebc95e60>)
+2017-05-31 12:38:59,755 :: WARNING :: Error - Read excel file
+2017-05-31 12:38:59,756 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('range() integer end argument expected, got list.',), <traceback object at 0x7fb602d95ef0>)
+2017-05-31 12:39:42,196 :: WARNING :: Error - Read excel file
+2017-05-31 12:39:42,197 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'project_errors' is not defined",), <traceback object at 0x7fa588675b90>)
+2017-05-31 12:44:10,281 :: WARNING :: Error - Read excel file
+2017-05-31 12:44:10,282 :: WARNING :: (<class 'xlrd.biffh.XLRDError'>, XLRDError("Unsupported format, or corrupt file: Expected BOF record; found 'a\\n'",), <traceback object at 0x7f424fe02a70>)
+2017-05-31 12:44:16,109 :: WARNING :: Error - Read excel file
+2017-05-31 12:44:16,109 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f424fe36cf8>)
+2017-05-31 12:58:05,501 :: WARNING :: Error - Upload path
+2017-05-31 12:58:05,502 :: WARNING :: /home/clancien/Desktop/site/geneulike/var/upload/clement.lancien@gmail.com/tmp
+2017-05-31 12:58:05,502 :: WARNING :: (<type 'exceptions.IOError'>, IOError(2, 'No such file or directory'), <traceback object at 0x7f001c647368>)
+2017-05-31 12:58:11,077 :: WARNING :: Error - Upload path
+2017-05-31 12:58:11,078 :: WARNING :: /home/clancien/Desktop/site/geneulike/var/upload/clement.lancien@gmail.com/tmp
+2017-05-31 12:58:11,078 :: WARNING :: (<type 'exceptions.IOError'>, IOError(2, 'No such file or directory'), <traceback object at 0x7f001c67bb00>)
+2017-05-31 12:58:48,265 :: WARNING :: Error - Upload path
+2017-05-31 12:58:48,266 :: WARNING :: /home/clancien/Desktop/site/geneulike/var/upload/clement.lancien@gmail.com/tmp
+2017-05-31 12:58:48,266 :: WARNING :: (<type 'exceptions.IOError'>, IOError(2, 'No such file or directory'), <traceback object at 0x7f59dfb282d8>)
+2017-05-31 13:15:21,204 :: WARNING :: Error - Read excel file
+2017-05-31 13:15:21,205 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idlists' is not defined",), <traceback object at 0x7efe6979d758>)
+2017-05-31 13:15:50,513 :: WARNING :: Error - Read excel file
+2017-05-31 13:15:50,514 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7f9a7e836cf8>)
+2017-05-31 13:16:26,188 :: WARNING :: Error - Read excel file
+2017-05-31 13:16:26,189 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idList' is not defined",), <traceback object at 0x7f6f6e096c20>)
+2017-05-31 13:19:46,271 :: WARNING :: Error - Read excel file
+2017-05-31 13:19:46,271 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idList' is not defined",), <traceback object at 0x7f13db773950>)
+2017-05-31 13:22:47,905 :: WARNING :: Error - Read excel file
+2017-05-31 13:22:47,906 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'ok' is not defined",), <traceback object at 0x7f97ef22f560>)
+2017-05-31 13:23:13,623 :: WARNING :: Error - Read excel file
+2017-05-31 13:23:13,623 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idListsrow_values' is not defined",), <traceback object at 0x7f2fe73ed488>)
+2017-05-31 13:23:45,096 :: WARNING :: Error - Read excel file
+2017-05-31 13:23:45,098 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idList' is not defined",), <traceback object at 0x7f577bfe23b0>)
+2017-05-31 13:49:53,713 :: WARNING :: Error - Read excel file
+2017-05-31 13:49:53,714 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("col_values() got an unexpected keyword argument 'end_rows'",), <traceback object at 0x7fcd8034a680>)
+2017-05-31 13:53:20,048 :: WARNING :: Error - Read excel file
+2017-05-31 13:53:20,048 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'split'",), <traceback object at 0x7f04a279f560>)
+2017-05-31 13:54:11,319 :: WARNING :: Error - Read excel file
+2017-05-31 13:54:11,319 :: WARNING :: (<type 'exceptions.ValueError'>, ValueError("invalid literal for int() with base 10: 'az12'",), <traceback object at 0x7f30c14dc998>)
+2017-05-31 13:59:43,085 :: WARNING :: Error - Read excel file
+2017-05-31 13:59:43,086 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idList' is not defined",), <traceback object at 0x7f90ba450c68>)
+2017-05-31 14:00:40,684 :: WARNING :: Error - Read excel file
+2017-05-31 14:00:40,685 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idList' is not defined",), <traceback object at 0x7f0266d27b00>)
+2017-05-31 14:01:36,347 :: WARNING :: Error - Save excel file
+2017-05-31 14:01:36,347 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Sheet' object has no attribute 'nrow'",), <traceback object at 0x7ffac55e7908>)
+2017-05-31 14:06:14,358 :: WARNING :: Error - Save excel file
+2017-05-31 14:06:14,359 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'row_values'",), <traceback object at 0x7f4f12b19a28>)
+2017-05-31 14:08:00,251 :: WARNING :: Error - Save excel file
+2017-05-31 14:08:00,251 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'row_values'",), <traceback object at 0x7f15abcaa488>)
+2017-05-31 14:09:05,200 :: WARNING :: Error - Save excel file
+2017-05-31 14:09:05,201 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'row_values'",), <traceback object at 0x7fe83d066830>)
+2017-05-31 14:10:17,722 :: WARNING :: Error - Save excel file
+2017-05-31 14:10:17,723 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'add'",), <traceback object at 0x7fd11a369518>)
+2017-05-31 14:10:54,803 :: WARNING :: Error - Save excel file
+2017-05-31 14:10:54,804 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('__init__() takes exactly 12 arguments (11 given)',), <traceback object at 0x7f211df46488>)
+2017-05-31 14:12:31,414 :: WARNING :: Error - Save excel file
+2017-05-31 14:12:31,415 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'compteur_project' referenced before assignment",), <traceback object at 0x7f8ae8c49b48>)
+2017-05-31 14:15:05,878 :: WARNING :: Error - Save excel file
+2017-05-31 14:15:05,879 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'compteur_project' is not defined",), <traceback object at 0x7f4511bf8ea8>)
+2017-05-31 14:21:02,217 :: WARNING :: Error - Save excel file
+2017-05-31 14:21:02,218 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'project_id' is not defined",), <traceback object at 0x7f78505fb680>)
+2017-05-31 14:35:35,762 :: WARNING :: Error - Read excel file
+2017-05-31 14:35:35,763 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f0371b9b878>)
+2017-05-31 14:37:55,621 :: WARNING :: Error - Read excel file
+2017-05-31 14:37:55,622 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f0bc3e21050>)
+2017-05-31 14:43:57,269 :: WARNING :: Error - Read excel file
+2017-05-31 14:43:57,270 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f90cc8164d0>)
+2017-05-31 14:44:48,011 :: WARNING :: Error - Read excel file
+2017-05-31 14:44:48,012 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f3e098b5950>)
+2017-05-31 14:45:19,476 :: WARNING :: Error - Read excel file
+2017-05-31 14:45:19,477 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f0f1e925560>)
+2017-05-31 14:46:03,744 :: WARNING :: Error - Read excel file
+2017-05-31 14:46:03,744 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f3aa2675ef0>)
+2017-05-31 14:50:43,106 :: WARNING :: Error - Read excel file
+2017-05-31 14:50:43,107 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f0a6dfa10e0>)
+2017-05-31 14:51:50,779 :: WARNING :: Error - Read excel file
+2017-05-31 14:51:50,779 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7fc03323e998>)
+2017-05-31 14:57:27,047 :: WARNING :: Error - Read excel file
+2017-05-31 14:57:27,050 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fc032810a28>)
+2017-05-31 15:05:39,243 :: WARNING :: Error - Read excel file
+2017-05-31 15:05:39,244 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f7e6ea27710>)
+2017-05-31 15:08:22,712 :: WARNING :: Error - Read excel file
+2017-05-31 15:08:22,712 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f9f4c06d170>)
+2017-05-31 15:18:12,820 :: WARNING :: Error - Read excel file
+2017-05-31 15:18:12,820 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f854b300cb0>)
+2017-05-31 15:18:57,652 :: WARNING :: Error - Read excel file
+2017-05-31 15:18:57,653 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fdf0dd40cb0>)
+2017-05-31 15:19:39,152 :: WARNING :: Error - Read excel file
+2017-05-31 15:19:39,152 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7f017b6df908>)
+2017-05-31 15:21:41,400 :: WARNING :: Error - Read excel file
+2017-05-31 15:21:41,401 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7f65ec7eccf8>)
+2017-05-31 15:23:16,699 :: WARNING :: Error - Read excel file
+2017-05-31 15:23:16,700 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7f345d444710>)
+2017-05-31 15:24:55,923 :: WARNING :: Error - Read excel file
+2017-05-31 15:24:55,923 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("open_workbook() got an unexpected keyword argument 'encoding'",), <traceback object at 0x7fd7e443bcb0>)
+2017-05-31 15:45:28,410 :: WARNING :: Error - Read excel file
+2017-05-31 15:45:28,411 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Book' object has no attribute 'co'",), <traceback object at 0x7faefbb8a830>)
+2017-05-31 15:46:09,867 :: WARNING :: Error - Read excel file
+2017-05-31 15:46:09,868 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7fbe6baca3f8>)
+2017-05-31 15:47:03,794 :: WARNING :: Error - Read excel file
+2017-05-31 15:47:03,798 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f7cd2981440>)
+2017-05-31 15:47:22,713 :: WARNING :: Error - Read excel file
+2017-05-31 15:47:22,714 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f7cd25dac20>)
+2017-05-31 15:49:08,866 :: WARNING :: Error - Read excel file
+2017-05-31 15:49:08,867 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fb982941638>)
+2017-05-31 15:52:16,851 :: WARNING :: Error - Read excel file
+2017-05-31 15:52:16,852 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f9d0442d1b8>)
+2017-05-31 15:52:23,167 :: WARNING :: Error - Read excel file
+2017-05-31 15:52:23,167 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f9d043bf998>)
+2017-05-31 16:11:27,185 :: WARNING :: Error - Read excel file
+2017-05-31 16:11:27,186 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7fdcd6879ab8>)
+2017-05-31 16:12:06,258 :: WARNING :: Error - Read excel file
+2017-05-31 16:12:06,259 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7ff8b065f4d0>)
+2017-05-31 16:29:04,787 :: WARNING :: Error - Read excel file
+2017-05-31 16:29:04,787 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7f6717e9d638>)
+2017-05-31 16:29:50,747 :: WARNING :: Error - Read excel file
+2017-05-31 16:29:50,748 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fba8eaa9710>)
+2017-05-31 17:07:19,159 :: WARNING :: Error - Read excel file
+2017-05-31 17:07:19,160 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f81ecfd9c68>)
+2017-05-31 17:08:37,359 :: WARNING :: Error - Read excel file
+2017-05-31 17:08:37,359 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f1f03653cb0>)
+2017-05-31 17:09:00,275 :: WARNING :: Error - Read excel file
+2017-05-31 17:09:00,276 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f1f035ed488>)
+2017-05-31 17:09:34,418 :: WARNING :: Error - Read excel file
+2017-05-31 17:09:34,419 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f5f80f10d88>)
+2017-05-31 17:10:20,814 :: WARNING :: Error - Read excel file
+2017-05-31 17:10:20,815 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f47d4b00560>)
+2017-05-31 17:11:06,105 :: WARNING :: Error - Read excel file
+2017-05-31 17:11:06,106 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f8bd70b9dd0>)
+2017-05-31 17:12:29,106 :: WARNING :: Error - Read excel file
+2017-05-31 17:12:29,107 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f3eb3c42d88>)
+2017-05-31 17:15:20,442 :: WARNING :: Error - Read excel file
+2017-05-31 17:15:20,443 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7fb413964b00>)
+2017-05-31 17:16:16,800 :: WARNING :: Error - Read excel file
+2017-05-31 17:16:16,800 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f89f2baa5f0>)
+2017-05-31 17:17:01,371 :: WARNING :: Error - Read excel file
+2017-05-31 17:17:01,371 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('normalize() argument 2 must be unicode, not str',), <traceback object at 0x7f07d0770d40>)
+2017-05-31 17:20:07,277 :: WARNING :: Error - Read excel file
+2017-05-31 17:20:07,277 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fb575c3dfc8>)
+2017-05-31 17:23:05,173 :: WARNING :: Error - Read excel file
+2017-05-31 17:23:05,173 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'\u2026', 0, 1, 'ordinal not in range(128)'), <traceback object at 0x7f6721734998>)
+2017-05-31 17:53:12,371 :: WARNING :: Error - Read excel file
+2017-05-31 17:53:12,400 :: WARNING :: (<type 'exceptions.LookupError'>, LookupError('unknown encoding: unicode',), <traceback object at 0x7f12233ab830>)
+2017-05-31 17:58:42,163 :: WARNING :: Error - Read excel file
+2017-05-31 17:58:42,163 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('expected string or buffer',), <traceback object at 0x7f198cd49dd0>)
+2017-05-31 18:00:41,376 :: WARNING :: Error - Read excel file
+2017-05-31 18:00:41,377 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'pstrList' is not defined",), <traceback object at 0x7ff90be87710>)
+2017-05-31 18:01:03,352 :: WARNING :: Error - Read excel file
+2017-05-31 18:01:03,352 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f6ad70e5710>)
+2017-05-31 18:03:09,961 :: WARNING :: Error - Read excel file
+2017-05-31 18:03:09,962 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f430b59f200>)
+2017-05-31 18:03:39,981 :: WARNING :: Error - Read excel file
+2017-05-31 18:03:39,982 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f7f87c45878>)
