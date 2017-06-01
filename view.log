@@ -2588,3 +2588,151 @@ ConnectionTimeout: ConnectionTimeout caused by - ReadTimeoutError(HTTPConnection
 2017-05-31 18:03:09,962 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f430b59f200>)
 2017-05-31 18:03:39,981 :: WARNING :: Error - Read excel file
 2017-05-31 18:03:39,982 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f7f87c45878>)
+2017-06-01 09:29:33,651 :: WARNING :: Error - Read excel file
+2017-06-01 09:29:33,667 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('need a single Unicode character as parameter',), <traceback object at 0x7f8e923e7a70>)
+2017-06-01 09:54:20,646 :: WARNING :: Error - Read excel file
+2017-06-01 09:54:20,646 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('need a single Unicode character as parameter',), <traceback object at 0x7f5aeb73b098>)
+2017-06-01 12:52:56,037 :: WARNING :: Error - Read excel file
+2017-06-01 12:52:56,080 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\n', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f0e76397dd0>)
+2017-06-01 12:55:43,651 :: WARNING :: Error - Read excel file
+2017-06-01 12:55:43,653 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'unicode' object has no attribute 'value'",), <traceback object at 0x7f4f3a994248>)
+2017-06-01 13:00:12,610 :: WARNING :: Error - Read excel file
+2017-06-01 13:00:12,618 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Book' object has no attribute 'cell'",), <traceback object at 0x7fa12a4c9bd8>)
+2017-06-01 13:03:18,638 :: WARNING :: Error - Read excel file
+2017-06-01 13:03:18,639 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'wb' is not defined",), <traceback object at 0x7ff0f18cf248>)
+2017-06-01 13:08:37,698 :: WARNING :: Error - Read excel file
+2017-06-01 13:08:37,699 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f57ac0ac440>)
+2017-06-01 13:09:25,423 :: WARNING :: Error - Read excel file
+2017-06-01 13:09:25,443 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fc5bb1f1998>)
+2017-06-01 13:10:28,019 :: WARNING :: Error - Read excel file
+2017-06-01 13:10:28,020 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fb8b2968a70>)
+2017-06-01 13:12:52,439 :: WARNING :: Error - Read excel file
+2017-06-01 13:12:52,439 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'wb' is not defined",), <traceback object at 0x7f7568184320>)
+2017-06-01 13:13:37,173 :: WARNING :: Error - Read excel file
+2017-06-01 13:13:37,174 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'wb' is not defined",), <traceback object at 0x7f755bdbc1b8>)
+2017-06-01 13:26:08,003 :: WARNING :: Error - Read excel file
+2017-06-01 13:26:08,008 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7ff9fb8e9d40>)
+2017-06-01 13:28:56,152 :: WARNING :: Error - Read excel file
+2017-06-01 13:28:56,152 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7f09c4c49c68>)
+2017-06-01 13:29:47,031 :: WARNING :: Error - Read excel file
+2017-06-01 13:29:47,032 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7f36889b5d40>)
+2017-06-01 13:32:35,355 :: WARNING :: Error - Read excel file
+2017-06-01 13:32:35,357 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'j' is not defined",), <traceback object at 0x7f910bcf7488>)
+2017-06-01 13:33:13,494 :: WARNING :: Error - Read excel file
+2017-06-01 13:33:13,494 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7fb52c6f6830>)
+2017-06-01 13:52:37,412 :: WARNING :: Error - Read excel file
+2017-06-01 13:52:37,413 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('get_plain_text() takes exactly 2 arguments (1 given)',), <traceback object at 0x7f8502db27a0>)
+2017-06-01 13:53:08,845 :: WARNING :: Error - Read excel file
+2017-06-01 13:53:08,846 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f317bd4dcf8>)
+2017-06-01 14:08:34,972 :: WARNING :: Error - Read excel file
+2017-06-01 14:08:34,972 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("argument of type 'float' is not iterable",), <traceback object at 0x7f12a6f559e0>)
+2017-06-01 14:10:32,700 :: WARNING :: Error - Read excel file
+2017-06-01 14:10:32,701 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'isinstanceof' is not defined",), <traceback object at 0x7fab5b549d88>)
+2017-06-01 14:11:11,088 :: WARNING :: Error - Read excel file
+2017-06-01 14:11:11,088 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("argument of type 'float' is not iterable",), <traceback object at 0x7fee3ee26d40>)
+2017-06-01 14:12:07,662 :: WARNING :: Error - Read excel file
+2017-06-01 14:12:07,664 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("argument of type 'float' is not iterable",), <traceback object at 0x7fcd8df61e60>)
+2017-06-01 14:25:25,005 :: WARNING :: Error - Read excel file
+2017-06-01 14:25:25,006 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("argument of type 'float' is not iterable",), <traceback object at 0x7f51759fdc20>)
+2017-06-01 14:37:31,606 :: WARNING :: Error - Read excel file
+2017-06-01 14:37:31,607 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fae3c967908>)
+2017-06-01 14:38:41,740 :: WARNING :: Error - Read excel file
+2017-06-01 14:38:41,741 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fe48b4c6d40>)
+2017-06-01 14:39:32,371 :: WARNING :: Error - Read excel file
+2017-06-01 14:39:32,374 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f39a27526c8>)
+2017-06-01 14:40:46,005 :: WARNING :: Error - Read excel file
+2017-06-01 14:40:46,015 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f4257537680>)
+2017-06-01 14:50:31,849 :: WARNING :: Error - Read excel file
+2017-06-01 14:50:31,864 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fcf0f526b00>)
+2017-06-01 14:51:05,752 :: WARNING :: Error - Read excel file
+2017-06-01 14:51:05,752 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f378cafff38>)
+2017-06-01 14:52:04,489 :: WARNING :: Error - Read excel file
+2017-06-01 14:52:04,490 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f6fa9d3e830>)
+2017-06-01 14:53:27,179 :: WARNING :: Error - Read excel file
+2017-06-01 14:53:27,180 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7fa2c0decd88>)
+2017-06-01 14:54:16,506 :: WARNING :: Error - Read excel file
+2017-06-01 14:54:16,507 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7efbfbe49e60>)
+2017-06-01 14:55:42,773 :: WARNING :: Error - Read excel file
+2017-06-01 14:55:42,774 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7ffb66af0d40>)
+2017-06-01 14:56:23,719 :: WARNING :: Error - Read excel file
+2017-06-01 14:56:23,720 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7feae466d368>)
+2017-06-01 14:58:20,906 :: WARNING :: Error - Read excel file
+2017-06-01 14:58:20,907 :: WARNING :: (<type 'exceptions.UnicodeDecodeError'>, UnicodeDecodeError('utf8', 'Once \\u2018\\u2019\\u2019\\u2019 upon a time\xe9\xe9\xe9', 41, 42, 'invalid continuation byte'), <traceback object at 0x7fedcac89a28>)
+2017-06-01 15:08:48,426 :: WARNING :: Error - Read excel file
+2017-06-01 15:08:48,427 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'split'",), <traceback object at 0x7fb78c325830>)
+2017-06-01 15:12:36,240 :: WARNING :: Error - Save excel file
+2017-06-01 15:12:36,266 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'add_studies' is not defined",), <traceback object at 0x7fbc920c2950>)
+2017-06-01 15:13:22,865 :: WARNING :: Error - Save excel file
+2017-06-01 15:13:22,866 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'compteur_study' is not defined",), <traceback object at 0x7fefe4fd8200>)
+2017-06-01 15:14:46,359 :: WARNING :: Error - Save excel file
+2017-06-01 15:14:46,360 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'L\u2019effet n\xe9gatif de netflix sur les \u2026', 1, 2, 'ordinal not in range(128)'), <traceback object at 0x7f191a77c128>)
+2017-06-01 15:15:45,820 :: WARNING :: Error - Save excel file
+2017-06-01 15:15:45,821 :: WARNING :: (<type 'exceptions.UnicodeEncodeError'>, UnicodeEncodeError('ascii', u'Once \u2018\u2019\u2019\u2019 upon a time\xe9\xe9\xe9', 5, 9, 'ordinal not in range(128)'), <traceback object at 0x7f888c95f0e0>)
+2017-06-01 15:29:35,902 :: WARNING :: Error - Save excel file
+2017-06-01 15:29:35,902 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7f2cb049b998>)
+2017-06-01 15:32:59,853 :: WARNING :: Error - Save excel file
+2017-06-01 15:32:59,885 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'get_write' is not defined",), <traceback object at 0x7efdf3ce0200>)
+2017-06-01 15:33:33,040 :: WARNING :: Error - Save excel file
+2017-06-01 15:33:33,041 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("bad operand type for unary +: 'str'",), <traceback object at 0x7fa1dcc97440>)
+2017-06-01 15:34:44,535 :: WARNING :: Error - Save excel file
+2017-06-01 15:34:44,536 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('function takes exactly 1 argument (3 given)',), <traceback object at 0x7f6d1f248050>)
+2017-06-01 15:57:12,078 :: WARNING :: Error - Save excel file
+2017-06-01 15:57:12,092 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('__init__() takes exactly 11 arguments (10 given)',), <traceback object at 0x7fb130f492d8>)
+2017-06-01 16:17:42,447 :: WARNING :: Error - Save excel file
+2017-06-01 16:17:42,447 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7ff476461950>)
+2017-06-01 16:25:27,306 :: WARNING :: Error - Save excel file
+2017-06-01 16:25:27,328 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'name_idenfiant' is not defined",), <traceback object at 0x7fe65d108758>)
+2017-06-01 16:26:58,416 :: WARNING :: Error - Save excel file
+2017-06-01 16:26:58,419 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7f92fa06f5f0>)
+2017-06-01 16:28:18,044 :: WARNING :: Error - Save excel file
+2017-06-01 16:28:18,045 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7f92f9ec2320>)
+2017-06-01 16:32:37,413 :: WARNING :: Error - Save excel file
+2017-06-01 16:32:37,414 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7f7416caaf80>)
+2017-06-01 16:33:19,968 :: WARNING :: Error - Save excel file
+2017-06-01 16:33:19,969 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'float' object has no attribute 'encode'",), <traceback object at 0x7ff8fee7f680>)
+2017-06-01 16:34:52,657 :: WARNING :: Error - Save excel file
+2017-06-01 16:34:52,659 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7f0b69c7f7a0>)
+2017-06-01 16:38:29,096 :: WARNING :: Error - Save excel file
+2017-06-01 16:38:29,096 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7fd2729c92d8>)
+2017-06-01 16:53:36,696 :: WARNING :: Error - Save excel file
+2017-06-01 16:53:36,750 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'get_strlist_identifiants' is not defined",), <traceback object at 0x7f3c9f7c1e60>)
+2017-06-01 17:05:04,314 :: WARNING :: Error - Save excel file
+2017-06-01 17:05:04,331 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7fd1b74b3830>)
+2017-06-01 17:07:41,031 :: WARNING :: Error - Save excel file
+2017-06-01 17:07:41,032 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7f79e50571b8>)
+2017-06-01 17:09:44,155 :: WARNING :: Error - Save excel file
+2017-06-01 17:09:44,157 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("List instance has no attribute 'identifiant'",), <traceback object at 0x7fe3a0bcdd88>)
+2017-06-01 17:13:07,925 :: WARNING :: Error - Save excel file
+2017-06-01 17:13:07,926 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("List instance has no attribute 'identifiant'",), <traceback object at 0x7fa4eb38f050>)
+2017-06-01 17:14:05,395 :: WARNING :: Error - Save excel file
+2017-06-01 17:14:05,396 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7f6f00d4e320>)
+2017-06-01 17:15:30,140 :: WARNING :: Error - Save excel file
+2017-06-01 17:15:30,141 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7fd6dbb0cbd8>)
+2017-06-01 17:16:28,311 :: WARNING :: Error - Save excel file
+2017-06-01 17:16:28,312 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7f0e65f3acb0>)
+2017-06-01 17:17:20,027 :: WARNING :: Error - Save excel file
+2017-06-01 17:17:20,031 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'encode'",), <traceback object at 0x7f165b8873f8>)
+2017-06-01 17:19:03,915 :: WARNING :: Error - Save excel file
+2017-06-01 17:19:03,916 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7fd25c7aabd8>)
+2017-06-01 17:19:49,583 :: WARNING :: Error - Read excel file
+2017-06-01 17:19:49,585 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7fdfe7c19758>)
+2017-06-01 17:20:34,334 :: WARNING :: Error - Save excel file
+2017-06-01 17:20:34,337 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("cannot concatenate 'str' and 'list' objects",), <traceback object at 0x7fb3bad6a518>)
+2017-06-01 17:21:25,938 :: WARNING :: Error - Save excel file
+2017-06-01 17:21:25,939 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'list' object has no attribute 'project_id'",), <traceback object at 0x7fa007143bd8>)
+2017-06-01 17:22:52,135 :: WARNING :: Error - Save excel file
+2017-06-01 17:22:52,135 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("Study instance has no attribute 'projects_id'",), <traceback object at 0x7fc094d40c20>)
+2017-06-01 17:57:55,857 :: WARNING :: Error - Save excel file
+2017-06-01 17:57:56,196 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not NoneType',), <traceback object at 0x7ff15ce67cf8>)
+2017-06-01 18:10:19,359 :: WARNING :: Error - Save excel file
+2017-06-01 18:10:19,360 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("Project instance has no attribute 'get_list'",), <traceback object at 0x7f86b20425f0>)
+2017-06-01 18:12:25,541 :: WARNING :: Error - Save excel file
+2017-06-01 18:12:25,543 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("List instance has no attribute 'process'",), <traceback object at 0x7fe5488303f8>)
+2017-06-01 18:22:43,011 :: WARNING :: Error - Save excel file
+2017-06-01 18:22:43,012 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_lists' is not defined",), <traceback object at 0x7f8208e45950>)
+2017-06-01 18:26:53,211 :: WARNING :: Error - Save excel file
+2017-06-01 18:26:53,211 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_lists' is not defined",), <traceback object at 0x7f9215f41dd0>)
+2017-06-01 18:27:53,756 :: WARNING :: Error - Save excel file
+2017-06-01 18:27:53,756 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_lists' is not defined",), <traceback object at 0x7f501d46aea8>)
+2017-06-01 18:28:36,334 :: WARNING :: Error - Save excel file
+2017-06-01 18:28:36,334 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_lists' is not defined",), <traceback object at 0x7f4022207f80>)

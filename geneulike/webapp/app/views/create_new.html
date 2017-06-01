@@ -5,7 +5,8 @@
 <script type="text/ng-template" id="firstDialogId">
 <div class="container" style="width: auto;">
   <div class="row">
-    <h2>Errors</h2>
+    <h2>Errors - {{ngDialogData.critical}}</h2>
+
     <div ng-repeat="err in ngDialogData.error_p.Critical" class="alert alert-danger" role="alert">[Project] Critical - {{err}}</div>
     <div ng-repeat="err in ngDialogData.error_s.Critical" class="alert alert-danger" role="alert">[Study] Critical - {{err}}</div>
     <div ng-repeat="err in ngDialogData.error_a.Critical" class="alert alert-danger" role="alert">[Strategy] Critical - {{err}}</div>

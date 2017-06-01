@@ -978,7 +978,16 @@ def file_upload(request):
     # if session_user == None:
     #     return 'HTTPForbidden()'
     # return {'message' : 'true'}
+import unicodedata as ucd
 
+
+def get_str(string):
+    if isinstance(string, float):
+        return str(int(string)).encode('utf-8')
+    elif string == '':
+        return str("").encode('utf-8')
+    else:
+        return string.encode('utf-8')
 ################HERE###########
 @view_config(route_name='excel_upload', renderer='json', request_method='POST')
 def excel_signature_upload(request):
@@ -1067,14 +1076,16 @@ def excel_signature_upload(request):
             projects_errors['Warning'].append("Line " + str(row_number+1) + " - no PubMed DOI")
         if not contributor:
             projects_errors['Info'].append("Line " + str(row_number+1) + " - no Contributor(s)")
-        
+        if identifier in projects_identifiers:
+            projects_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical ProjectID")
+            critical += 1
     def is_project_row(row_value, row_number):
         
-        is_project_error(   str(row_value[0]),\
-                            str(row_value[1]),\
-                            str(row_value[2]),\
-                            str(row_value[3]),\
-                            str(row_value[4]),\
+        is_project_error(   (row_value[0]),\
+                            (row_value[1]),\
+                            (row_value[2]),\
+                            (row_value[3]),\
+                            (row_value[4]),\
                             row_number)
 
         if str(row_value[0]):
@@ -1086,9 +1097,20 @@ def excel_signature_upload(request):
         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
         #projects = 
         for row_number in range(5, projects.nrows):
-            is_project_row( get_unicode_to_str(projects.row_values(row_number, start_colx=0, end_colx=None)) , row_number)
+            is_project_row( projects.row_values(row_number, start_colx=0, end_colx=None), row_number)
 
-            
+    # def get_plain_text(_list):
+    #     newList=[]
+    #     print _list
+    #     for elt in _list:
+    #         if elt == '':
+    #             newList.append(str(""))
+    #         elif isinstance(elt, float ):
+    #             newList.append(str(int(elt)))
+    #         else:
+    #             newList.append(str(elt.encode("utf-8")))
+    #     print newList
+    #     return newList
 # title = u"Klüft ć skräms inför på fédéral électoral große"
 
 # print str(unicodedata.normalize('NFKD', title).encode('ascii','ignore'))
@@ -1123,22 +1145,37 @@ def excel_signature_upload(request):
     #     return row_value_pubmed == ""
 
     def get_unicode_to_str(_lists):
+
         newList = []
-        strList = []
+        #print _lists
         for x in _lists:
-            
-            if isinstance(x, unicode):
-                newList.append(unicodedata.normalize('NFKD', x).encode('ascii','ignore'))
-            
+            if x == '':
+                newList.append(str(""))
+
+            elif isinstance(x, float):
+                newList.append(str(int(x)))
             else:
-                newList.append(x)
-            x.replace('\u2018','\'')
-            x.replace('\u2019','\'')
-            print x      
-            strList.append(str(x))
-        print newList
-        print strList
+                newList.append(x.decode("utf-8"))
+
+            #print x.encode('utf-8')
+            #if isinstance(x, unicode):
+                #newList.append(x.encode('utf-8'))
+                #ucd.name(x)
+                #newList.append(unicodedata.normalize('NFKD', x).encode('ascii','ignore'))
+            #if 
+            #else:
+            #    newList.append(x)
+            #x.replace('\u2018','\'')
+            #x.replace('\u2019','\'')
+            #print x      
+            #strList.append(str(x))
+        #for x in newList:
+            #print get_str(x) 
+        #print strList
         return newList
+
+    def get_str(element):
+        return element.encode('utf-8')
 
     def is_study_error(identifier, associated_project_identifier, title, description, \
                         phenotype_desease, go_terms, organism, development_stage, pubmed, row_number):
@@ -1166,26 +1203,28 @@ def excel_signature_upload(request):
             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Development Stage")
         if not pubmed:
             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Pubmed")
+        if identifier in studies_identifiers:
+            studies_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical StudiesID")
+            critical += 1
 
-            
     def is_study_row(row_value, row_number):
             
-        is_study_error( str(row_value[0]),\
-                        is_study_associated_project_identifier(str(row_value[1])),\
-                        str(row_value[2]),\
-                        str(row_value[3]),\
-                        str(row_value[4]),\
-                        str(row_value[5]),\
-                        str(row_value[6]),\
-                        str(row_value[7]),\
-                        str(row_value[8]),\
+        is_study_error( (row_value[0]),\
+                        is_study_associated_project_identifier((row_value[1])),\
+                        (row_value[2]),\
+                        (row_value[3]),\
+                        (row_value[4]),\
+                        (row_value[5]),\
+                        (row_value[6]),\
+                        (row_value[7]),\
+                        (row_value[8]),\
                         row_number)
                             
         if(str(row_value[0])):
-            studies_identifiers.append(str(row_value[0]))
+            studies_identifiers.append((row_value[0]))
             for i in range(len(has_identifier)):
-                if has_identifier[i][0] == str(row_value[1]):
-                    has_identifier[i][1] += str(row_value[0])
+                if has_identifier[i][0] == (row_value[1]):
+                    has_identifier[i][1] += (row_value[0])
 
     def studies_sheet(studies):
         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
@@ -1195,7 +1234,7 @@ def excel_signature_upload(request):
             #print studies.row_values(row_number, start_colx=0, end_colx=None)
             #is_study_row(studies.row_values(row_number, start_colx=0, end_colx=None), row_number)
             #is_study_row([str(unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore')) for x in studies.row_values(row_number, start_colx=0, end_colx=None)], row_number)
-            is_study_row(get_unicode_to_str(studies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
+            is_study_row((studies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
 
 
 
@@ -1244,29 +1283,30 @@ def excel_signature_upload(request):
             strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Technology")
         if not process:
             strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Process")
-    
+        if identifier in strategies_identifiers:
+            strategies_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical StrategyID")
+            critical += 1
+
     def is_strategy_row(row_value, row_number):
-        
-        is_strategy_error(  str(row_value[0]),\
-                            is_strategy_associated_study_identifier(str(row_value[1])),\
-                            str(row_value[2]),\
-                            str(row_value[3]),\
-                            str(row_value[4]),\
-                            str(row_value[5]),\
-                            str(row_value[6]),\
+        is_strategy_error(  (row_value[0]),\
+                            is_strategy_associated_study_identifier((row_value[1])),\
+                            (row_value[2]),\
+                            (row_value[3]),\
+                            (row_value[4]),\
+                            (row_value[5]),\
+                            (row_value[6]),\
                             row_number)
                                 
         if(str(row_value[0])):
-            strategies_identifiers.append(str(row_value[0]))
+            strategies_identifiers.append((row_value[0]))
             for i in range(len(has_identifier)):
-                if has_identifier[i][1] == str(row_value[1]):
-                    has_identifier[i][2] += str(row_value[0])
+                if has_identifier[i][1] == (row_value[1]):
+                    has_identifier[i][2] += (row_value[0])
 
 
     def strategies_sheet(strategies):
-
         for row_number in range(5, strategies.nrows):
-            is_strategy_row(get_unicode_to_str(strategies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
+            is_strategy_row((strategies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
 
 
 
@@ -1326,25 +1366,25 @@ def excel_signature_upload(request):
     
     def is_list_row(row_value, row_number):
         
-        is_list_error(  str(row_value[0]),\
-                        is_list_associated_strategy_identifier(str(row_value[1])),\
-                        str(row_value[2]),\
-                        str(row_value[3]),\
-                        str(row_value[4]),\
-                        is_list_extended_type_of_identifier(str(row_value[5]), str(row_value[4])),\
-                        str(row_value[6]),\
-                        str(row_value[7]),\
+        is_list_error(  (row_value[0]),\
+                        is_list_associated_strategy_identifier((row_value[1])),\
+                        (row_value[2]),\
+                        (row_value[3]),\
+                        (row_value[4]),\
+                        is_list_extended_type_of_identifier((row_value[5]), (row_value[4])),\
+                        (row_value[6]),\
+                        (row_value[7]),\
                         row_number)
         
         if(str(row_value[0]) and str(row_value[8]) == "Yes"):
             lists_identifiers.append(str(row_value[0]))
             for i in range(len(has_identifier)):
-                if has_identifier[i][2] == str(row_value[1]):
-                    has_identifier[i][3] += str(row_value[0])
+                if has_identifier[i][2] == (row_value[1]):
+                    has_identifier[i][3] += (row_value[0])
       
     def lists_sheet(lists):
         for row_number in range(5, lists.nrows):
-            is_list_row(lists.row_values(row_number, start_colx=0, end_colx=None) , row_number)
+            is_list_row(get_unicode_to_str(lists.row_values(row_number, start_colx=0, end_colx=None)) , row_number)
 
 #idlist sheet
 
@@ -1363,7 +1403,7 @@ def excel_signature_upload(request):
     
     def is_idList_row(col_value, col_number):
         #print col_value[1:]
-        is_idList_error(is_idList_identifier(str(col_value[0])),\
+        is_idList_error(is_idList_identifier((col_value[0])),\
                              is_idList_list(col_value[1:]), 
                              col_number)
         if(is_idList_identifier(col_value[0]) == False):
@@ -1431,15 +1471,37 @@ def excel_signature_upload(request):
 
     try :
         input_file.seek(0)
-        wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1252")
+        wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1251")
+        
+        # book = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name))
+        # sheet = book.sheet_by_index(0)
+        # print "start"
+        # print sheet.cell(5, 2)  # prints text:u'Andrea Bargnani'
+        # print sheet.cell(5, 2).value
+        # print isinstance(sheet.cell(5, 2).value, basestring) #str(sheet.cell(5, 2).value).encode("utf-8")
+        # print str()
+        # print "end"
+
+
+
+        # print "here"
+        # print wb.cell(5, 2).value
+        # print [x.value for x in wb.sheet_by_index(0).row_values(5)]
+        # with open("/home/clancien/test.txt", 'w') as output:
+        #     for x in wb.sheet_by_index(0).row_values(5):
+        #         output.write(x + "\n")
         #print wb.biff_version, wb.codepage, wb.encoding
+
         #Read project
+
+
         projects = wb.sheet_by_index(0)
         studies = wb.sheet_by_index(1)
         strategies = wb.sheet_by_index(2)
         lists = wb.sheet_by_index(3)
         idLists=wb.sheet_by_index(4)
         #print lists
+
         projects_sheet(projects)
         studies_sheet(studies)
         strategies_sheet(strategies)
@@ -1450,6 +1512,7 @@ def excel_signature_upload(request):
         #print has_identifier
         #print len(has_identifier)
         #add if
+        print "critical : " + str(critical)
         return {'msg':"File checked and uploded !",
                 'error_project': projects_errors,
                 'error_study':studies_errors,
@@ -1479,7 +1542,7 @@ class Project:
         owner,\
         author,\
         file_path,\
-        id):
+        identifiant):
 
         self.project_id = "GPR" + str(Project.compteur_project)
         self.studies_id=[]
@@ -1498,13 +1561,35 @@ class Project:
         self.status= "private"
         self.tags = ""
         Project.compteur_project += 1
-        self.id=[]
+        self.id=identifiant
 
-    def get_project(self):
+    def get_dico(self):
+
+        if len(self.studies_id) == 1:
+            _studies= str(self.studies_id[0])
+        else:
+            _studies= ' , '.join(self.studies_id)
+
+        if len(self.strategies_id) == 1:
+            _strategies = str(self.strategies_id[0])
+        else:
+            _strategies = ' , '.join(self.strategies_id)
+
+        if len(self.studies_id) == 1:
+            _studies = str(self.studies_id[0])
+        else:
+            _studies= ' , '.join(self.studies_id)
+
+        if len(self.lists_id) == 1:
+            _lists = str(self.lists_id[0])
+        else:
+            _lists = ' , '.join(self.lists_id)
+
+
         return {'project_id' : self.project_id,
-                'studies_id' : self.studies_id,
-                'strategies_id' : self.strategies_id,
-                'lists_id' : self.lists_id,
+                'studies_id' : _studies,
+                'strategies_id' : _strategies,
+                'lists_id' : _lists,
                 'title' : self.title,
                 'description' : self.description,
                 'pubmed' : self.pubmed,
@@ -1536,6 +1621,51 @@ class Project:
                 'tags' : self.tags
     }, width=1)
 
+    def get_write(self, path_filename):
+
+
+        if len(self.studies_id) == 1:
+            _studies= str(self.studies_id[0])
+        else:
+            _studies= ' , '.join(self.studies_id)
+
+        if len(self.strategies_id) == 1:
+            _strategies = str(self.strategies_id[0])
+        else:
+            _strategies = ' , '.join(self.strategies_id)
+
+        if len(self.studies_id) == 1:
+            _studies = str(self.studies_id[0])
+        else:
+            _studies= ' , '.join(self.studies_id)
+
+        if len(self.lists_id) == 1:
+            _lists = str(self.lists_id[0])
+        else:
+            _lists = ' , '.join(self.lists_id)
+
+        liste = ' , '.join(self.id)
+
+        with open(path_filename, 'a') as output:
+            output.write(   self.project_id+"\t"+
+                            _studies +"\t"+
+                            _strategies + "\t" +
+                            _lists + "\t" +
+                            self.title + "\t" +
+                            self.description + "\t"+
+                            self.pubmed + "\t"+
+                            self.contributors + "\t"+
+                            self.crosslinks+ "\t"+
+                            self.last_update+ "\t" +
+                            self.submission_date +"\t" +
+                            self.owner +"\t" +
+                            self.author + "\t"+
+                            self.file_path + "\t" +
+                            self.status + "\t" +
+                            self.tags + "\t"+
+                            liste+"\n" )
+
+
 class Study:
 
     compteur_study=0
@@ -1550,12 +1680,12 @@ class Study:
         add_info,\
         last_update,\
         file_path,\
-        id):
+        identifiant):
 
         self.project_id = ""
-        self.studies_id="GST" + str(compteur_study)
-        self.strategies_id=""
-        self.lists_id=""
+        self.studies_id="GST" + str(Study.compteur_study)
+        self.strategies_id=[]
+        self.lists_id=[]
         self.title = title
         self.description = description
         self.phenotype_desease = phenotype_desease
@@ -1569,13 +1699,24 @@ class Study:
         self.status = "private"
         self.tags = ""
         Study.compteur_study += 1
-        self.id=[]
+        self.id=identifiant
 
-    def get_study(self):
+    def get_dico(self):
+        if len(self.strategies_id) == 1:
+            _strategies = str(self.strategies_id[0])
+        else:
+            _strategies = ' , '.join(self.strategies_id)
+
+
+        if len(self.lists_id) == 1:
+            _lists = str(self.lists_id[0])
+        else:
+            _lists = ' , '.join(self.lists_id)
+
         return {'project_id' : self.project_id,
                 'studies_id' : self.studies_id,
-                'strategies_id' : self.strategies_id,
-                'lists_id' : self.lists_id,
+                'strategies_id' : _strategies,
+                'lists_id' : _lists,
                 'title' : self.title,
                 'description' : self.description,
                 'phenotype_desease' : self.phenotype_desease,
@@ -1589,43 +1730,81 @@ class Study:
                 'tags' : self.tags
         }
 
+    def get_write(self, path_filename):
+
+        if len(self.strategies_id) == 1:
+            _strategies = str(self.strategies_id[0])
+        else:
+            _strategies = ' , '.join(self.strategies_id)
+
+
+        if len(self.lists_id) == 1:
+            _lists = str(self.lists_id[0])
+        else:
+            _lists = ' , '.join(self.lists_id)
+
+        liste = ' , '.join(self.id)
+
+        with open(path_filename, 'a') as output:
+            output.write(   self.project_id+"\t"+
+                            self.studies_id +"\t"+
+                            _strategies + "\t" +
+                            _lists + "\t" +
+                            self.title + "\t" +
+                            self.description + "\t"+
+                            self.phenotype_desease + "\t"+
+                            self.go_term + "\t"+
+                            self.organism+ "\t"+
+                            self.development_stage+ "\t" +
+                            self.pubmed +"\t" +
+                            self.add_info +"\t" +
+                            self.last_update + "\t"+
+                            self.file_path + "\t" +
+                            self.status + "\t" +
+                            self.tags + "\t"+
+                            liste+"\n" )
+
 class Strategy:
 
     compteur_strategy=0
     def __init__(self,\
         title,\
         description,\
-        phenotype_desease,\
-        organism,\
-        development_stage,\
-        pubmed,\
+        type_of_experiment,\
+        technology,\
+        process,\
         add_info,\
         last_update,\
         file_path,\
-        id):
+        identifiant):
 
         self.project_id = ""
         self.studies_id=""
-        self.strategies_id="GSR" + str(compteur_strategy)
-        self.lists_id=""
+        self.strategies_id="GSR" + str(Strategy.compteur_strategy)
+        self.lists_id=[]
         self.title = title
         self.description = description
-        self.type_of_experiment = phenotype_desease
-        self.technology = organism
-        self.process = crosslinks
+        self.type_of_experiment = type_of_experiment
+        self.technology = technology
+        self.process = process
         self.add_info = add_info
         self.last_update = last_update
         self.file_path = file_path
         self.status = "private"
         self.tags = ""
         Strategy.compteur_strategy += 1
-        self.id=[]
+        self.id=identifiant
 
-    def get_strategy(self):
+    def get_dico(self):
+        if len(self.lists_id) == 1:
+            _lists = str(self.lists_id[0])
+        else:
+            _lists = ' , '.join(self.lists_id)
+
         return {'project_id' : self.project_id,
                 'studies_id' : self.studies_id,
                 'strategies_id' : self.strategies_id,
-                'lists_id' : self.lists_id,
+                'lists_id' : _lists,
                 'title' : self.title,
                 'description' : self.description,
                 'type_of_experiment' : self.type_of_experiment,
@@ -1637,13 +1816,42 @@ class Strategy:
                 'tags' : self.tags
         }
 
+    def get_write(self, path_filename):
+
+
+        if len(self.lists_id) == 1:
+            _lists = str(self.lists_id[0])
+        else:
+            _lists = ' , '.join(self.lists_id)
+
+        liste = ' , '.join(self.id)
+
+        with open(path_filename, 'a') as output:
+            output.write(   self.project_id+"\t"+
+                            self.studies_id +"\t"+
+                            self.strategies_id + "\t" +
+                            _lists + "\t" +
+                            self.title + "\t" +
+                            self.description + "\t"+
+                            self.type_of_experiment + "\t"+
+                            self.technology + "\t"+
+                            self.process+ "\t"+
+                            self.add_info+ "\t" +
+                            self.last_update + "\t"+
+                            self.file_path + "\t" +
+                            self.status + "\t" +
+                            self.tags + "\t"+
+                            liste+"\n" )
+
+
+
 class List:
 
     compteur_list=0
     def __init__(self,\
         title,\
         description,\
-        identifiant,\
+        identifiers,\
         identifier_extended,\
         list_parent_id,\
         list_child_id,\
@@ -1652,15 +1860,15 @@ class List:
         add_info,\
         last_update,\
         file_path,\
-        id):
+        identifiant):
 
         self.project_id = ""
         self.studies_id=""
         self.strategies_id=""
-        self.lists_id="GUL" + str(compteur_list)
+        self.lists_id="GUL" + str(List.compteur_list)
         self.title = title
         self.description = description
-        self.identifiant = identifiant
+        self.identifiers = identifiers
         self.identifier_extended = identifier_extended
         self.list_parent_id = list_parent_id
         self.list_child_id = list_child_id
@@ -1674,26 +1882,60 @@ class List:
 
         List.compteur_list += 1
 
-        self.id = []
+        self.id = identifiant
 
-    def get_list(self):
+    def get_dico(self):
+
+        if len(self.list) == 1:
+            _liste = str(self.list[0])
+        else:
+            _liste= ' , '.join(self.lists_id)
+
         return {'project_id' : self.project_id,
                 'studies_id' : self.studies_id,
                 'strategies_id' : self.strategies_id,
                 'lists_id' : self.lists_id,
                 'title' : self.title,
                 'description' : self.description,
-                'identifiant' : self.identifiant,
+                'identifiers' : self.identifiers,
                 'identifier_extended' : self.identifier_extended,
-                'list_parent_id' : self.process,
+                'list_parent_id' : self.list_parent_id,
                 'list_child_id' : self.list_child_id,
                 'comparable' : self.comparable,
-                'list' : self.list,
+                'list' : _liste,
                 'last_update' : self.last_update,
                 'status' : self.status,
                 'file_path' : self.file_path,
                 'tags' : self.tags
         }
+
+    def get_write(self, path_filename):
+        if len(self.list) == 1:
+            _liste = str(self.list[0])
+        else:
+            _liste= ' , '.join(self.lists_id)
+
+        liste = ' , '.join(self.id)
+        with open(path_filename, 'a') as output:
+            output.write(   self.project_id+"\t"+
+                            self.studies_id +"\t"+
+                            self.strategies_id + "\t" +
+                            self.lists_id + "\t" +
+                            self.title + "\t" +
+                            self.description + "\t"+
+                            self.identifiers + "\t"+
+                            self.identifier_extended + "\t"+
+                            self.list_parent_id+ "\t"+
+                            self.list_child_id+ "\t" +
+                            self.comparable + "\t"+
+                            _liste + "\t"+
+                            self.add_info+"\t"+
+                            self.last_update+"\t"+
+                            self.file_path + "\t" +
+                            self.status + "\t" +
+                            self.tags + "\t"+
+                            liste +"\n" )
+
 
 
 
@@ -1741,49 +1983,49 @@ def save_excel(request):
         for row_number in range(5, project_sheet.nrows):
             
             row_value = project_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            #print project_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            # projects.append(Project(   str(row_value[1]),\
-            #                         str(row_value[2]),\
-            #                         str(row_value[3]),\
-            #                         str(row_value[4]),\
-            #                         str(row_value[5]),\
-            #                         str(date),\
-            #                         str(date),\
-            #                         str(user),\
-            #                         str(user),\
-            #                         str(input_file),\
-            #                         [str(row_value[0]), "", "",""]
-            #                     ))
+            projects.append(Project(   get_str(row_value[1]),\
+                                    get_str(row_value[2]),\
+                                    get_str(row_value[3]),\
+                                    get_str(row_value[4]),\
+                                    get_str(row_value[5]),\
+                                    get_str(date),\
+                                    get_str(date),\
+                                    get_str(user),\
+                                    get_str(user),\
+                                    get_str(input_file),\
+                                    [get_str(row_value[0]), "", "",""]
+                                ))
 
     def add_study(study_sheet):
         for row_number in range(5, study_sheet.nrows):
             row_value = study_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            studies.append(Study(  str(row_value[2]),\
-                                str(row_value[3]),\
-                                str(row_value[4]),\
-                                str(row_value[5]),\
-                                str(row_value[6]),\
-                                str(row_value[7]),\
-                                str(row_value[8]),\
-                                str(row_value[9]),\
-                                str(date),\
-                                str(input_file),\
-                                [str(row_value[1]), str(row_value[0]), "", ""]
+            studies.append(Study(  get_str(row_value[2]),\
+                                get_str(row_value[3]),\
+                                get_str(row_value[4]),\
+                                get_str(row_value[5]),\
+                                get_str(row_value[6]),\
+                                get_str(row_value[7]),\
+                                get_str(row_value[8]),\
+                                get_str(row_value[9]),\
+                                get_str(date),\
+                                get_str(input_file),\
+                                [get_str(row_value[1]), get_str(row_value[0]), "", ""]
                             ))
 
     def add_strategy(strategy_sheet):
         for row_number in range(5, strategy_sheet.nrows):
             row_value = strategy_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            strategies.append(Strategy(str(row_value[2]),\
-                                    str(row_value[3]),\
-                                    str(row_value[4]),\
-                                    str(row_value[5]),\
-                                    str(row_value[6]),\
-                                    str(row_value[7]),\
-                                    str(date),\
-                                    str(input_file),\
-                                    ["",str(row_value[1]), str(row_value[0]), ""]
+            strategies.append(Strategy( get_str(row_value[2]),\
+                                        get_str(row_value[3]),\
+                                        get_str(row_value[4]),\
+                                        get_str(row_value[5]),\
+                                        get_str(row_value[6]),\
+                                        get_str(row_value[7]),\
+                                        get_str(date),\
+                                        get_str(input_file),\
+                                        ["",get_str(row_value[1]), get_str(row_value[0]), ""]
                                     ))
+
 
     def get_Col_List(header_col, list_headers):
         if header_col in list_headers:
@@ -1793,67 +2035,125 @@ def save_excel(request):
         #         return  list_headers.index(header_col)
 
     def add_list(list_sheet, idList_sheet):
-        idLists = [str(list_ID) for list_ID in idList_sheet.row_values(0, start_colx=0, end_colx=None)]
+        idLists = [get_str(list_ID) for list_ID in idList_sheet.row_values(0, start_colx=0, end_colx=None)]
         for row_number in range(5, list_sheet.nrows):
-            row_value = list_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            index_list_identifiants =  get_Col_List(str(row_value[0]), idLists)
-            list_identifiants = ",".join(str(name_idenfiant) for name_identifiant in idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None))
-            _list = List( str(row_value[2]),\
-                            str(row_value[3]),\
-                            str(row_value[4]),\
-                            str(row_value[5]),\
-                            str(row_value[6]),\
-                            str(row_value[7]),\
-                            str(row_value[8]),\
-                            list_identifiants,\
-                            str(row_value[9]),\
-                            str(date),\
-                            str(input_file),\
-                            ["", "", str(row_value[1]), str(row_value[0])]
-                        )
+            row_value = (list_sheet.row_values(row_number, start_colx=0, end_colx=None))
             boolean = True
-            for obj in lists:
-                if obj.id == _list.id:
-                    obj.identifiant = obj.identifiant + " , " + _list.identifiant
-                    if not _list.identifier_extended:
-                        obj.identifier_extended = obj.identifier_extended + " , " + ""
-                    else:
-                        obj.identifier_extended = obj.identifier_extended + " , " + _list.identifier_extended
-                    boolean=False
+            for _liste in lists:
+                if _liste.id[3] == get_str(row_value[0]):
+                    _liste.identifiers = _liste.identifiers + ' , ' + get_str(row_value[4])
+                    _liste.identifier_extended = _liste.identifiers + ' , ' + get_str(row_value[5])
+                    boolean = False
                     break
             if boolean:
+
+                index_list_identifiants =  get_Col_List(get_str(row_value[0]), idLists)
+                list_identifiants = ",".join(str(name_identifiant) for name_identifiant in (idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None)))
+                # list_identifiants=""
+                _list = List( get_str(row_value[2]),\
+                            get_str(row_value[3]),\
+                            get_str(row_value[4]),\
+                            get_str(row_value[5]),\
+                            get_str(row_value[6]),\
+                            get_str(row_value[7]),\
+                            get_str(row_value[8]),\
+                            list_identifiants,\
+                            get_str(row_value[9]),\
+                            get_str(date),\
+                            get_str(input_file),\
+                            ["", "", get_str(row_value[1]), get_str(row_value[0])]
+                        )
                 add_multiple_id(_list)
                 lists.append(_list)
+            
+            # print "333333"
+            # boolean = True
+            # for obj in lists:
+            #     if obj.identifiant == _list.identifiant:
+            #         obj.identifiant = obj.identifiant + " , " + _list.identifiant
+            #         if not _list.identifier_extended:
+            #             obj.identifier_extended = obj.identifier_extended + " , " + ""
+            #         else:
+            #             obj.identifier_extended = obj.identifier_extended + " , " + _list.identifier_extended
+            #         boolean=False
+            #         break
+            # if boolean:
+            #     add_multiple_id(_list)
+            #     lists.append(_list)
 
 
 
     def add_multiple_id(_list):
-        
+        """Modifier list par dico pour eviter les boucles donc gain de temps"""
+        _project=None
+        _study=None
+        _strategy=None
         for strategy in strategies:
             if _list.id[2] == strategy.id[2]:
-                strategy.lists_id = strategy.lists_id + " , " + _list.lists_id
-                _list.strategies_id = strategy.strategies_id
+                _strategy=strategy
 
-                for study in studies:
-                    if strategy.id[1] == study.id[1]:
-                        study.strategies_id = study.strategies_id + " , " + strategies_id
-                        study.lists_id = study.lists_id + " , " + _list.lists_id
-                        if not strategies.project_id:
-                            strategy.project_id = study.projects_id 
-                        for project in projects:
-                            if project.project_id == study.project_id:
-                                project.studies_id = project.studies_id + " , " + study.studies_id
-                                project.strategies_id = project.strategies_id + " , " + strategy.strategies_id
-                                project.lists_id = project.lists_id + " , " +  _list.lists_id
-                                return
+
+        for study in studies:
+            if _strategy.id[1] == study.id[1]:
+                _study=study
+        
+        for project in projects:
+            if _study.id[0] == project.id[0]:
+                _project=project
+
+        _project.studies_id.append(_study.studies_id)
+        _project.strategies_id.append(_strategy.strategies_id)
+        _project.lists_id.append(_list.lists_id)
+
+
+        _study.project_id = _project.project_id
+        _study.strategies_id.append(_strategy.strategies_id)
+        _study.lists_id.append(_list.lists_id)
+
+        _strategy.project_id = _project.project_id
+        _strategy.studies_id = _study.studies_id
+        _strategy.lists_id.append(_list.lists_id)
+
+        _list.project_id = _project.project_id
+        _list.studies_id = _study.studies_id
+        _list.strategies_id = _strategy.strategies_id
+
+
 
     try:
-        add_project(wb.sheet_by_index(0))
-        #for project in projects:
-         #   project.lire()
-        #add_study(wb.sheet_by_index(1))
-        #add_strategy(wb.sheet_by_index(2))
-        #add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
+        """Important empecher l'ajout dans la base si multiple id pour projet study et strat"""
+        add_project(wb.sheet_by_index(0)) 
+        
+        add_study(wb.sheet_by_index(1))
+        
+        add_strategy(wb.sheet_by_index(2))
+        
+        add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
+
+        for project in projects:
+            print "ok"
+            project.get_write("/home/clancien/project.txt")
+        for study in studies:
+            print "ok"
+            study.get_write("/home/clancien/study.txt")
+        for strategy in strategies:
+            print "ok"
+            strategy.get_write("/home/clancien/strategy.txt")
+        for _list in lists:
+            print "ok"
+            _list.get_write("/home/clancien/lists.txt")
+
+        for project in projects:
+            request.registry.db_mongo['projects'].insert(project.get_dico())
+
+        for study in studies:
+            request.registry.db_mongo['studies'].insert(study.get_dico())
+
+        for strategy in strategies:
+            request.registry.db_mongo['strategies'].insert(strategy.get_dico())
+
+        for _list in lists:
+            request.registry.db_mongo['lists'].insert(_list.get_dico())
 
         return {'msg':"File checked and uploded !", 'status':'0'}
     except:
