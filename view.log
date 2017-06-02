@@ -2736,3 +2736,43 @@ ConnectionTimeout: ConnectionTimeout caused by - ReadTimeoutError(HTTPConnection
 2017-06-01 18:27:53,756 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_lists' is not defined",), <traceback object at 0x7f501d46aea8>)
 2017-06-01 18:28:36,334 :: WARNING :: Error - Save excel file
 2017-06-01 18:28:36,334 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_lists' is not defined",), <traceback object at 0x7f4022207f80>)
+2017-06-02 09:08:33,685 :: WARNING :: Error - Read excel file
+2017-06-02 09:08:33,719 :: WARNING :: (<type 'exceptions.IndexError'>, IndexError('list index out of range',), <traceback object at 0x7f7d3f18ea28>)
+2017-06-02 12:52:31,322 :: WARNING :: Error - Save excel file
+2017-06-02 12:52:31,332 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'upload_path' is not defined",), <traceback object at 0x7f64770cd128>)
+2017-06-02 13:03:09,062 :: WARNING :: Error - Save excel file
+2017-06-02 13:03:09,063 :: WARNING :: (<type 'exceptions.KeyError'>, KeyError('uid',), <traceback object at 0x7f0b55401638>)
+2017-06-02 13:18:17,536 :: WARNING :: Error - Save excel file
+2017-06-02 13:18:17,537 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'namefile' is not defined",), <traceback object at 0x7f2a2c90d5a8>)
+2017-06-02 13:45:48,549 :: WARNING :: Error - Save excel file
+2017-06-02 13:45:48,550 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("class Study has no attribute 'compteur_project'",), <traceback object at 0x7fecc6983488>)
+2017-06-02 14:45:37,367 :: WARNING :: Error - Read excel file
+2017-06-02 14:45:37,368 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'idLists_error' is not defined",), <traceback object at 0x7f3139c64d88>)
+2017-06-02 14:47:04,164 :: WARNING :: Error - Read excel file
+2017-06-02 14:47:04,165 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'critical' referenced before assignment",), <traceback object at 0x7f03421946c8>)
+2017-06-02 14:55:40,158 :: WARNING :: Error - Save excel file
+2017-06-02 14:55:40,159 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("List instance has no attribute 'identifiers_extended'",), <traceback object at 0x7f4cbae42c20>)
+2017-06-02 16:38:47,563 :: WARNING :: Error - Save excel file
+2017-06-02 16:38:47,564 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("List instance has no attribute 'identifiant'",), <traceback object at 0x7fcc8bca47a0>)
+2017-06-02 16:41:15,813 :: WARNING :: Error - Save excel file
+2017-06-02 16:41:15,813 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'str' object has no attribute 'append'",), <traceback object at 0x7f9a7a058b90>)
+2017-06-02 16:43:16,003 :: WARNING :: Error - Save excel file
+2017-06-02 16:43:16,005 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not NoneType',), <traceback object at 0x7efd4456c758>)
+2017-06-02 16:58:53,825 :: WARNING :: 1 thread(s) still running
+2017-06-02 16:59:36,518 :: WARNING :: 2 thread(s) still running
+2017-06-02 17:00:39,053 :: WARNING :: Error - Save excel file
+2017-06-02 17:00:39,054 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('iteration over non-sequence',), <traceback object at 0x7f588059e368>)
+2017-06-02 17:02:40,329 :: WARNING :: Error - Save excel file
+2017-06-02 17:02:40,330 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("List instance has no attribute 'lists'",), <traceback object at 0x7f0d158eac68>)
+2017-06-02 17:13:16,841 :: WARNING :: 1 thread(s) still running
+2017-06-02 17:16:54,538 :: WARNING :: 1 thread(s) still running
+2017-06-02 17:17:47,634 :: WARNING :: 1 thread(s) still running
+2017-06-02 17:20:15,874 :: WARNING :: Error - Save excel file
+2017-06-02 17:20:15,876 :: WARNING :: (<class 'pymongo.errors.OperationFailure'>, OperationFailure(u'database error: interrupted at shutdown',), <traceback object at 0x7fe88b2aab48>)
+2017-06-02 17:33:54,203 :: WARNING :: Error - Save excel file
+2017-06-02 17:33:54,203 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'identifiant' is not defined",), <traceback object at 0x7f03555ff3f8>)
+2017-06-02 17:35:01,894 :: WARNING :: 1 thread(s) still running
+2017-06-02 17:35:55,391 :: WARNING :: Error - Save excel file
+2017-06-02 17:35:55,391 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_dico' is not defined",), <traceback object at 0x7f21fe7de3b0>)
+2017-06-02 17:41:22,116 :: WARNING :: 1 thread(s) still running
+2017-06-02 17:45:17,568 :: WARNING :: 1 thread(s) still running

@@ -1012,7 +1012,10 @@ def excel_signature_upload(request):
         # Now that we know the file has been fully saved to disk move it into place.
 
         upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
-        #print upload_path
+        print request.registry.upload_path
+        print request.params['uid']
+        print request.params['dataset']
+
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
@@ -1042,7 +1045,14 @@ def excel_signature_upload(request):
 
 
     zorro = 1
-    
+    def is_empty(row_value):
+        boolean=False
+        print row_value
+        for i in row_value:
+            print str(i)
+            if row_value != "":
+                return True
+        return boolean
 
 #Project sheet
     # def is_project_identifier(row_value_identifier):
@@ -1080,17 +1090,17 @@ def excel_signature_upload(request):
             projects_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical ProjectID")
             critical += 1
     def is_project_row(row_value, row_number):
-        
-        is_project_error(   (row_value[0]),\
-                            (row_value[1]),\
-                            (row_value[2]),\
-                            (row_value[3]),\
-                            (row_value[4]),\
-                            row_number)
+        if is_empty(row_value): 
+            is_project_error(   (row_value[0]),\
+                                (row_value[1]),\
+                                (row_value[2]),\
+                                (row_value[3]),\
+                                (row_value[4]),\
+                                row_number)
 
-        if str(row_value[0]):
-            projects_identifiers.append(str(row_value[0]))
-            has_identifier.append([str(row_value[0]), "", "", ""])
+            if str(row_value[0]):
+                projects_identifiers.append(str(row_value[0]))
+                has_identifier.append([str(row_value[0]), "", "", ""])
                
     def projects_sheet(projects):
         
@@ -1208,23 +1218,23 @@ def excel_signature_upload(request):
             critical += 1
 
     def is_study_row(row_value, row_number):
-            
-        is_study_error( (row_value[0]),\
-                        is_study_associated_project_identifier((row_value[1])),\
-                        (row_value[2]),\
-                        (row_value[3]),\
-                        (row_value[4]),\
-                        (row_value[5]),\
-                        (row_value[6]),\
-                        (row_value[7]),\
-                        (row_value[8]),\
-                        row_number)
-                            
-        if(str(row_value[0])):
-            studies_identifiers.append((row_value[0]))
-            for i in range(len(has_identifier)):
-                if has_identifier[i][0] == (row_value[1]):
-                    has_identifier[i][1] += (row_value[0])
+        if is_empty(row_value):    
+            is_study_error( (row_value[0]),\
+                            is_study_associated_project_identifier((row_value[1])),\
+                            (row_value[2]),\
+                            (row_value[3]),\
+                            (row_value[4]),\
+                            (row_value[5]),\
+                            (row_value[6]),\
+                            (row_value[7]),\
+                            (row_value[8]),\
+                            row_number)
+                                
+            if(str(row_value[0])):
+                studies_identifiers.append((row_value[0]))
+                for i in range(len(has_identifier)):
+                    if has_identifier[i][0] == (row_value[1]):
+                        has_identifier[i][1] += (row_value[0])
 
     def studies_sheet(studies):
         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
@@ -1288,20 +1298,21 @@ def excel_signature_upload(request):
             critical += 1
 
     def is_strategy_row(row_value, row_number):
-        is_strategy_error(  (row_value[0]),\
-                            is_strategy_associated_study_identifier((row_value[1])),\
-                            (row_value[2]),\
-                            (row_value[3]),\
-                            (row_value[4]),\
-                            (row_value[5]),\
-                            (row_value[6]),\
-                            row_number)
-                                
-        if(str(row_value[0])):
-            strategies_identifiers.append((row_value[0]))
-            for i in range(len(has_identifier)):
-                if has_identifier[i][1] == (row_value[1]):
-                    has_identifier[i][2] += (row_value[0])
+        if is_empty(row_value): 
+            is_strategy_error(  (row_value[0]),\
+                                is_strategy_associated_study_identifier((row_value[1])),\
+                                (row_value[2]),\
+                                (row_value[3]),\
+                                (row_value[4]),\
+                                (row_value[5]),\
+                                (row_value[6]),\
+                                row_number)
+                                    
+            if(str(row_value[0])):
+                strategies_identifiers.append((row_value[0]))
+                for i in range(len(has_identifier)):
+                    if has_identifier[i][1] == (row_value[1]):
+                        has_identifier[i][2] += (row_value[0])
 
 
     def strategies_sheet(strategies):
@@ -1365,22 +1376,26 @@ def excel_signature_upload(request):
             lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListChildID")
     
     def is_list_row(row_value, row_number):
-        
-        is_list_error(  (row_value[0]),\
-                        is_list_associated_strategy_identifier((row_value[1])),\
-                        (row_value[2]),\
-                        (row_value[3]),\
-                        (row_value[4]),\
-                        is_list_extended_type_of_identifier((row_value[5]), (row_value[4])),\
-                        (row_value[6]),\
-                        (row_value[7]),\
-                        row_number)
-        
-        if(str(row_value[0]) and str(row_value[8]) == "Yes"):
-            lists_identifiers.append(str(row_value[0]))
-            for i in range(len(has_identifier)):
-                if has_identifier[i][2] == (row_value[1]):
-                    has_identifier[i][3] += (row_value[0])
+        if is_empty(row_value):
+            print"True"
+        else:
+            print "Flase"
+        if is_empty(row_value): 
+            is_list_error(  (row_value[0]),\
+                            is_list_associated_strategy_identifier((row_value[1])),\
+                            (row_value[2]),\
+                            (row_value[3]),\
+                            (row_value[4]),\
+                            is_list_extended_type_of_identifier((row_value[5]), (row_value[4])),\
+                            (row_value[6]),\
+                            (row_value[7]),\
+                            row_number)
+            
+            if(str(row_value[0]) and str(row_value[8]) == "Yes"):
+                lists_identifiers.append(str(row_value[0]))
+                for i in range(len(has_identifier)):
+                    if has_identifier[i][2] == (row_value[1]):
+                        has_identifier[i][3] += (row_value[0])
       
     def lists_sheet(lists):
         for row_number in range(5, lists.nrows):
@@ -1395,19 +1410,21 @@ def excel_signature_upload(request):
         return len(col_value_list) == 0
         
     def is_idList_error(identifier, idList, col_number):
+        global critical
         if(identifier):
-            idLists_error['Critical'].append("Column " + str(col_number) + " in your idLists Sheet has no known Identifier")
+            idLists_errors['Critical'].append("Column " + str(col_number+1) + " in your idLists Sheet has no known Identifier")
             critical += 1
         if(idList):
-            idLists_error['Critical'].append("Column " + str(col_number) + " in your idLists Sheet has no List associated with")
+            idLists_errors['Critical'].append("Column " + str(col_number+1) + " in your idLists Sheet has no List associated with")
     
     def is_idList_row(col_value, col_number):
         #print col_value[1:]
-        is_idList_error(is_idList_identifier((col_value[0])),\
-                             is_idList_list(col_value[1:]), 
-                             col_number)
-        if(is_idList_identifier(col_value[0]) == False):
-            idLists_identifiers.append(str(col_value[0]))
+        if is_empty(col_value): 
+            is_idList_error(is_idList_identifier((col_value[0])),\
+                                 is_idList_list(col_value[1:]), 
+                                 col_number)
+            if(is_idList_identifier(col_value[0]) == False):
+                idLists_identifiers.append(str(col_value[0]))
     
     def get_absent_identifier_in_idLists():
         absent_identifier_in_idList_sheet = []
@@ -1522,6 +1539,8 @@ def excel_signature_upload(request):
                 'critical':str(critical),
                 'file': os.path.join(upload_path, tmp_file_name),
                 'status':'0' }
+        if critical != 0:
+            os.remove(os.path.join(upload_path, tmp_file_name))
     except:
         logger.warning("Error - Read excel file")
         logger.warning(sys.exc_info())
@@ -1530,7 +1549,7 @@ def excel_signature_upload(request):
 import pprint
 class Project:
 
-    compteur_project=0
+    compteur_project= 0
     def __init__(self,\
         title,\
         description,\
@@ -1886,11 +1905,12 @@ class List:
 
     def get_dico(self):
 
-        if len(self.list) == 1:
+
+        if (len(self.list)) == 1:
             _liste = str(self.list[0])
         else:
-            _liste= ' , '.join(self.lists_id)
-
+            _liste = ' , '.join(self.list)
+            
         return {'project_id' : self.project_id,
                 'studies_id' : self.studies_id,
                 'strategies_id' : self.strategies_id,
@@ -1966,8 +1986,10 @@ def save_excel(request):
     #Read project
 
     projects=[]
+    #projects={}
     studies=[]
     strategies=[]
+
     lists=[]
 
     projects_id =[]
@@ -1979,52 +2001,81 @@ def save_excel(request):
     print "date : " + str(datetime.datetime.utcnow())
     print "date : " + str(date)
 
+    def is_empty(row_value):
+        boolean=False
+        for i in row_value:
+            if row_value != "":
+                return True
+        return boolean
     def add_project(project_sheet):
+        if Project.compteur_project == 0:
+            print str(request.registry.db_mongo['projects'].find().count())
+            Project.compteur_project = int(request.registry.db_mongo['projects'].find().count())
         for row_number in range(5, project_sheet.nrows):
             
             row_value = project_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            projects.append(Project(   get_str(row_value[1]),\
-                                    get_str(row_value[2]),\
-                                    get_str(row_value[3]),\
-                                    get_str(row_value[4]),\
-                                    get_str(row_value[5]),\
-                                    get_str(date),\
-                                    get_str(date),\
-                                    get_str(user),\
-                                    get_str(user),\
-                                    get_str(input_file),\
-                                    [get_str(row_value[0]), "", "",""]
-                                ))
 
-    def add_study(study_sheet):
-        for row_number in range(5, study_sheet.nrows):
-            row_value = study_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            studies.append(Study(  get_str(row_value[2]),\
-                                get_str(row_value[3]),\
-                                get_str(row_value[4]),\
-                                get_str(row_value[5]),\
-                                get_str(row_value[6]),\
-                                get_str(row_value[7]),\
-                                get_str(row_value[8]),\
-                                get_str(row_value[9]),\
-                                get_str(date),\
-                                get_str(input_file),\
-                                [get_str(row_value[1]), get_str(row_value[0]), "", ""]
-                            ))
+            # project[(get_str(row_value[0]), "", "","")] = Project(   get_str(row_value[1]),\
+            #                         get_str(row_value[2]),\
+            #                         get_str(row_value[3]),\
+            #                         get_str(row_value[4]),\
+            #                         get_str(row_value[5]),\
+            #                         get_str(date),\
+            #                         get_str(date),\
+            #                         get_str(user),\
+            #                         get_str(user),\
+            #                         get_str(input_file),\
 
-    def add_strategy(strategy_sheet):
-        for row_number in range(5, strategy_sheet.nrows):
-            row_value = strategy_sheet.row_values(row_number, start_colx=0, end_colx=None)
-            strategies.append(Strategy( get_str(row_value[2]),\
+            if is_empty(row_value):
+                projects.append(Project(   get_str(row_value[1]),\
+                                        get_str(row_value[2]),\
                                         get_str(row_value[3]),\
                                         get_str(row_value[4]),\
                                         get_str(row_value[5]),\
-                                        get_str(row_value[6]),\
-                                        get_str(row_value[7]),\
                                         get_str(date),\
+                                        get_str(date),\
+                                        get_str(user),\
+                                        get_str(user),\
                                         get_str(input_file),\
-                                        ["",get_str(row_value[1]), get_str(row_value[0]), ""]
+                                        [get_str(row_value[0]), "", "",""]
                                     ))
+
+    def add_study(study_sheet):
+        if Study.compteur_study == 0:
+            Study.compteur_study = int(request.registry.db_mongo['studies'].find().count())
+        for row_number in range(5, study_sheet.nrows):
+            row_value = study_sheet.row_values(row_number, start_colx=0, end_colx=None)
+
+            if is_empty(row_value):
+                studies.append(Study(  get_str(row_value[2]),\
+                                    get_str(row_value[3]),\
+                                    get_str(row_value[4]),\
+                                    get_str(row_value[5]),\
+                                    get_str(row_value[6]),\
+                                    get_str(row_value[7]),\
+                                    get_str(row_value[8]),\
+                                    get_str(row_value[9]),\
+                                    get_str(date),\
+                                    get_str(input_file),\
+                                    [get_str(row_value[1]), get_str(row_value[0]), "", ""]
+                                ))
+
+    def add_strategy(strategy_sheet):
+        if Strategy.compteur_strategy== 0:
+            Strategy.compteur_strategy = int(request.registry.db_mongo['strategies'].find().count())
+        for row_number in range(5, strategy_sheet.nrows):
+            row_value = strategy_sheet.row_values(row_number, start_colx=0, end_colx=None)
+            if is_empty(row_value):
+                strategies.append(Strategy( get_str(row_value[2]),\
+                                            get_str(row_value[3]),\
+                                            get_str(row_value[4]),\
+                                            get_str(row_value[5]),\
+                                            get_str(row_value[6]),\
+                                            get_str(row_value[7]),\
+                                            get_str(date),\
+                                            get_str(input_file),\
+                                            ["",get_str(row_value[1]), get_str(row_value[0]), ""]
+                                        ))
 
 
     def get_Col_List(header_col, list_headers):
@@ -2035,36 +2086,41 @@ def save_excel(request):
         #         return  list_headers.index(header_col)
 
     def add_list(list_sheet, idList_sheet):
+        if List.compteur_list == 0:
+            List.compteur_list = int(request.registry.db_mongo['lists'].find().count())
         idLists = [get_str(list_ID) for list_ID in idList_sheet.row_values(0, start_colx=0, end_colx=None)]
         for row_number in range(5, list_sheet.nrows):
             row_value = (list_sheet.row_values(row_number, start_colx=0, end_colx=None))
-            boolean = True
-            for _liste in lists:
-                if _liste.id[3] == get_str(row_value[0]):
-                    _liste.identifiers = _liste.identifiers + ' , ' + get_str(row_value[4])
-                    _liste.identifier_extended = _liste.identifiers + ' , ' + get_str(row_value[5])
-                    boolean = False
-                    break
-            if boolean:
+            if is_empty(row_value):
+                boolean = True
+                for _liste in lists:
+                    if _liste.id[3] == get_str(row_value[0]):
+                        _liste.identifiers = _liste.identifiers + ' , ' + get_str(row_value[4])
+                        _liste.identifier_extended = _liste.identifier_extended + ' , ' + get_str(row_value[5])
+                        boolean = False
+                        break
+                if boolean:
 
-                index_list_identifiants =  get_Col_List(get_str(row_value[0]), idLists)
-                list_identifiants = ",".join(str(name_identifiant) for name_identifiant in (idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None)))
-                # list_identifiants=""
-                _list = List( get_str(row_value[2]),\
-                            get_str(row_value[3]),\
-                            get_str(row_value[4]),\
-                            get_str(row_value[5]),\
-                            get_str(row_value[6]),\
-                            get_str(row_value[7]),\
-                            get_str(row_value[8]),\
-                            list_identifiants,\
-                            get_str(row_value[9]),\
-                            get_str(date),\
-                            get_str(input_file),\
-                            ["", "", get_str(row_value[1]), get_str(row_value[0])]
-                        )
-                add_multiple_id(_list)
-                lists.append(_list)
+                    index_list_identifiants =  get_Col_List(get_str(row_value[0]), idLists)
+                    list_identifiants = ",".join([str(name_identifiant) for name_identifiant in (idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None))])
+                    list_identifiants = re.sub(r" ", '', list_identifiants)
+                    print list_identifiants
+                    # list_identifiants=""
+                    _list = List( get_str(row_value[2]),\
+                                get_str(row_value[3]),\
+                                get_str(row_value[4]),\
+                                get_str(row_value[5]),\
+                                get_str(row_value[6]),\
+                                get_str(row_value[7]),\
+                                get_str(row_value[8]),\
+                                list_identifiants,\
+                                get_str(row_value[9]),\
+                                get_str(date),\
+                                get_str(input_file),\
+                                ["", "", get_str(row_value[1]), get_str(row_value[0])]
+                            )
+                    add_multiple_id(_list)
+                    lists.append(_list)
             
             # print "333333"
             # boolean = True
@@ -2119,6 +2175,169 @@ def save_excel(request):
         _list.strategies_id = _strategy.strategies_id
 
 
+    def get_Convert(upload_path):
+        raw=[]
+        entrez=[]
+        homologene=[]
+        gpl='GPL'
+
+
+        for _list in lists:
+            print _list.list
+            identifiants =_list.identifiers.split(',')
+            identifiants_extended=_list.identifier_extended.split(',')
+            if (len(identifiants) == 1 and identifiants[0] == 'Other'):
+                continue
+
+            else:
+                if len(identifiants) == 1:
+                    print "here"
+                    if identifiants[0] == 'Uniprot':
+                        for name in _list.list.split(','):
+                            print "name : ",name 
+                            raw.append(str(name))
+                            swissprot = get_Entrez_ID('SwissProt', str(name))
+                            trembl = get_Entrez_ID('trEMBL', str(name))
+                            entrez_id=""
+                            if swissprot == None and trembl != None:
+                                entrez_id= trembl['BDID']
+                                entrez.append(entrez_id)
+                            elif swissprot != None and trembl == None:
+                                entrez_id= swissprot['BDID']
+                                entrez.append(entrez_id)
+                            else:
+                                entrez.append("-")
+                                print name , ' error'
+                            if entrez_id != "":
+                                _homologene = get_HomoloGeneID(entrez_id)
+                                if _homologene != None:
+                                    homologene_id = _homologene['BDID']
+                                    homologene.append(str(homologene_id))
+                                else:
+                                    homologene.append("-")
+                            else:
+                                homologene.append("-")
+
+                    elif identifiants[0] == gpl:
+
+                        for name in _list.list.split(','):
+                            raw.append(str(name))
+                            _gpl =  get_GPL(str(identifiants_extended[0]), str(name))
+                            if _gpl == None:
+                                entrez.append('-')
+                                homologene.append('-')
+                            else:
+                                entrez_id = _gpl['GeneID']
+                                entrez.append(str(entrez_id))
+                                _homologene=get_HomoloGeneID(str(entrez_id))
+                                if _homologene == None:
+                                    homologene.append('-')
+                                else:
+                                    homologene_id= _homologene['GeneID']
+                                    homologene.append(str(homologene_id))
+
+                    else:
+                        base = str(identifiants[0])
+                        if identifiants[0] == "Entrez_name":
+                            base = "Gene_Symbol"
+                        print base
+                        for name in _list.list.split(','):
+
+                            raw.append(str(name))
+                            _entrez = get_Entrez_ID(base, str(name))
+                            if _entrez == None:
+                                entrez.append('-')
+                                homologene.append('-')
+                            else:
+                                entrez_id = _entrez['GeneID']
+                                #pprint.pprint(_entrez)
+                                entrez.append(str(entrez_id))
+                                _homologene = get_HomoloGeneID(str(name))
+                                if _homologene == None:
+                                    homologene.append("-")
+                                else:
+                                    homologene_id = _homologene['GeneID']
+                                    homologene.append(str(homologene_id))
+                                print entrez_id
+
+                else:
+
+                    for name in _list.list.split(','):
+
+                        raw.append(name)
+                        entrez_identifiant=[]
+                        entrez_id=""
+                        for index in range(len(identifiants)):
+
+                            if identifiants[index] == 'Uniprot':
+                                swissprot = get_Entrez_ID('SwissProt', str(name))
+                                trembl = get_Entrez_ID('trEMBL', str(name))
+                                entrez_id=""
+                                if swissprot == None and trembl != None:
+                                    entrez_id= str(trembl['BDID'])
+                                elif swissprot != None and trembl == None:
+                                    entrez_id= str(swissprot['BDID'])
+                                else:
+                                    entrez_id = '-'
+                                    print "error"
+
+                                entrez_identifiant.append(entrez_id)
+
+                            elif identifiants[index] == gpl:
+                                _entrez = get_Entrez_ID(str(identifiants_extended[index]), name)
+                                if _entrez == None:
+                                    entrez.append('-')
+                                else:
+                                    entrez_id = _entrez['GeneID']
+                                    entrez.append(str(entrez_id))
+                            else:
+                                base = str(identifiants[index])
+                                if identifiants[index] == "Entrez_name":
+                                    base = "Gene_Symbol"
+
+                                _entrez = get_Entrez_ID(base, str(name))
+
+                                if _entrez == None:
+                                    entrez_identifiant.append('-')
+                                else:
+                                    entrez_id = _entrez['GeneID']
+                                    entrez_identifiant.append(str(entrez_id))
+
+                        for entrez in entrez_identifiant:
+                            if entrez != '-':
+                                entrez_id=str(entrez)
+                                entrez.append(entrez_id)
+                        if entrez_id == "":
+                            entrez_id="-"
+
+                        if entrez_id != "-":
+                            _homologene = get_HomoloGeneID(entrez_id)
+                            if _homologene == None:
+                                homologene.append('-')
+                            else:
+                                homologene_id = _homologene['GeneID']
+                                homologene.append(str(homologene_id))
+                        else:
+                             homologene.append('-')
+
+            with open(os.path.join(upload_path, _list.project_id, _list.lists_id, _list.lists_id) , 'w') as output:
+                for index in range(len(raw)):
+                    output.write(str(raw[index]) + "\t" + str(entrez[index]) + "\t" + str(homologene[index]) + "\n")
+
+
+
+
+    def get_Entrez_ID(base, bdid):
+        return request.registry.db_mongo[str(base)].find_one({"BDID" : str(bdid)})
+                
+    def get_HomoloGeneID(entrez_id):
+        return request.registry.db_mongo['HomoloGene'].find_one({"BDID" : str(entrez_id)})
+
+    def get_GPL(gpl_name, id_name):
+         return request.registry.db_mongo['GPL'].find_one({"BD" : str(gpl_name),"BDID" : str(entrez_id)})
+
+            
+
 
     try:
         """Important empecher l'ajout dans la base si multiple id pour projet study et strat"""
@@ -2130,21 +2349,27 @@ def save_excel(request):
         
         add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
 
-        for project in projects:
-            print "ok"
-            project.get_write("/home/clancien/project.txt")
-        for study in studies:
-            print "ok"
-            study.get_write("/home/clancien/study.txt")
-        for strategy in strategies:
-            print "ok"
-            strategy.get_write("/home/clancien/strategy.txt")
-        for _list in lists:
-            print "ok"
-            _list.get_write("/home/clancien/lists.txt")
-
+        # for project in projects:
+        #     print "ok"
+        #     project.get_write("/home/clancien/project.txt")
+        # for study in studies:
+        #     print "ok"
+        #     study.get_write("/home/clancien/study.txt")
+        # for strategy in strategies:
+        #     print "ok"
+        #     strategy.get_write("/home/clancien/strategy.txt")
+        # for _list in lists:
+        #     print "ok"
+        #     _list.get_write("/home/clancien/lists.txt")
+        upload_path = os.path.join(request.registry.upload_path, user, 'dashboard')
         for project in projects:
             request.registry.db_mongo['projects'].insert(project.get_dico())
+            #v=os.path.join(upload_path, project.project_id)
+            #print str(v)
+            if not os.path.exists(os.path.join(upload_path, project.project_id)):
+
+                os.makedirs(os.path.join(upload_path, project.project_id))
+                print "create project directory"
 
         for study in studies:
             request.registry.db_mongo['studies'].insert(study.get_dico())
@@ -2154,8 +2379,19 @@ def save_excel(request):
 
         for _list in lists:
             request.registry.db_mongo['lists'].insert(_list.get_dico())
+            #v=os.path.join(upload_path, project.project_id,_list.lists_id)
+            #print str(v)
+            if not os.path.exists(os.path.join(upload_path, _list.project_id,_list.lists_id)):
+                os.makedirs(os.path.join(upload_path, _list.project_id, _list.lists_id))
+            #os.rename(os.path.join(upload_path, _list.lists_id, name_file))
+            #v = get_str(os.path.join(upload_path, _list.project_id, _list.lists_id)) #, namefile))
+            #print v
+            #_list.file_path= get_str(os.path.join(upload_path, _list.project_id, _list.lists_id, namefile))
+            #pprint.pprint(request.registry.db_mongo['lists'].find_one({'project_id' : 'GPR0'}))
 
+        get_Convert(upload_path)
         return {'msg':"File checked and uploded !", 'status':'0'}
+
     except:
         logger.warning("Error - Save excel file")
         logger.warning(sys.exc_info())
