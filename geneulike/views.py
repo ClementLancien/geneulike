@@ -460,21 +460,27 @@ def pending(request):
 @view_config(route_name='1', renderer='json', request_method='POST')
 def getdata(request):
     form = json.loads(request.body, encoding=request.charset)
+    pprint.pprint(form)
     collection = form['collection']
     select_filter = form['filter']
     field = form['field']
     project_number = 0
     study_number = 0
-    assay_number = 0
-    signature_number = 0
+    strategy_number = 0
+    list_number = 0
+    print "select_filter ", select_filter
     if 'all_info' in form :
-        project_number = request.registry.db_mongo['projects'].find({field :select_filter}).count()
-        study_number = request.registry.db_mongo['studies'].find({field :select_filter}).count()
-        assay_number = request.registry.db_mongo['assays'].find({field :select_filter}).count()
-        signature_number = request.registry.db_mongo['signatures'].find({field :select_filter}).count() 
+
+        project_number = request.registry.db_mongo['projects'].find({field : select_filter}).count()
+        study_number = request.registry.db_mongo['studies'].find({field : select_filter}).count()
+        strategy_number = request.registry.db_mongo['strategies'].find({field : select_filter}).count()
+        list_number = request.registry.db_mongo['lists'].find({field : select_filter}).count()
+       
     if form['from'] == "None" :
-        
-        result = request.registry.db_mongo[collection].find_one({field :select_filter})
+        print collection
+        print field
+        result = request.registry.db_mongo[collection].find_one({collection + "_" +field :select_filter})
+        pprint.pprint(result)
         if result is not None :
             if 'edges' in result:
                 if result['edges'] is not None :
@@ -496,7 +502,8 @@ def getdata(request):
             form['from'] = len(selected) - 15
         if len(selected) < int(form['to']) :
             form['to'] = len(selected)
-        return {'msg':'ok','request':selected[int(form['from']):int(form['to'])],'project_number':project_number,'study_number':study_number,'assay_number':assay_number,'signature_number':signature_number}
+
+        return {'msg':'ok','request':selected[int(form['from']):int(form['to'])],'project_number':project_number,'study_number':study_number,'strategy_number':strategy_number,'list_number': list_number}
 
 @view_config(route_name='ontologies', renderer='json', request_method='POST')
 def ontologies(request):
@@ -835,6 +842,7 @@ def file_signature(request):
 
 @view_config(route_name='file_upload', renderer='json', request_method='POST')
 def file_upload(request):
+    print "file_upload"
     session_user = is_authenticated(request)
     if session_user is None:
         return 'HTTPForbidden()'
@@ -991,6 +999,7 @@ def get_str(string):
 ################HERE###########
 @view_config(route_name='excel_upload', renderer='json', request_method='POST')
 def excel_signature_upload(request):
+    print "excel_signature_upload"
     session_user = is_authenticated(request)
     if session_user is None:
         return 'HTTPForbidden()'
@@ -1012,14 +1021,14 @@ def excel_signature_upload(request):
         # Now that we know the file has been fully saved to disk move it into place.
 
         upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
-        print request.registry.upload_path
-        print request.params['uid']
-        print request.params['dataset']
+        #print request.registry.upload_path
+        #print request.params['uid']
+        #print request.params['dataset']
 
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
-        print 'write file into : '+upload_path
+        #print 'write file into : '+upload_path
     except:
         logger.warning("Error - Upload path")
         logger.warning(upload_path)
@@ -1047,9 +1056,9 @@ def excel_signature_upload(request):
     zorro = 1
     def is_empty(row_value):
         boolean=False
-        print row_value
+       # print row_value
         for i in row_value:
-            print str(i)
+            #print str(i)
             if row_value != "":
                 return True
         return boolean
@@ -1529,7 +1538,10 @@ def excel_signature_upload(request):
         #print has_identifier
         #print len(has_identifier)
         #add if
-        print "critical : " + str(critical)
+        #print "critical : " + str(critical)
+        if critical != 0:
+            print "create path"
+            os.remove(os.path.join(upload_path, tmp_file_name))
         return {'msg':"File checked and uploded !",
                 'error_project': projects_errors,
                 'error_study':studies_errors,
@@ -1539,8 +1551,7 @@ def excel_signature_upload(request):
                 'critical':str(critical),
                 'file': os.path.join(upload_path, tmp_file_name),
                 'status':'0' }
-        if critical != 0:
-            os.remove(os.path.join(upload_path, tmp_file_name))
+        
     except:
         logger.warning("Error - Read excel file")
         logger.warning(sys.exc_info())
@@ -1619,7 +1630,8 @@ class Project:
                 'owner' : self.owner,
                 'author' : self.author,
                 'file_path' : self.file_path,
-                'tags' : self.tags
+                'status' : self.status,
+                'tags' : self.tags,
     }
 
     def lire(self):
@@ -1698,6 +1710,7 @@ class Study:
         pubmed,\
         add_info,\
         last_update,\
+        owner,\
         file_path,\
         identifiant):
 
@@ -1714,11 +1727,13 @@ class Study:
         self.pubmed = pubmed
         self.add_info = add_info
         self.last_update = last_update
+        self.owner = owner
         self.file_path = file_path
         self.status = "private"
         self.tags = ""
         Study.compteur_study += 1
         self.id=identifiant
+
 
     def get_dico(self):
         if len(self.strategies_id) == 1:
@@ -1744,9 +1759,12 @@ class Study:
                 'development_stage' : self.development_stage,
                 'pubmed' : self.pubmed,
                 'last_update' : self.last_update,
+                'add_info' : self.add_info,
                 'status' : self.status,
+                'owner' : self.owner,
                 'file_path' : self.file_path,
-                'tags' : self.tags
+                'status' : self.status,
+                'tags' : self.tags,
         }
 
     def get_write(self, path_filename):
@@ -1794,6 +1812,7 @@ class Strategy:
         process,\
         add_info,\
         last_update,\
+        owner,\
         file_path,\
         identifiant):
 
@@ -1808,6 +1827,7 @@ class Strategy:
         self.process = process
         self.add_info = add_info
         self.last_update = last_update
+        self.owner = owner,
         self.file_path = file_path
         self.status = "private"
         self.tags = ""
@@ -1830,9 +1850,12 @@ class Strategy:
                 'technology' : self.technology,
                 'process' : self.process,
                 'last_update' : self.last_update,
+                'add_info' : self.add_info,
                 'status' : self.status,
+                'owner' : self.owner,
                 'file_path' : self.file_path,
-                'tags' : self.tags
+                'status' : self.status,
+                'tags' : self.tags,
         }
 
     def get_write(self, path_filename):
@@ -1878,6 +1901,7 @@ class List:
         _list,\
         add_info,\
         last_update,\
+        owner,\
         file_path,\
         identifiant):
 
@@ -1895,6 +1919,7 @@ class List:
         self.list = _list
         self.add_info = add_info
         self.last_update = last_update
+        self.owner = owner
         self.file_path = file_path
         self.status = "private"    
         self.tags = ""
@@ -1924,9 +1949,11 @@ class List:
                 'comparable' : self.comparable,
                 'list' : _liste,
                 'last_update' : self.last_update,
-                'status' : self.status,
+                'add_info' : self.add_info,
+                'owner' : self.owner,
                 'file_path' : self.file_path,
-                'tags' : self.tags
+                'status' : self.status,
+                'tags' : self.tags,
         }
 
     def get_write(self, path_filename):
@@ -1961,6 +1988,7 @@ class List:
 
 @view_config(route_name='project_up', renderer='json', request_method='POST')
 def save_excel(request):
+    print "save_excel"
     session_user = is_authenticated(request)
     if session_user is None:
         return 'HTTPForbidden()'
@@ -1976,14 +2004,28 @@ def save_excel(request):
 
     print 'write file into : '+input_file
 
-    #Create error list
-    
-    asso_id = {}
-    reverse_asso = {}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     #Read excel file
     wb = xlrd.open_workbook(input_file,encoding_override="cp1251")
-    #Read project
+
+
+
+
+
+
 
     projects=[]
     #projects={}
@@ -2009,7 +2051,7 @@ def save_excel(request):
         return boolean
     def add_project(project_sheet):
         if Project.compteur_project == 0:
-            print str(request.registry.db_mongo['projects'].find().count())
+            #print str(request.registry.db_mongo['projects'].find().count())
             Project.compteur_project = int(request.registry.db_mongo['projects'].find().count())
         for row_number in range(5, project_sheet.nrows):
             
@@ -2037,8 +2079,10 @@ def save_excel(request):
                                         get_str(user),\
                                         get_str(user),\
                                         get_str(input_file),\
-                                        [get_str(row_value[0]), "", "",""]
+                                        [get_str(row_value[0]), "", "",""],
                                     ))
+
+
 
     def add_study(study_sheet):
         if Study.compteur_study == 0:
@@ -2056,8 +2100,10 @@ def save_excel(request):
                                     get_str(row_value[8]),\
                                     get_str(row_value[9]),\
                                     get_str(date),\
+                                    get_str(user),\
                                     get_str(input_file),\
-                                    [get_str(row_value[1]), get_str(row_value[0]), "", ""]
+                                    [get_str(row_value[1]), get_str(row_value[0]), "", ""],
+
                                 ))
 
     def add_strategy(strategy_sheet):
@@ -2073,8 +2119,10 @@ def save_excel(request):
                                             get_str(row_value[6]),\
                                             get_str(row_value[7]),\
                                             get_str(date),\
+                                            get_str(user),\
                                             get_str(input_file),\
-                                            ["",get_str(row_value[1]), get_str(row_value[0]), ""]
+                                            ["",get_str(row_value[1]), get_str(row_value[0]), ""],
+
                                         ))
 
 
@@ -2116,8 +2164,10 @@ def save_excel(request):
                                 list_identifiants,\
                                 get_str(row_value[9]),\
                                 get_str(date),\
+                                get_str(user),\
                                 get_str(input_file),\
-                                ["", "", get_str(row_value[1]), get_str(row_value[0])]
+                                ["", "", get_str(row_value[1]), get_str(row_value[0])],
+
                             )
                     add_multiple_id(_list)
                     lists.append(_list)
@@ -2176,6 +2226,7 @@ def save_excel(request):
 
 
     def get_Convert(upload_path):
+        print "enter get_convert"
         raw=[]
         entrez=[]
         homologene=[]
@@ -2259,6 +2310,7 @@ def save_excel(request):
                                     homologene_id = _homologene['GeneID']
                                     homologene.append(str(homologene_id))
                                 print entrez_id
+                        print "herererer"
 
                 else:
 
@@ -2319,10 +2371,15 @@ def save_excel(request):
                                 homologene.append(str(homologene_id))
                         else:
                              homologene.append('-')
-
+            print "path"
+            print upload_path
+            print _list.project_id
+            print _list.lists_id
+            print _list.lists_id
             with open(os.path.join(upload_path, _list.project_id, _list.lists_id, _list.lists_id) , 'w') as output:
                 for index in range(len(raw)):
                     output.write(str(raw[index]) + "\t" + str(entrez[index]) + "\t" + str(homologene[index]) + "\n")
+                    print "has write"
 
 
 
@@ -2336,7 +2393,7 @@ def save_excel(request):
     def get_GPL(gpl_name, id_name):
          return request.registry.db_mongo['GPL'].find_one({"BD" : str(gpl_name),"BDID" : str(entrez_id)})
 
-            
+
 
 
     try:
@@ -2388,7 +2445,7 @@ def save_excel(request):
             #print v
             #_list.file_path= get_str(os.path.join(upload_path, _list.project_id, _list.lists_id, namefile))
             #pprint.pprint(request.registry.db_mongo['lists'].find_one({'project_id' : 'GPR0'}))
-
+        print "try"
         get_Convert(upload_path)
         return {'msg':"File checked and uploded !", 'status':'0'}
 

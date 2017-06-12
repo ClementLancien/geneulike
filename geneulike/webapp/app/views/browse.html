@@ -89,6 +89,69 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="col-md-12">
+			<div ng-if="collection == 'projects' || collection =='studies' || collection =='strategies' || collection=='lists'" id='description' class='well'>
+				<h5>Description</h5>
+				<p>{{data.description}}</p>
+			</div>
+			<div ng-if="collection == 'projects'" class='well'>
+				<h5>PubMed DOI(s)</h5>
+				<p ng-repeat='pub in data.pubmed.split()'>{{pub}}</p>
+			</div>
+			<div ng-if="collection == 'projects'" class='well'>
+				<h5>Contributors</h5>
+				<p ng-repeat='contributor in data.contributor.split()'>{{contributor}}</p>
+			</div>
+			<div ng-if="collection == 'projects'" class='well'>
+				<h5>Crosslinks</h5>
+				<p ng-repeat='crosslinks in data.crosslinks.split()'>{{crosslinks}}</p>
+			</div>
+
+			<div ng-if="collection == 'studies'" class='well'>
+				<h5>Phenotype/Desease</h5>
+				<p ng-repeat='pheno in data.phenotype_desease.split()' >{{pheno}}</p>
+			</div>
+			<div ng-if="collection == 'studies'" class='well'>
+				<h5>GO terms</h5>
+				<p ng-repeat='go in data.go_term.split()'>{{go}}</p>
+			</div>
+			<div ng-if="collection == 'studies'" class='well'>
+				<h5>Organism</h5>
+				<p>{{data.organism}}</p>
+			</div>
+			<div ng-if="collection == 'studies'" class='well'>
+				<h5>Developpement Stage</h5>
+				<p>{{data.development_stage}}</p>
+			</div>
+			<div ng-if="collection == 'studies'" class='well'>
+				<h5>PubMed</h5>
+				<p>{{data.pubmed}}</p>
+			</div>Additionnal Info
+			<div ng-if="collection == 'studies'" class='well'>
+				<h5>Additionnal informations</h5>
+				<p>{{data.add_info}}</p>
+			</div>
+
+			<div ng-if="collection == 'strategies'" class='well'>
+				<h5>Type of Experiment</h5>
+				<p>{{data.type_of_experiment}}</p>
+			</div>
+			<div ng-if="collection == 'strategies'" class='well'>
+				<h5>Technology</h5>
+				<p>{{data.technology}}</p>
+			</div>
+			<div ng-if="collection == 'strategies'" class='well'>
+				<h5>Process</h5>
+				<p>{{data.process}}</p>
+			</div>
+			<div ng-if="collection == 'strategies'" class='well'>
+				<h5>Process</h5>
+				<p>{{data.process}}</p>
+			</div>
+
+			
+			
+
+
 			<div ng-if="collection == 'projects' || collection =='studies'" id='description' class='well'>
 				<h5>Description</h5>
 				<p>{{data.description}}</p>
@@ -152,7 +215,7 @@
 		<p ng-if="collection =='signatures'"><b>Associated assays : </b><span ng-repeat='ass in data.assays'><a href="" ng-click="display(ass)"> {{ass}} </a>|</span></p>
 
 
-		<p><b>Last update : </b> {{convert_timestamp_to_date(data.last_update)}}</p>
+		<p><b>Last update : herererer </b> {{convert_timestamp_to_date(data.last_update)}}</p>
 	</div>
 	<div class="col-md-6">
 		<p ng-if="collection =='studies'"><b>Study type : </b> {{data.study_type}}</p>

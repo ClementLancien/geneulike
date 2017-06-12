@@ -1332,16 +1332,16 @@ app.controller('userprojectCtrl',
         $scope.sgfrom = 0;
         $scope.sgto = 25;
 
-
         User.get({'uid': $routeParams['id']}).$promise.then(function(data){
           
           $scope.user = data;
+
           Dataset.get({'filter':$scope.user.id,'from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'owner','all_info':'true'}).$promise.then(function(data){
             $scope.projects = data.request;
             $scope.project_number = data.project_number;
-            $scope.studies_number = data.study_number;
-            $scope.signatures_number = data.signature_number;
-            $scope.assay_number = data.assay_number;
+            $scope.study_number = data.study_number;
+            $scope.strategy_number = data.strategy_number;
+            $scope.list_number = data.list_number;
           });
         });
       $scope.auth_user = Auth.getUser();
@@ -1356,15 +1356,15 @@ app.controller('userprojectCtrl',
           });
       };
 
-      $scope.showAssays = function(){
-        Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'assays','field':'owner'}).$promise.then(function(data){
-            $scope.assays = data.request;
+      $scope.showStrategies = function(){
+        Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'owner'}).$promise.then(function(data){
+            $scope.strategies = data.request;
           });
       };
 
-      $scope.showSignatures = function(){
-        Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'signatures','field':'owner'}).$promise.then(function(data){
-            $scope.signatures = data.request;
+      $scope.showLists = function(){
+        Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'owner'}).$promise.then(function(data){
+            $scope.lists = data.request;
           });
       };
 
@@ -1387,18 +1387,18 @@ app.controller('userprojectCtrl',
             $scope.studies = data.request;
           });
         };
-        if(type=="assays"){
+        if(type=="strategies"){
           $scope.afrom = $scope.ato + 1;
           $scope.ato = $scope.ato + 26;
-          Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'assays','field':'owner'}).$promise.then(function(data){
-            $scope.assays = data.request;
+          Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'owner'}).$promise.then(function(data){
+            $scope.strategies = data.request;
           });
         };
-        if(type=="signatures"){
+        if(type=="lists"){
           $scope.sgfrom = $scope.sgto + 1;
           $scope.sgto = $scope.sgto + 26;
-          Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'signatures','field':'owner'}).$promise.then(function(data){
-            $scope.signatures = data.request;
+          Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'owner'}).$promise.then(function(data){
+            $scope.lists = data.request;
           });
         };
       }
@@ -1418,18 +1418,18 @@ app.controller('userprojectCtrl',
             $scope.studies = data.request;
           });
         };
-        if(type=="assays"){
+        if(type=="strategies"){
           $scope.afrom = $scope.afrom - 26;
           $scope.ato = $scope.ato - 26;
-          Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'assays','field':'owner'}).$promise.then(function(data){
-            $scope.assays = data.request;
+          Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'owner'}).$promise.then(function(data){
+            $scope.strategies = data.request;
           });
         };
-        if(type=="projects"){
+        if(type=="lists"){
           $scope.sgfrom = $scope.sgfrom - 26;
           $scope.sgto = $scope.sgto - 26;
-          Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'signatures','field':'owner'}).$promise.then(function(data){
-            $scope.signatures = data.request;
+          Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'owner'}).$promise.then(function(data){
+            $scope.lists = data.request;
           });
         };
 
@@ -1541,22 +1541,92 @@ app.controller('compareCtrl',
 });
 
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location,Auth, User,Upload,FileUploader,ngDialog, $timeout) {
+    function ($scope, $rootScope, $routeParams, $location, Auth, User,Upload,ngDialog) {
 
 
+//         $scope.user = null;
 
+//         User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+//             console.log("titi");
+//             $scope.user = data;
+//             console.log(data);
+//             console.log(user);
+//         });
+//         console.log("toto");
+
+//       $scope.auth_user = Auth.getUser();
+
+//       $scope.upExcel = function (obj){
+//         console.log(obj);
+//         ngDialog.open({ template: 'saving', className: 'ngdialog-theme-default'})
+//         console.log($routeParams['id']);
+//         User.project_save({'uid': $routeParams['id'], 'file': obj}).$promise.then(function(data){
+//                 console.log("here");
+//                 alert(data.msg);
+//                 ngDialog.close();
+//         });
+//       }
+
+
+//       $scope.openDefault = function () {
+//         ngDialog.open({
+//           template: 'firstDialogId',
+//           className: 'ngdialog-theme-default'
+//         });
+//       };
+     
+
+//       //INSERT FUNCTION UPLOAD EXCEL FILE
+//       //use user id to upload en read excel file
+//       $scope.signature_upload = function(excel_file) {
+//             ////console.log(signature_file);
+//             var resultInfo={'error':"",'critical':""};
+//             Upload.upload({
+//                 url: '/upload/'+$scope.user.id+'/excelupload',
+//                 fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+//                 file: excel_file
+//             }).progress(function (evt) {
+//                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+//                 ngDialog.open({ template: 'checking', className: 'ngdialog-theme-default'})
+//                 console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+//             }).success(function (data, status, headers, config) {
+//                 if(data.status == '0'){
+//                   console.log('file ' + config.file.name + ' uploaded.');
+//                   console.log(data);
+//                   resultInfo['error_p'] = data.error_project;
+//                   resultInfo['error_s'] = data.error_study;
+//                   resultInfo['error_a'] = data.error_assay;
+//                   resultInfo['error_f'] = data.error_factor;
+//                   resultInfo['error_sig'] = data.error_signature;
+//                   resultInfo['critical'] = data.critical;
+//                   resultInfo['file'] = data.file;
+//                   ngDialog.close();
+//                   ngDialog.open({ template: 'firstDialogId', scope: $scope, className: 'ngdialog-theme-default',data: resultInfo})
+//                 }
+//                 if (data.status == '1'){
+//                   alert(data.msg);
+//                 }
+                
+                
+//             }).error(function (data, status, headers, config) {
+//                 ////console.log('error status: ' + status);
+//             })
+//             console.log(resultInfo);    
+//       };
+// });
         $scope.user = null;
 
         User.get({'uid': $routeParams['id']}).$promise.then(function(data){
             $scope.user = data;
         });
-
+        console.log("herer");
+        console.log($scope.user);
       $scope.auth_user = Auth.getUser();
 
       $scope.upExcel = function (obj){
         console.log(obj);
         ngDialog.open({ template: 'saving', className: 'ngdialog-theme-default'})
-        User.project_save({'uid': $scope.user.id, 'file': obj}).$promise.then(function(data){
+        User.project_save({'uid': $routeParams['id'], 'file': obj}).$promise.then(function(data){
                 alert(data.msg);
                 ngDialog.close();
         });
@@ -1574,7 +1644,7 @@ app.controller('createCtrl',
       //INSERT FUNCTION UPLOAD EXCEL FILE
       //use user id to upload en read excel file
       $scope.signature_upload = function(excel_file) {
-            ////console.log(signature_file);
+            console.log("gere we are");
             var resultInfo={'error':"",'critical':""};
             Upload.upload({
                 url: '/upload/'+$scope.user.id+'/excelupload',
@@ -1610,6 +1680,9 @@ app.controller('createCtrl',
             console.log(resultInfo);
             
       };
+
+});
+
 
       //INSERT PREVALIDATION FILE VISUALISATION
       //show to user a preview of his project and need validation to upload
@@ -1652,7 +1725,7 @@ app.controller('createCtrl',
         //     console.info(status);
         //     console.info(response);
         // };
-});
+
 //         $scope.add = function(filesToAdd){
 //             //console.info('ici' , filesToAdd.length);
 //             //return console.info('la' , $scope.listOfFiles.length, $scope.listOfFiles);
@@ -1997,23 +2070,26 @@ app.controller('browseCtrl',
 
       var params = $location.search();
       ////console.log(params);
+
+      console.log(params);
       if(params['dataset'] !== undefined) {
         $scope.collection = "";
-        if (params['dataset'].includes("TSE")){
+        if (params['dataset'].includes("GST")){
           $scope.collection = 'studies';
         };
-        if (params['dataset'].includes("TSP")){
+        if (params['dataset'].includes("GPR")){
           $scope.collection = 'projects';
         };
-        if (params['dataset'].includes("TSA")){
-          $scope.collection = 'assays';
+        if (params['dataset'].includes("GSR")){
+          $scope.collection = 'strategies';
         };
-        if (params['dataset'].includes("TSS")){
-          $scope.collection = 'signatures';
+        if (params['dataset'].includes("GUL")){
+          $scope.collection = 'lists';
         };
 
         Dataset.get({'filter':params['dataset'],'from':'None','to':'None','collection':$scope.collection,'field':'id'}).$promise.then(function(data){
           $scope.data = data.request;
+
           
           if($scope.data.status != 'public' && ($scope.user == undefined || $scope.user.id != $scope.data.owner )){
             console.log($scope.data.status);
@@ -2030,16 +2106,15 @@ app.controller('browseCtrl',
          
           if($scope.collection == 'studies'){
             document.getElementById('mynetwork').style.display = "none";
-            console.log($scope.data);
-
+            $scope.data.id=$scope.data.studies_id
             //Get info on project/studies and owner
             Dataset.get({'filter':$scope.data.projects,'from':'None','to':'None','collection':'projects','field':'id'}).$promise.then(function(result){
               $scope.info_project = result.request.title;
             });
             
 
-            $scope.data.assays = $scope.data.assays.split(',');
-            $scope.data.signatures = $scope.data.signatures.split(',');
+            $scope.data.strategies = $scope.data.strategies_id.split(',');
+            $scope.data.lists = $scope.data.lists_id.split(',');
             if($scope.data.warnings != undefined){
               $scope.data.warnings = $scope.data.warnings.split(',');
             }
@@ -2052,19 +2127,24 @@ app.controller('browseCtrl',
 
           };
 
-          if($scope.collection == 'assays'){
+          if($scope.collection == 'strategies'){
+            console.log("TRUE");
             document.getElementById('mynetwork').style.display = "none";
             console.log($scope.data);
 
             Dataset.get({'filter':$scope.data.projects,'from':'None','to':'None','collection':'projects','field':'id'}).$promise.then(function(result){
               $scope.info_project = result.request.title;
+              console.log("here");
+              console.log(result.request);
             });
-
+            
             Dataset.get({'filter':$scope.data.studies,'from':'None','to':'None','collection':'studies','field':'id'}).$promise.then(function(result){
               $scope.info_study = result.request.title;
+              console.log("here");
+              console.log(result.request.title);
             });
 
-            $scope.data.signatures = $scope.data.signatures.split(',');
+            $scope.data.lists = $scope.data.lists_id.split(',');
 
             if($scope.data.warnings != undefined){
               $scope.data.warnings = $scope.data.warnings.split(',');
@@ -2076,18 +2156,18 @@ app.controller('browseCtrl',
               $scope.data.critical = $scope.data.critical.split(',');
             }
             
-            $scope.data.factors = $scope.data.factors.split(',');
-            for(var i=0;i < $scope.data.factors.length; i++){
-              console.log($scope.data.factors[i]);
-              var id_factor = $scope.data.factors[i];
-              Dataset.get({'filter':id_factor,'from':'None','to':'None','collection':'factors','field':'id'}).$promise.then(function(data){
-                $scope.factors.push(data.request);
-              });
+            // $scope.data.factors = $scope.data.factors.split(',');
+            // for(var i=0;i < $scope.data.factors.length; i++){
+            //   console.log($scope.data.factors[i]);
+            //   var id_factor = $scope.data.factors[i];
+            //   Dataset.get({'filter':id_factor,'from':'None','to':'None','collection':'factors','field':'id'}).$promise.then(function(data){
+            //     $scope.factors.push(data.request);
+            //   });
 
-            }
+            // }
           };
 
-          if($scope.collection == 'signatures'){
+          if($scope.collection == 'lists'){
             console.log($scope.data);
 
             Dataset.get({'filter':$scope.data.projects,'from':'None','to':'None','collection':'projects','field':'id'}).$promise.then(function(result){
@@ -2110,11 +2190,11 @@ app.controller('browseCtrl',
 
             document.getElementById('mynetwork').style.display = "none";
             $scope.data.studies = $scope.data.studies.split(',');
-            $scope.data.assays = $scope.data.assays.split(',');
-            for(var z=0;z<$scope.data.assays.length;z++){
-              Dataset.get({'filter':$scope.data.assays[z],'from':'None','to':'None','collection':'assays','field':'id'}).$promise.then(function(data){
-                $scope.assays = data.request;
-                $scope.assays.factors = $scope.assays.factors.split(',');
+            $scope.data.strategies = $scope.data.strategies.split(',');
+            for(var z=0;z<$scope.data.strategies.length;z++){
+              Dataset.get({'filter':$scope.data.strategies[z],'from':'None','to':'None','collection':'strategies','field':'id'}).$promise.then(function(data){
+                $scope.strategies = data.request;
+                $scope.strategies.factors = $scope.strategies.factors.split(',');
                 for(var i=0;i < $scope.assays.factors.length; i++){
                   console.log($scope.assays.factors[i]);
                   var id_factor = $scope.assays.factors[i];
@@ -2150,8 +2230,8 @@ app.controller('browseCtrl',
             var selecteddata;
 
             data.request.studies = data.request.studies.split(',')
-            data.request.signatures =  data.request.signatures.split(',')
-            data.request.assays =  data.request.assays.split(',')
+            data.request.lists =  data.request.lists.split(',')
+            data.request.strategies =  data.request.strategies.split(',')
             //init root as project
             nodeObj[data.request.id] = nodeId;
             nodeProject.push({'id':nodeId,'label':data.request.id,'shape':'box','level':1})
@@ -2163,15 +2243,15 @@ app.controller('browseCtrl',
               nodeObj[obj] = nodeId;
               nodeProject.push({'id':nodeId,'label':obj,'shape':'circle','color':'#93c54b','level':2})
             }
-            for(var index in data.request.signatures){
+            for(var index in data.request.lists){
               nodeId ++;
-              var obj = data.request.signatures[index];
+              var obj = data.request.lists[index];
               nodeObj[obj] = nodeId;
               nodeProject.push({'id':nodeId,'label':obj,'shape':'database','color':'#d9534f','level':4})
             }
-            for(var index in data.request.assays){
+            for(var index in data.request.strategies){
               nodeId ++;
-              var obj = data.request.assays[index];
+              var obj = data.request.strategies[index];
               nodeObj[obj] = nodeId;
               nodeProject.push({'id':nodeId,'label':obj,'shape':'triangle','color':'grey','level':3})
             }
