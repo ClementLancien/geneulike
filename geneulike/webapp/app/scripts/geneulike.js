@@ -2105,8 +2105,8 @@ app.controller('browseCtrl',
           });
          
           if($scope.collection == 'studies'){
+            console.log($scope.data)
             document.getElementById('mynetwork').style.display = "none";
-            $scope.data.id=$scope.data.studies_id
             //Get info on project/studies and owner
             Dataset.get({'filter':$scope.data.projects,'from':'None','to':'None','collection':'projects','field':'id'}).$promise.then(function(result){
               $scope.info_project = result.request.title;

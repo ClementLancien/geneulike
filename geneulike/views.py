@@ -1923,7 +1923,6 @@ class List:
         self.file_path = file_path
         self.status = "private"    
         self.tags = ""
-
         List.compteur_list += 1
 
         self.id = identifiant

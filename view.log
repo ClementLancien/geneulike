@@ -4270,3 +4270,711 @@ Traceback (most recent call last):
   File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
     select_filter = form['filter']
 KeyError: 'filter'
+2017-06-13 08:22:04,428 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063877830672
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:23:25,618 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063866728528
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:23:55,132 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063863465040
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:24:16,373 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063860702800
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:24:35,356 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063868147216
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:35:10,022 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063872774672
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:35:24,305 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063874694224
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:35:40,740 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063874428432
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:39:24,233 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063878077264
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:40:37,336 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063985545296
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:40:54,436 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063887933840
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:42:12,255 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063882709584
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:42:31,311 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063642547088
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:44:21,780 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063639839184
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:46:13,050 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063636607376
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:52:43,101 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063858271440
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:53:27,612 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063871130576
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 482, in getdata
+    result = request.registry.db_mongo[collection].find_one({collection + "_" +field :select_filter})
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/database.py", line 211, in __getitem__
+    return self.__getattr__(name)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/database.py", line 201, in __getattr__
+    return Collection(self, name)
+  File "/usr/local/lib/python2.7/dist-packages/pymongo/collection.py", line 104, in __init__
+    raise InvalidName("collection names cannot be empty")
+InvalidName: collection names cannot be empty
+2017-06-13 08:53:31,777 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063858143120
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:56:37,548 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063866810128
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:56:56,004 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063874555280
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:57:18,201 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063867375760
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 08:58:14,312 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063872426512
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 09:00:02,181 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063875189200
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 09:00:33,864 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063885341968
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 09:01:58,231 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063868543568
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 09:02:38,309 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063615982352
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-13 09:04:02,497 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e4053d4481e240586c83&tb=140063612841808
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 465, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'

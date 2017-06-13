@@ -16,7 +16,6 @@
       <h3>{{project.project_id}} - {{project.title}}</h3>(<a href="#/browse?dataset={{project.project_id}}">view</a>)
       <p><b>Description : </b>{{project.description}}</p>
       <p><b>Description : </b>{{project.contributors}}</p>
-      <p><b>Pubmed : </b><span ng-repeat='pub in project.pubmed.split()'><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{pub}}">{{pub}} </a></span></p>
       <p><b>Studies : </b><span ng-repeat='study in project.studies_id.split()'>{{study}}<span></span></p>
       <p><b>Strategies : </b><span ng-repeat='strategy in project.strategies_id.split()'>{{strategy}}<span></span></p>
       <p><b>Lists : </b><span ng-repeat='list in project.lists_id.split()'>{{list}}</p>
