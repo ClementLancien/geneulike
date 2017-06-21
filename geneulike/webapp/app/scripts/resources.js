@@ -105,7 +105,6 @@
             },
             datasets: {
                 url: '/user/:uid/dataset',
-                method: 'GET',
                 isArray: true,
                 cache: false
             },

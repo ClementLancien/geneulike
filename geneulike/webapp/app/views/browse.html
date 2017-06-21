@@ -80,37 +80,60 @@
 
 
 
-<h2>{{data.id}} - {{data.title}} <button ng-if="collection == 'signatures' && data.type == 'Genomic' && (data.file_down != '' || data.file_up != '')" ng-click="addToWorkspace(data.id)" type="btn" class="btn btn-success btn-large">Save in workspace</button></h2>
+<h2>{{data_id}} - {{data.title}} <button ng-if="collection == 'signatures' && data.type == 'Genomic' && (data.file_down != '' || data.file_up != '')" ng-click="addToWorkspace(data.id)" type="btn" class="btn btn-success btn-large">Save in workspace</button></h2>
 <div ng-if="data.owner == user.id && data.status == 'public'" class="alert alert-success" role="alert">This project is marked as public (accessible to everyone).</div>
 <div ng-if="data.owner == user.id && data.status == 'pending approval'" class="alert alert-info" role="alert">This project is marked as pending approval (invisible to everyone and not modifiable by you).</div>
 <div ng-if="data.owner == user.id && data.status == 'private' && collection=='projects'" class="alert alert-warning" role="alert">This project is marked as private (invisible to everyone but you). <span class="pull-right">(<a href="" ng-click="switch(data)">switch to public</a>)</span></div>
 <div ng-if="data.owner == user.id && data.status == 'private' && collection !='projects'" class="alert alert-warning" role="alert">This project is marked as private (invisible to everyone but you). Go to the project page to switch to public.</div>
 
-<div class="row">
-	<div class="col-md-12">
-		<div class="col-md-12">
-			<table class="table" ng-if="collection == 'projects'">
-			    <tbody>
+
+			<table class="table text-center" ng-if="collection == 'projects'">
+			    <tbody >
 			        <tr class="success">
-			          <th>Description</th>
-			            <td>{{data.description}}</td>
+			          <th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-top: 1px solid;border-left: 1px solid;">Description</th>
+			            <td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;border-top: 1px solid;">{{data.description}}</td>
 			        </tr>
 			        <tr>
-			          <th>Pubmed</th>
-			            <td><p ng-repeat='pub in data.pubmed.split()'><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{pub}}"> {{pub}} </a></p></td>
+			          <th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Pubmed</th>
+			            <td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p ng-repeat='pub in data.pubmed.split()'><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{pub}}"> {{pub}} </a></p></td>
 			        </tr>
 			        <tr class="success">
-			          <th>Contributors</th>
-			            <td><p ng-repeat='contributor in data.contributor.split()'>{{contributor}}</p></td>
+			          <th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Contributors</th>
+			            <td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p ng-repeat='contributor in data.contributors.split()'>{{contributor}}</p></td>
 			        </tr>
-			      <tr>
+			        <tr>
+			          <th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Associated Studies {{data.studies_id}}</th>
+			            <td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p ng-repeat='stud in data.studies_id.split()'><a href="" ng-click="display(stud)">{{stud}} </a></span></p></td>
+			        </tr>
+			        <tr class="success">
+			           <th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Associated strategies </th>
+			            <td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p ng-repeat='strat in data.strategies_id.split()'><a href="" ng-click="display(strat)">{{strat}} </a></span></p></td>
+			        </tr>
+			        <tr>
+			          <th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Associated Lists</th>
+			            <td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p ng-repeat='list in data.lists_id.split()'><a href="" ng-click="display(list)">{{list}} </a></span></p></td>
+			        </tr>
+			      	<!--<tr>
 			          <th>Crosslinks</th>
 			          	<td><p ng-repeat='crosslinks in data.crosslinks.split()'>{{crosslinks}}</p></td>
+			        </tr><-->
+			        <!--<a href="" ng-click="display(data.project_id)">{{data_project_id}}</a>-->
+			        <tr class="success">
+			        	<th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Created</th>
+			        	<td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p>{{convert_timestamp_to_date(data.submission_date)}}</p></td>
+			        </tr>
+			       	<tr>
+			        	<th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Owner</th>
+			        	<td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p>{{data.owner}}</p></td>
+			        </tr>
+			        <tr class="success">
+			        	<th style="vertical-align: middle;border-right: thick double #ff0000;border-bottom: 1px solid;border-left: 1px solid;">Last Updated</th>
+			        	<td style="vertical-align: middle;border-bottom: 1px solid;border-right: 1px solid;"><p>{{convert_timestamp_to_date(data.last_update)}}</p></td>
 			        </tr>
 			    </tbody>
 			</table>	
 
-			<table class="table" ng-if="collection == 'studies'">
+			<!--<table class="table" ng-if="collection == 'studies'">
 			    <tbody>
 			        <tr class="danger">
 			          <th>Description</th>
@@ -143,6 +166,14 @@
 			        <tr>
 			          <th>Additionnal Info</th>
 			          	<td>{{data.add.info}}</p></p></td>
+			        </tr>
+			        <tr>
+			        	<th>Owner</th>
+			        	<td><p>{{data.owner}}</p></td>
+			        </tr>
+			        <tr>
+			        	<th>Last Updated</th>
+			        	<td><p>{{convert_timestamp_to_date(data.last_update)}}</p></td>
 			        </tr>
 			    </tbody>
 			</table>	

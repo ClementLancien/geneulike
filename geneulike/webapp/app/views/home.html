@@ -120,12 +120,13 @@
         </div>
         <div class="panel-body fixed-panel">
           <div ng-repeat="sign in last_sign">
-            <h4>{{sign.id}} - {{sign.title}}</h4>
+            <h4>{{sign.project_id}} - {{sign.title}}</h4>
             <ul>
               <li><b>Description :</b> {{sign.description}}</li>
-              <li><b>Studies :</b> <span ng-repeat="stud in sign.studies.split(',')"><a href="#/browse?dataset={{stud}}">{{stud}}</a> </span></li>
-              <li><b>Signatures :</b> <span ng-repeat="sig in sign.signatures.split(',')"><a href="#/browse?dataset={{sig}}">{{sig}}</a> </span></li>
-              <li>(<a href="#/browse?dataset={{sign.id}}">view</a>)</li>
+              <li><b>Studies :</b> <span ng-repeat="stud in sign.studies_id.split(',')"><a href="#/browse?dataset={{stud}}">{{stud}}</a> </span></li>
+              <li><b>Strategies :</b> <span ng-repeat="strat in sign.strategies_id.split(',')"><a href="#/browse?dataset={{strat}}">{{strat}}</a> </span></li>
+              <li><b>Lists :</b> <span ng-repeat="list in sign.lists_id.split(',')"><a href="#/browse?dataset={{list}}">{{list}}</a> </span></li>
+              <li>(<a href="#/browse?dataset={{sign.project_id}}">view</a>)</li>
             </ul>
             <hr>
 

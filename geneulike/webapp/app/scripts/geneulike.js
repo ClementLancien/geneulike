@@ -243,6 +243,7 @@ app.controller('appCtrl',
             var user_seletedID = user.selectedID.split(',');
             var cookies_list = cookie_selectID.split(',');
             var job_list = cookie_jobID.split(',');
+
             
             for(var i=0;i<cookies_list.length; i++){
               var index = user_seletedID.indexOf(cookies_list[i]);
@@ -283,8 +284,9 @@ app.controller('appCtrl',
 
 
          
-        Dataset.get({'filter':'public','from':10000000000,'to': 10000000000000,'collection':'projects','field':'status'}).$promise.then(function(data){
+        Dataset.get({'filter':'private','collection':'projects','field':'status', 'obs':true}).$promise.then(function(data){
             $scope.last_sign = data.request;
+            console.log($scope.last_sign);
         });
 
         //INSERT FUNCTION GET LAST
@@ -1255,6 +1257,7 @@ app.controller('userInfoCtrl',
  
         User.get({'uid': $routeParams['id']}).$promise.then(function(data){
             $scope.user = data;
+            console.log($scope.user)
             $scope.joined=data['joined'].substr(0,10);
 
             
@@ -1309,9 +1312,10 @@ app.controller('userInfoCtrl',
 
 
         $scope.update = function() {
-
             if($scope.user != null) {
+                                    //$scope?user?id
                 $scope.user.$save({'uid': $routeParams['id']}).then(function(data){
+                    console.log(data);
                     $scope.user = data;
                 });
             }
@@ -1378,6 +1382,7 @@ app.controller('userprojectCtrl',
           console.log($scope.pto)
           Dataset.get({'filter':$scope.user.id,'from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'owner'}).$promise.then(function(data){
             $scope.projects = data.request;
+            console.log($scope.projects)
           });
         };
         if(type=="studies"){
@@ -2070,7 +2075,6 @@ app.controller('browseCtrl',
 
       var params = $location.search();
       ////console.log(params);
-
       console.log(params);
       if(params['dataset'] !== undefined) {
         $scope.collection = "";
@@ -2089,6 +2093,7 @@ app.controller('browseCtrl',
 
         Dataset.get({'filter':params['dataset'],'from':'None','to':'None','collection':$scope.collection,'field':'id'}).$promise.then(function(data){
           $scope.data = data.request;
+          console.log($scope.data);
 
           
           if($scope.data.status != 'public' && ($scope.user == undefined || $scope.user.id != $scope.data.owner )){
@@ -2210,8 +2215,24 @@ app.controller('browseCtrl',
           //Network project
           if($scope.collection == 'projects'){
             //Init edge/node variable
-            $scope.data.pubmed = $scope.data.pubmed.split(',')
-            $scope.data.contributor = $scope.data.contributor.split(',')
+            console.log($scope.data.studies_id);
+            $scope.data_id=$scope.data.project_id
+            if ($scope.data.pubmed == ""){
+                $scope.data.pubmed = "-";
+            }
+       
+            else{
+                $scope.data.pubmed = $scope.data.pubmed.split(',');
+            }
+
+            if ($scope.data.contributors == ""){
+                $scope.data.contributor= "-";
+            }
+            else{
+                $scope.data.contributor = $scope.data.contributors.split(',');
+            }
+
+            
             if($scope.data.warnings != undefined){
               $scope.data.warnings = $scope.data.warnings.split(',');
             }
@@ -2221,88 +2242,88 @@ app.controller('browseCtrl',
             if($scope.data.critical != undefined){
               $scope.data.critical = $scope.data.critical.split(',');
             }
+            // return
+            // var nodeId = 1
+            // var nodeObj = {};
+            // var nodeProject = [];
+            // var edgeProject = [];
+            // var selectedNode;
+            // var selecteddata;
 
-            var nodeId = 1
-            var nodeObj = {};
-            var nodeProject = [];
-            var edgeProject = [];
-            var selectedNode;
-            var selecteddata;
+            // data.request.studies = data.request.studies.split(',')
+            // data.request.lists =  data.request.lists.split(',')
+            // data.request.strategies =  data.request.strategies.split(',')
+            // //init root as project
+            // nodeObj[data.request.id] = nodeId;
+            // nodeProject.push({'id':nodeId,'label':data.request.id,'shape':'box','level':1})
 
-            data.request.studies = data.request.studies.split(',')
-            data.request.lists =  data.request.lists.split(',')
-            data.request.strategies =  data.request.strategies.split(',')
-            //init root as project
-            nodeObj[data.request.id] = nodeId;
-            nodeProject.push({'id':nodeId,'label':data.request.id,'shape':'box','level':1})
+            // //Create node + node index
+            // for(var index in data.request.studies){
+            //   nodeId ++;
+            //   var obj = data.request.studies[index];
+            //   nodeObj[obj] = nodeId;
+            //   nodeProject.push({'id':nodeId,'label':obj,'shape':'circle','color':'#93c54b','level':2})
+            // }
+            // for(var index in data.request.lists){
+            //   nodeId ++;
+            //   var obj = data.request.lists[index];
+            //   nodeObj[obj] = nodeId;
+            //   nodeProject.push({'id':nodeId,'label':obj,'shape':'database','color':'#d9534f','level':4})
+            // }
+            // for(var index in data.request.strategies){
+            //   nodeId ++;
+            //   var obj = data.request.strategies[index];
+            //   nodeObj[obj] = nodeId;
+            //   nodeProject.push({'id':nodeId,'label':obj,'shape':'triangle','color':'grey','level':3})
+            // }
 
-            //Create node + node index
-            for(var index in data.request.studies){
-              nodeId ++;
-              var obj = data.request.studies[index];
-              nodeObj[obj] = nodeId;
-              nodeProject.push({'id':nodeId,'label':obj,'shape':'circle','color':'#93c54b','level':2})
-            }
-            for(var index in data.request.lists){
-              nodeId ++;
-              var obj = data.request.lists[index];
-              nodeObj[obj] = nodeId;
-              nodeProject.push({'id':nodeId,'label':obj,'shape':'database','color':'#d9534f','level':4})
-            }
-            for(var index in data.request.strategies){
-              nodeId ++;
-              var obj = data.request.strategies[index];
-              nodeObj[obj] = nodeId;
-              nodeProject.push({'id':nodeId,'label':obj,'shape':'triangle','color':'grey','level':3})
-            }
+            // //Create edges from root
+            // for(var index in data.request.studies){
+            //   var obj = data.request.studies[index];
+            //   var from = 1;
+            //   var to = nodeObj[obj];
+            //   edgeProject.push({'from':from,'to':to})
+            // }
 
-            //Create edges from root
-            for(var index in data.request.studies){
-              var obj = data.request.studies[index];
-              var from = 1;
-              var to = nodeObj[obj];
-              edgeProject.push({'from':from,'to':to})
-            }
-
-            //create all remining edges
-            for(var index in data.request.edges){
-              var from = nodeObj[index];
-              for(var asso in data.request.edges[index]){
-                var to = nodeObj[data.request.edges[index][asso]];
-                edgeProject.push({'from':from,'to':to})
-              }
-              //var from = 1;
-              //var to = nodeObj[obj];
-              //edgeProject.push({'from':from,'to':to})
-            }
+            // //create all remining edges
+            // for(var index in data.request.edges){
+            //   var from = nodeObj[index];
+            //   for(var asso in data.request.edges[index]){
+            //     var to = nodeObj[data.request.edges[index][asso]];
+            //     edgeProject.push({'from':from,'to':to})
+            //   }
+            //   //var from = 1;
+            //   //var to = nodeObj[obj];
+            //   //edgeProject.push({'from':from,'to':to})
+            // }
 
 
-            // create an array with nodes
-            nodes.add(nodeProject);
+            // // create an array with nodes
+            // nodes.add(nodeProject);
 
-            // create an array with edges
-            edges.add(edgeProject);
+            // // create an array with edges
+            // edges.add(edgeProject);
 
-            // create a network
+            // // create a network
 
-            // provide the data in the vis format
-            var datanet = {
-                nodes: nodes,
-                edges: edges
-            };
+            // // provide the data in the vis format
+            // var datanet = {
+            //     nodes: nodes,
+            //     edges: edges
+            // };
             
-            network = new vis.Network(container, datanet, options);
+            // network = new vis.Network(container, datanet, options);
             
 
-            // initialize your network!
+            // // initialize your network!
             
-            network.on( 'click', function(properties) {
-                var ids = properties.nodes;
-                var clickedNodes = nodes.get(ids);
-                selectedNode = clickedNodes[0]['label'];
-                document.getElementById('information').innerHTML = selectedNode;
-                document.getElementById('viewinfo').style.display = "inline";
-            });
+            // network.on( 'click', function(properties) {
+            //     var ids = properties.nodes;
+            //     var clickedNodes = nodes.get(ids);
+            //     selectedNode = clickedNodes[0]['label'];
+            //     document.getElementById('information').innerHTML = selectedNode;
+            //     document.getElementById('viewinfo').style.display = "inline";
+            // });
           } //End network project
         });
       }
@@ -2487,31 +2508,37 @@ app.controller('databaseCtrl',
       $scope.sgfrom = 0;
       $scope.sgto = 25;
 
-      Dataset.get({'filter':'public','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status','all_info':'true'}).$promise.then(function(data){
+      Dataset.get({'filter':'private','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status','all_info':'true'}).$promise.then(function(data){
         $scope.projects = data.request;
-        $scope.project_number = data.project_number;
+        console.log('start');
+        console
+        console.log($scope.projects[0].lists_id);
+        console.log('stop');
+        $scope.projects_number = data.project_number;
         $scope.studies_number = data.study_number;
-        $scope.signatures_number = data.signature_number;
-        $scope.assay_number = data.assay_number;
+        $scope.strategies_number = data.strategy_number;
+        $scope.lists_number = data.list_number;
       });
 
 
 
       $scope.showStudies = function(){
-        Dataset.get({'filter':'public','from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'status'}).$promise.then(function(data){
+        Dataset.get({'filter':'private','from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'status'}).$promise.then(function(data){
             $scope.studies = data.request;
+            
           });
       };
 
-      $scope.showAssays = function(){
-        Dataset.get({'filter':'public','from':$scope.afrom,'to': $scope.ato,'collection':'assays','field':'status'}).$promise.then(function(data){
-            $scope.assays = data.request;
+      $scope.showStrategies = function(){
+        Dataset.get({'filter':'private','from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'status'}).$promise.then(function(data){
+            $scope.strategies = data.request;
           });
       };
 
-      $scope.showSignatures = function(){
-        Dataset.get({'filter':'public','from':$scope.sgfrom,'to': $scope.sgto,'collection':'signatures','field':'status'}).$promise.then(function(data){
-            $scope.signatures = data.request;
+      $scope.showLists = function(){
+        Dataset.get({'filter':'private','from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'status'}).$promise.then(function(data){
+            $scope.lists = data.request;
+            console.log($scope.lists);
           });
       };
 

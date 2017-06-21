@@ -170,24 +170,18 @@ def getLastSeen(request):
 
 
 
-
-
-
-
-
 @view_config(route_name='user_info', renderer='json', request_method='POST')
 def user_info_update(request):
     user = is_authenticated(request)
-    if user is None or user['id'] not in request.registry.admin_list:
+    if user['id'] == request.matchdict['id'] or user['id'] in request.registry.admin_list:
+        form = json.loads(request.body, encoding=request.charset)
+        tid = form['_id']
+        del form['_id']
+        request.registry.db_mongo['users'].update({'id': request.matchdict['id']}, form)
+        form['_id'] = tid;
+        return form
+    else : 
         return HTTPUnauthorized('Not authorized to access this resource')
-    if user['id'] != request.matchdict['id'] and user['id'] not in request.registry.admin_list:
-        return HTTPUnauthorized('Not authorized to access this resource')
-    form = json.loads(request.body, encoding=request.charset)
-    tid = form['_id']
-    del form['_id']
-    request.registry.db_mongo['users'].update({'id': request.matchdict['id']}, form)
-    form['_id'] = tid;
-    return form
 
 @view_config(route_name='user', renderer='json')
 def user(request):
@@ -456,10 +450,13 @@ def pending(request):
     return {'msg':'Your project is now pending approval.'}
 
 
+ 
+
 
 @view_config(route_name='1', renderer='json', request_method='POST')
 def getdata(request):
     form = json.loads(request.body, encoding=request.charset)
+    #print form.keys()
     pprint.pprint(form)
     collection = form['collection']
     select_filter = form['filter']
@@ -468,18 +465,32 @@ def getdata(request):
     study_number = 0
     strategy_number = 0
     list_number = 0
-    print "select_filter ", select_filter
+    #print 'field', field
+    #print "select_filter ", select_filter
     if 'all_info' in form :
-
+        print"true"
         project_number = request.registry.db_mongo['projects'].find({field : select_filter}).count()
         study_number = request.registry.db_mongo['studies'].find({field : select_filter}).count()
         strategy_number = request.registry.db_mongo['strategies'].find({field : select_filter}).count()
         list_number = request.registry.db_mongo['lists'].find({field : select_filter}).count()
-       
+        print str(project_number), str(study_number), str(strategy_number), str(list_number)
+    if 'obs' in form:
+        number = request.registry.db_mongo[collection].find({field:select_filter}).count()
+        if number>=30:
+            result = list(request.registry.db_mongo[collection].find({field:select_filter}).skip(request.registry.db_mongo[collection].count() - 15))
+        else:
+            ress = request.registry.db_mongo[collection].find({field:select_filter})
+            result= list(request.registry.db_mongo[collection].find({field:select_filter}).skip(request.registry.db_mongo[collection].count()-number))
+        result.reverse()
+        return {'msg':'','request':result} 
+
     if form['from'] == "None" :
-        print collection
-        print field
-        result = request.registry.db_mongo[collection].find_one({collection + "_" +field :select_filter})
+        if collection=="projects":
+            collec="project"
+        else:
+            collec=collection
+        result = request.registry.db_mongo[collection].find_one({collec + "_id" :select_filter})
+        print collection + "_id" +" : "+ select_filter
         pprint.pprint(result)
         if result is not None :
             if 'edges' in result:
@@ -491,6 +502,7 @@ def getdata(request):
                                 dico[i] = dico[i][0].split(',')
                         result['edges'] = dico
             return {'msg':'','request':result}
+
     else :
         selected = []
         if int(form['from']) < 0 :
@@ -1930,10 +1942,6 @@ class List:
     def get_dico(self):
 
 
-        if (len(self.list)) == 1:
-            _liste = str(self.list[0])
-        else:
-            _liste = ' , '.join(self.list)
             
         return {'project_id' : self.project_id,
                 'studies_id' : self.studies_id,
@@ -1946,7 +1954,7 @@ class List:
                 'list_parent_id' : self.list_parent_id,
                 'list_child_id' : self.list_child_id,
                 'comparable' : self.comparable,
-                'list' : _liste,
+                'list' : self.list,
                 'last_update' : self.last_update,
                 'add_info' : self.add_info,
                 'owner' : self.owner,
@@ -1956,12 +1964,7 @@ class List:
         }
 
     def get_write(self, path_filename):
-        if len(self.list) == 1:
-            _liste = str(self.list[0])
-        else:
-            _liste= ' , '.join(self.lists_id)
 
-        liste = ' , '.join(self.id)
         with open(path_filename, 'a') as output:
             output.write(   self.project_id+"\t"+
                             self.studies_id +"\t"+
@@ -1974,13 +1977,11 @@ class List:
                             self.list_parent_id+ "\t"+
                             self.list_child_id+ "\t" +
                             self.comparable + "\t"+
-                            _liste + "\t"+
                             self.add_info+"\t"+
                             self.last_update+"\t"+
                             self.file_path + "\t" +
                             self.status + "\t" +
-                            self.tags + "\t"+
-                            liste +"\n" )
+                            self.tags +"\n" )
 
 
 
@@ -2039,8 +2040,8 @@ def save_excel(request):
     lists_id = []
     dt = datetime.datetime.utcnow()
     date = time.mktime(dt.timetuple())
-    print "date : " + str(datetime.datetime.utcnow())
-    print "date : " + str(date)
+    #print "date : " + str(datetime.datetime.utcnow())
+    #print "date : " + str(date)
 
     def is_empty(row_value):
         boolean=False
@@ -2149,9 +2150,16 @@ def save_excel(request):
                 if boolean:
 
                     index_list_identifiants =  get_Col_List(get_str(row_value[0]), idLists)
-                    list_identifiants = ",".join([str(name_identifiant) for name_identifiant in (idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None))])
-                    list_identifiants = re.sub(r" ", '', list_identifiants)
-                    print list_identifiants
+                    list_identifiants=[]
+                    for name in idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None):
+                        if name != "":
+                            a=re.sub(r" ", '', str(name))
+                            list_identifiants.append(str(a)) 
+                    #print list_identifiants
+                    list_identifiants = ",".join(str(name) for name in list_identifiants)
+                    #print list_identifiants
+                    #list_identifiants = re.sub(r" ", '', list_identifiants)
+                    #print list_identifiants
                     # list_identifiants=""
                     _list = List( get_str(row_value[2]),\
                                 get_str(row_value[3]),\
@@ -2170,6 +2178,7 @@ def save_excel(request):
                             )
                     add_multiple_id(_list)
                     lists.append(_list)
+                    #print _list.list
             
             # print "333333"
             # boolean = True
@@ -2193,183 +2202,245 @@ def save_excel(request):
         _project=None
         _study=None
         _strategy=None
+        print "start"
+        
+        
+        print lists
+        print "end"
         for strategy in strategies:
+            print strategy.id
             if _list.id[2] == strategy.id[2]:
                 _strategy=strategy
 
 
         for study in studies:
+            print study.id
             if _strategy.id[1] == study.id[1]:
                 _study=study
         
         for project in projects:
+            pprint.pprint(study)
             if _study.id[0] == project.id[0]:
                 _project=project
 
-        _project.studies_id.append(_study.studies_id)
-        _project.strategies_id.append(_strategy.strategies_id)
-        _project.lists_id.append(_list.lists_id)
+        if _study.studies_id not in _project.studies_id:
+            _project.studies_id.append(_study.studies_id)
+        if _strategy.strategies_id not in _project.strategies_id:
+            _project.strategies_id.append(_strategy.strategies_id)
+        if _list.lists_id not in _project.lists_id:
+            _project.lists_id.append(_list.lists_id)
 
+        if _study.project_id == "":
+            _study.project_id = _project.project_id
+        if _strategy.strategies_id not in _study.strategies_id:
+            _study.strategies_id.append(_strategy.strategies_id)
+        if _list.lists_id not in _study.lists_id:
+            _study.lists_id.append(_list.lists_id)
 
-        _study.project_id = _project.project_id
-        _study.strategies_id.append(_strategy.strategies_id)
-        _study.lists_id.append(_list.lists_id)
-
-        _strategy.project_id = _project.project_id
-        _strategy.studies_id = _study.studies_id
-        _strategy.lists_id.append(_list.lists_id)
+        if _strategy.project_id == "":
+            _strategy.project_id = _project.project_id
+        if _strategy.studies_id == "":
+            _strategy.studies_id = _study.studies_id
+        if _list.lists_id not in _strategy.lists_id:
+            _strategy.lists_id.append(_list.lists_id)
 
         _list.project_id = _project.project_id
         _list.studies_id = _study.studies_id
         _list.strategies_id = _strategy.strategies_id
 
-
+    def delDoublon(liste):
+        newListe=[]
+        for element in liste:
+            if element not in newListe:
+                newListe.append(element)
+        return newListe
     def get_Convert(upload_path):
         print "enter get_convert"
         raw=[]
         entrez=[]
         homologene=[]
         gpl='GPL'
-
+        #print 'start'
 
         for _list in lists:
-            print _list.list
-            identifiants =_list.identifiers.split(',')
-            identifiants_extended=_list.identifier_extended.split(',')
-            if (len(identifiants) == 1 and identifiants[0] == 'Other'):
-                continue
+            has = _list.list.split(",")
+            print str(len(has))
+            ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
+            print(str(len(ahs)))
+            ahs=delDoublon(ahs)
+            print(str(len(ahs)))
+            entrez=[]
 
-            else:
-                if len(identifiants) == 1:
-                    print "here"
-                    if identifiants[0] == 'Uniprot':
-                        for name in _list.list.split(','):
-                            print "name : ",name 
-                            raw.append(str(name))
-                            swissprot = get_Entrez_ID('SwissProt', str(name))
-                            trembl = get_Entrez_ID('trEMBL', str(name))
-                            entrez_id=""
-                            if swissprot == None and trembl != None:
-                                entrez_id= trembl['BDID']
-                                entrez.append(entrez_id)
-                            elif swissprot != None and trembl == None:
-                                entrez_id= swissprot['BDID']
-                                entrez.append(entrez_id)
-                            else:
-                                entrez.append("-")
-                                print name , ' error'
-                            if entrez_id != "":
-                                _homologene = get_HomoloGeneID(entrez_id)
-                                if _homologene != None:
-                                    homologene_id = _homologene['BDID']
-                                    homologene.append(str(homologene_id))
-                                else:
-                                    homologene.append("-")
-                            else:
-                                homologene.append("-")
+            for toto in ahs:
+                entrez.append(toto['GeneID'])
 
-                    elif identifiants[0] == gpl:
 
-                        for name in _list.list.split(','):
-                            raw.append(str(name))
-                            _gpl =  get_GPL(str(identifiants_extended[0]), str(name))
-                            if _gpl == None:
-                                entrez.append('-')
-                                homologene.append('-')
-                            else:
-                                entrez_id = _gpl['GeneID']
-                                entrez.append(str(entrez_id))
-                                _homologene=get_HomoloGeneID(str(entrez_id))
-                                if _homologene == None:
-                                    homologene.append('-')
-                                else:
-                                    homologene_id= _homologene['GeneID']
-                                    homologene.append(str(homologene_id))
+            #print entrez
+            homolo=[]
+            hre=list(request.registry.db_mongo['HomoloGene'].find({'GeneID':{"$in" :entrez}}, {'BDID':1, '_id':0}))
+            for the in hre:
+                
+                homolo.append(the['BDID'])
+            
+                #for the in hre:
+                    #homolo.append(the['BDID'])
+            print 'name list : ' + str(_list.title)+ " found len : " + str(len(ahs)) + "for original len " + str(len(has)) + "nombre HomologenID : "+ str(len(homolo))
+            
+            #ncbi=[]
+            #print ahs
+            #for entre in ahs:
+                #print "ok"
+   
+                        # print elt["geneID"]
+            #print ncbi
+                #r=request.registry.db_mongo['HomoloGene'].find({'GeneID':str(entre)}).limit(1)
+                #if r!= None:
+                    #ncbi.append(r['BDID'])
+            # request.registry.db_mongo['GPL'].find({"BDID":{$in:["1769308_at","toto"]}},{"GeneID":1,"BDID":1, _id:0}).limit(1) _list.list.split(',')
+            #print _list.list.split(',')
+            #ahs = list(request.registry.db_mongo['GPL'].find({'BDID':{'$in':['1769308_at','1769308_at']}}).limit(1))
+            #print ahs
+            #print 'name list : ' + str(_list.title)+ " found len : " + str(len(ahs)) + "for original len " + str(len(has)) + "nombre HomologenID : "+ str(len(ncbi))
+            
+        #print 'end'
+        # for _list in lists:
+        #     print _list.list
+        #     identifiants =_list.identifiers.split(',')
+        #     identifiants_extended=_list.identifier_extended.split(',')
+        #     if (len(identifiants) == 1 and identifiants[0] == 'Other'):
+        #         continue
 
-                    else:
-                        base = str(identifiants[0])
-                        if identifiants[0] == "Entrez_name":
-                            base = "Gene_Symbol"
-                        print base
-                        for name in _list.list.split(','):
+        #     else:
+        #         if len(identifiants) == 1:
+        #             print "here"
+        #             if identifiants[0] == 'Uniprot':
+        #                 for name in _list.list.split(','):
+        #                     print "name : ",name 
+        #                     raw.append(str(name))
+        #                     swissprot = get_Entrez_ID('SwissProt', str(name))
+        #                     trembl = get_Entrez_ID('trEMBL', str(name))
+        #                     entrez_id=""
+        #                     if swissprot == None and trembl != None:
+        #                         entrez_id= trembl['BDID']
+        #                         entrez.append(entrez_id)
+        #                     elif swissprot != None and trembl == None:
+        #                         entrez_id= swissprot['BDID']
+        #                         entrez.append(entrez_id)
+        #                     else:
+        #                         entrez.append("-")
+        #                         print name , ' error'
+        #                     if entrez_id != "":
+        #                         _homologene = get_HomoloGeneID(entrez_id)
+        #                         if _homologene != None:
+        #                             homologene_id = _homologene['BDID']
+        #                             homologene.append(str(homologene_id))
+        #                         else:
+        #                             homologene.append("-")
+        #                     else:
+        #                         homologene.append("-")
 
-                            raw.append(str(name))
-                            _entrez = get_Entrez_ID(base, str(name))
-                            if _entrez == None:
-                                entrez.append('-')
-                                homologene.append('-')
-                            else:
-                                entrez_id = _entrez['GeneID']
-                                #pprint.pprint(_entrez)
-                                entrez.append(str(entrez_id))
-                                _homologene = get_HomoloGeneID(str(name))
-                                if _homologene == None:
-                                    homologene.append("-")
-                                else:
-                                    homologene_id = _homologene['GeneID']
-                                    homologene.append(str(homologene_id))
-                                print entrez_id
-                        print "herererer"
+        #             elif identifiants[0] == gpl:
 
-                else:
+        #                 for name in _list.list.split(','):
+        #                     raw.append(str(name))
+        #                     _gpl =  get_GPL(str(identifiants_extended[0]), str(name))
+        #                     if _gpl == None:
+        #                         entrez.append('-')
+        #                         homologene.append('-')
+        #                     else:
+        #                         entrez_id = _gpl['GeneID']
+        #                         entrez.append(str(entrez_id))
+        #                         _homologene=get_HomoloGeneID(str(entrez_id))
+        #                         if _homologene == None:
+        #                             homologene.append('-')
+        #                         else:
+        #                             homologene_id= _homologene['GeneID']
+        #                             homologene.append(str(homologene_id))
 
-                    for name in _list.list.split(','):
+        #             else:
+        #                 base = str(identifiants[0])
+        #                 if identifiants[0] == "Entrez_name":
+        #                     base = "Gene_Symbol"
+        #                 print base
+        #                 for name in _list.list.split(','):
 
-                        raw.append(name)
-                        entrez_identifiant=[]
-                        entrez_id=""
-                        for index in range(len(identifiants)):
+        #                     raw.append(str(name))
+        #                     _entrez = get_Entrez_ID(base, str(name))
+        #                     if _entrez == None:
+        #                         entrez.append('-')
+        #                         homologene.append('-')
+        #                     else:
+        #                         entrez_id = _entrez['GeneID']
+        #                         #pprint.pprint(_entrez)
+        #                         entrez.append(str(entrez_id))
+        #                         _homologene = get_HomoloGeneID(str(name))
+        #                         if _homologene == None:
+        #                             homologene.append("-")
+        #                         else:
+        #                             homologene_id = _homologene['GeneID']
+        #                             homologene.append(str(homologene_id))
+        #                         print entrez_id
+        #                 print "herererer"
 
-                            if identifiants[index] == 'Uniprot':
-                                swissprot = get_Entrez_ID('SwissProt', str(name))
-                                trembl = get_Entrez_ID('trEMBL', str(name))
-                                entrez_id=""
-                                if swissprot == None and trembl != None:
-                                    entrez_id= str(trembl['BDID'])
-                                elif swissprot != None and trembl == None:
-                                    entrez_id= str(swissprot['BDID'])
-                                else:
-                                    entrez_id = '-'
-                                    print "error"
+        #         else:
 
-                                entrez_identifiant.append(entrez_id)
+        #             for name in _list.list.split(','):
 
-                            elif identifiants[index] == gpl:
-                                _entrez = get_Entrez_ID(str(identifiants_extended[index]), name)
-                                if _entrez == None:
-                                    entrez.append('-')
-                                else:
-                                    entrez_id = _entrez['GeneID']
-                                    entrez.append(str(entrez_id))
-                            else:
-                                base = str(identifiants[index])
-                                if identifiants[index] == "Entrez_name":
-                                    base = "Gene_Symbol"
+        #                 raw.append(name)
+        #                 entrez_identifiant=[]
+        #                 entrez_id=""
+        #                 for index in range(len(identifiants)):
 
-                                _entrez = get_Entrez_ID(base, str(name))
+        #                     if identifiants[index] == 'Uniprot':
+        #                         swissprot = get_Entrez_ID('SwissProt', str(name))
+        #                         trembl = get_Entrez_ID('trEMBL', str(name))
+        #                         entrez_id=""
+        #                         if swissprot == None and trembl != None:
+        #                             entrez_id= str(trembl['BDID'])
+        #                         elif swissprot != None and trembl == None:
+        #                             entrez_id= str(swissprot['BDID'])
+        #                         else:
+        #                             entrez_id = '-'
+        #                             print "error"
 
-                                if _entrez == None:
-                                    entrez_identifiant.append('-')
-                                else:
-                                    entrez_id = _entrez['GeneID']
-                                    entrez_identifiant.append(str(entrez_id))
+        #                         entrez_identifiant.append(entrez_id)
 
-                        for entrez in entrez_identifiant:
-                            if entrez != '-':
-                                entrez_id=str(entrez)
-                                entrez.append(entrez_id)
-                        if entrez_id == "":
-                            entrez_id="-"
+        #                     elif identifiants[index] == gpl:
+        #                         _entrez = get_Entrez_ID(str(identifiants_extended[index]), name)
+        #                         if _entrez == None:
+        #                             entrez.append('-')
+        #                         else:
+        #                             entrez_id = _entrez['GeneID']
+        #                             entrez.append(str(entrez_id))
+        #                     else:
+        #                         base = str(identifiants[index])
+        #                         if identifiants[index] == "Entrez_name":
+        #                             base = "Gene_Symbol"
 
-                        if entrez_id != "-":
-                            _homologene = get_HomoloGeneID(entrez_id)
-                            if _homologene == None:
-                                homologene.append('-')
-                            else:
-                                homologene_id = _homologene['GeneID']
-                                homologene.append(str(homologene_id))
-                        else:
-                             homologene.append('-')
+        #                         _entrez = get_Entrez_ID(base, str(name))
+
+        #                         if _entrez == None:
+        #                             entrez_identifiant.append('-')
+        #                         else:
+        #                             entrez_id = _entrez['GeneID']
+        #                             entrez_identifiant.append(str(entrez_id))
+
+        #                 for entrez in entrez_identifiant:
+        #                     if entrez != '-':
+        #                         entrez_id=str(entrez)
+        #                         entrez.append(entrez_id)
+        #                 if entrez_id == "":
+        #                     entrez_id="-"
+
+        #                 if entrez_id != "-":
+        #                     _homologene = get_HomoloGeneID(entrez_id)
+        #                     if _homologene == None:
+        #                         homologene.append('-')
+        #                     else:
+        #                         homologene_id = _homologene['GeneID']
+        #                         homologene.append(str(homologene_id))
+        #                 else:
+        #                      homologene.append('-')
             print "path"
             print upload_path
             print _list.project_id
@@ -2384,7 +2455,8 @@ def save_excel(request):
 
 
     def get_Entrez_ID(base, bdid):
-        return request.registry.db_mongo[str(base)].find_one({"BDID" : str(bdid)})
+        #db.GPL.find({"BD": "[Yeast_2] Affymetrix Yeast Genome 2.0 Array","BDID":{$in:["1769308_at","toto"]}},{"GeneID":1,"BDID":1, _id:0}).limit(1)
+        return request.registry.db_mongo[str(base)].find({"BDID" : str(bdid)})
                 
     def get_HomoloGeneID(entrez_id):
         return request.registry.db_mongo['HomoloGene'].find_one({"BDID" : str(entrez_id)})
