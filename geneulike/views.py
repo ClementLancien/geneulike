@@ -2261,11 +2261,12 @@ def save_excel(request):
         homologene=[]
         gpl='GPL'
         #print 'start'
-
+        #[Rat230_2] Affymetrix Rat Genome 230 2.0 Array
+        #[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array
         for _list in lists:
             has = _list.list.split(",")
             print str(len(has))
-            ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
+            ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Rat230_2] Affymetrix Rat Genome 230 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
             print(str(len(ahs)))
             ahs=delDoublon(ahs)
             print(str(len(ahs)))
@@ -2278,12 +2279,23 @@ def save_excel(request):
             #print entrez
             homolo=[]
             hre=list(request.registry.db_mongo['HomoloGene'].find({'GeneID':{"$in" :entrez}}, {'BDID':1, '_id':0}))
+
             for the in hre:
                 
                 homolo.append(the['BDID'])
             
                 #for the in hre:
                     #homolo.append(the['BDID'])
+            with open(os.path.join(upload_path, "MusEntrezGene"+ str(_list.title)) , 'w') as output:
+                for entre in entrez:
+
+                    output.write(str(entre)+"\n")
+
+            with open(os.path.join(upload_path, "MusHomologene"+ str(_list.title)) , 'w') as output:
+                for hom in homolo:
+  
+                    output.write(str(hom) + "\n")    
+
             print 'name list : ' + str(_list.title)+ " found len : " + str(len(ahs)) + "for original len " + str(len(has)) + "nombre HomologenID : "+ str(len(homolo))
             
             #ncbi=[]

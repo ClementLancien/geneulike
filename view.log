@@ -6437,3 +6437,9 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/pymongo/collection.py", line 104, in __init__
     raise InvalidName("collection names cannot be empty")
 InvalidName: collection names cannot be empty
+2017-06-23 18:35:20,263 :: WARNING :: Error - Save excel file
+2017-06-23 18:35:20,308 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'file' object has no attribute 'entre'",), <traceback object at 0x7f491b7ccef0>)
+2017-06-23 18:36:30,181 :: WARNING :: Error - Save excel file
+2017-06-23 18:36:30,182 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'file' object has no attribute 'entre'",), <traceback object at 0x7fbe0a150950>)
+2017-06-23 18:37:10,899 :: WARNING :: Error - Save excel file
+2017-06-23 18:37:10,900 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'file' object has no attribute 'entre'",), <traceback object at 0x7fa64c99cb00>)
