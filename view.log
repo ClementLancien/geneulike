@@ -6443,3 +6443,379 @@ InvalidName: collection names cannot be empty
 2017-06-23 18:36:30,182 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'file' object has no attribute 'entre'",), <traceback object at 0x7fbe0a150950>)
 2017-06-23 18:37:10,899 :: WARNING :: Error - Save excel file
 2017-06-23 18:37:10,900 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'file' object has no attribute 'entre'",), <traceback object at 0x7fa64c99cb00>)
+2017-06-23 18:45:48,907 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=01cf5e49b92aceaa23ba&tb=140379132280336
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 462, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-23 18:45:48,913 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=01cf5e49b92aceaa23ba&tb=140379132147344
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 462, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-06-28 09:27:09,116 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:14,076 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:14,077 :: DEBUG :: Starting new HTTP connection (2): localhost
+2017-06-28 09:27:15,338 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:15,338 :: DEBUG :: Starting new HTTP connection (3): localhost
+2017-06-28 09:27:16,234 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:16,235 :: DEBUG :: Starting new HTTP connection (4): localhost
+2017-06-28 09:27:16,953 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 125
+2017-06-28 09:27:16,954 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:2.878s]
+2017-06-28 09:27:16,954 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND id:GPR0) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:16,955 :: DEBUG :: < {"took":2689,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-06-28 09:27:16,957 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 125
+2017-06-28 09:27:16,958 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:7.841s]
+2017-06-28 09:27:16,958 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND id:GPR0) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:16,959 :: DEBUG :: < {"took":5417,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-06-28 09:27:16,986 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 125
+2017-06-28 09:27:16,986 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 124
+2017-06-28 09:27:16,987 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:0.753s]
+2017-06-28 09:27:16,988 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND id:GPR0) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:16,987 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:1.649s]
+2017-06-28 09:27:16,988 :: DEBUG :: < {"took":530,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-06-28 09:27:16,988 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND id:GPR0) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:16,989 :: DEBUG :: < {"took":1421,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-06-28 09:27:27,554 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:27,656 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 123
+2017-06-28 09:27:27,656 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:0.103s]
+2017-06-28 09:27:27,657 :: DEBUG :: > {"query": {"query_string": {"query": "status:public ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:27,657 :: DEBUG :: < {"took":99,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-06-28 09:27:33,493 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:33,509 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 122
+2017-06-28 09:27:33,510 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:0.018s]
+2017-06-28 09:27:33,510 :: DEBUG :: > {"query": {"query_string": {"query": "status:public ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:33,511 :: DEBUG :: < {"took":2,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-06-28 09:27:34,508 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-06-28 09:27:34,801 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 124
+2017-06-28 09:27:34,801 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:0.293s]
+2017-06-28 09:27:34,802 :: DEBUG :: > {"query": {"query_string": {"query": "status:public ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-06-28 09:27:34,802 :: DEBUG :: < {"took":289,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-07-03 10:55:22,218 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-07-03 10:55:24,176 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-07-03 10:55:24,177 :: DEBUG :: Starting new HTTP connection (2): localhost
+2017-07-03 10:55:25,034 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-07-03 10:55:25,035 :: DEBUG :: Starting new HTTP connection (3): localhost
+2017-07-03 10:55:25,284 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 124
+2017-07-03 10:55:25,284 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:1.108s]
+2017-07-03 10:55:25,285 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND undefined:liver) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-07-03 10:55:25,285 :: DEBUG :: < {"took":846,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-07-03 10:55:25,296 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 125
+2017-07-03 10:55:25,297 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:3.079s]
+2017-07-03 10:55:25,298 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND undefined:liver) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-07-03 10:55:25,300 :: DEBUG :: < {"took":2623,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-07-03 10:55:25,326 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 123
+2017-07-03 10:55:25,327 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:0.293s]
+2017-07-03 10:55:25,327 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND (_type:projects AND undefined:liver) ", "default_operator": "AND", "analyzer": "standard"}}}
+2017-07-03 10:55:25,327 :: DEBUG :: < {"took":18,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-07-03 10:56:09,790 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=7ce473123afb88599ad4&tb=139706024204048
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 462, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-07-03 10:56:09,799 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=7ce473123afb88599ad4&tb=139706024300816
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 462, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-07-03 10:57:01,396 :: DEBUG :: Converted retries value: False -> Retry(total=False, connect=None, read=None, redirect=0)
+2017-07-03 10:57:02,514 :: DEBUG :: http://localhost:9200 "GET /geneulike/_search?search_type=query_then_fetch&size=1000 HTTP/1.1" 200 125
+2017-07-03 10:57:02,515 :: INFO :: GET http://localhost:9200/geneulike/_search?search_type=query_then_fetch&size=1000 [status:200 request:1.119s]
+2017-07-03 10:57:02,515 :: DEBUG :: > {"query": {"query_string": {"query": "status:public AND _all:GUL5*", "default_operator": "AND", "analyzer": "standard"}}}
+2017-07-03 10:57:02,515 :: DEBUG :: < {"took":1113,"timed_out":false,"_shards":{"total":5,"successful":5,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]}}
+2017-07-03 11:51:39,274 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=2ac88689d836b657aa60&tb=140281783126288
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 461, in rendered_view
+    request, result, view_inst, context)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/renderers.py", line 432, in render_view
+    return self.render_to_response(response, system, request=request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/renderers.py", line 455, in render_to_response
+    result = self.render(value, system_values, request=request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/renderers.py", line 451, in render
+    result = renderer(value, system_values)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/renderers.py", line 275, in _render
+    return self.serializer(value, default=default, **self.kw)
+  File "/usr/lib/python2.7/json/__init__.py", line 251, in dumps
+    sort_keys=sort_keys, **kw).encode(obj)
+  File "/usr/lib/python2.7/json/encoder.py", line 207, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python2.7/json/encoder.py", line 270, in iterencode
+    return _iterencode(o, 0)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/renderers.py", line 288, in default
+    raise TypeError('%r is not JSON serializable' % (obj,))
+TypeError: <pymongo.cursor.Cursor object at 0x7f95e5da0350> is not JSON serializable
+2017-07-03 11:56:03,882 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=970ed88663394d867c56&tb=140563023117840
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 472, in getdata
+    if form['from'] == "None" :
+KeyError: 'from'
+2017-07-03 11:56:49,446 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=970ed88663394d867c56&tb=140563017136720
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 472, in getdata
+    # if form['from'] == "None" :
+KeyError: 'from'
+2017-07-03 11:57:17,331 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=970ed88663394d867c56&tb=140563015229264
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 496, in getdata
+    #     return {'msg':'ok','request':selected[int(form['from']):int(form['to'])],'project_number':project_number,'study_number':study_number,'strategy_number':strategy_number,'list_number':list_number}
+UnboundLocalError: local variable 'strategy_number' referenced before assignment
+2017-07-03 11:58:03,280 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=970ed88663394d867c56&tb=140563012386512
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 472, in getdata
+    # if form['from'] == "None" :
+KeyError: 'from'
+2017-07-03 11:58:19,816 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=970ed88663394d867c56&tb=140563024035088
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 472, in getdata
+    # if form['from'] == "None" :
+KeyError: 'from'
+2017-07-03 11:58:20,231 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=970ed88663394d867c56&tb=140563007150096
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 472, in getdata
+    # if form['from'] == "None" :
+KeyError: 'from'
+2017-07-03 15:24:36,641 :: WARNING :: Error - Save excel file
+2017-07-03 15:24:36,650 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'lists' referenced before assignment",), <traceback object at 0x7f806eb7b3f8>)
+2017-07-03 15:26:12,133 :: WARNING :: Error - Save excel file
+2017-07-03 15:26:12,134 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name '_list_identifiers' is not defined",), <traceback object at 0x7f4bd649ecb0>)
+2017-07-03 15:30:48,475 :: WARNING :: Error - Save excel file
+2017-07-03 15:30:48,476 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'Database' object is not iterable",), <traceback object at 0x7fe49d55aa28>)
+2017-07-03 15:31:43,759 :: WARNING :: Error - Save excel file
+2017-07-03 15:31:43,761 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'Database' object is not iterable",), <traceback object at 0x7fbeacfbab00>)
+2017-07-03 15:32:25,444 :: WARNING :: Error - Save excel file
+2017-07-03 15:32:25,444 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError("'Database' object is not iterable",), <traceback object at 0x7fbeaca7a4d0>)
+2017-07-03 15:54:54,330 :: WARNING :: Error - Save excel file
+2017-07-03 15:54:54,336 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'identifier' referenced before assignment",), <traceback object at 0x7f3e79dfec68>)
+2017-07-03 15:55:43,437 :: WARNING :: Error - Save excel file
+2017-07-03 15:55:43,440 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'identifier' referenced before assignment",), <traceback object at 0x7fd21beac248>)
+2017-07-03 15:56:26,311 :: WARNING :: Error - Save excel file
+2017-07-03 15:56:26,312 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('range() integer end argument expected, got list.',), <traceback object at 0x7f5d412dd170>)
+2017-07-03 15:57:00,229 :: WARNING :: Error - Save excel file
+2017-07-03 15:57:00,230 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'identifier' referenced before assignment",), <traceback object at 0x7f44176ff908>)

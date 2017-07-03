@@ -38,7 +38,7 @@
         <hr>
       </div>
       <button ng-click="back('studies')" class="btn btn-primary pull-left" ng-if="sfrom - 25 >= 0">Back</button>
-      <button ng-click="more('studies')" class="btn btn-primary pull-left" ng-if="studies.length == 25">Next</button>
+      <button ng-click="more('studies')" class="btn btn-primary pull-right" ng-if="studies.length == 25">Next</button>
   </div>
 
   <div id="strategy" class="tab-pane fade">
@@ -54,7 +54,7 @@
         <hr>
       </div>
       <button ng-click="back('strategies')" class="btn btn-primary pull-left" ng-if="afrom - 25 >= 0">Back</button>
-      <button ng-click="more('strategies')" class="btn btn-primary pull-left" ng-if="strategies.length == 25">Next</button>
+      <button ng-click="more('strategies')" class="btn btn-primary pull-right" ng-if="strategies.length == 25">Next</button>
   </div>
   <div id="list" class="tab-pane fade">
     <div ng-repeat='list in lists'>
@@ -68,6 +68,6 @@
         <hr>
       </div>
       <button ng-click="back('lists')" class="btn btn-primary pull-left" ng-if="sgfrom - 25 >= 0">Back</button>
-      <button ng-click="more('lists')" class="btn btn-primary pull-left" ng-if="lists.length == 25">Next</button>
+      <button ng-click="more('lists')" class="btn btn-primary pull-right" ng-if="lists.length == 25">Next</button>
   </div>
 </div>

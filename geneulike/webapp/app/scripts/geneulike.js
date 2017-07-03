@@ -304,22 +304,78 @@ app.controller('queryCtrl',
         $scope.query = {};
         $scope.querymode = '';
 
+        $scope.pfrom=0;
+        $scope.sfrom=0;
+        $scope.stfrom=0;
+        $scope.lfrom=0;
+
+        $scope.selected_field.projects='';
+        $scope.selected_field.studies='';
+        $scope.selected_field.strategies='';
+        $scope.selected_field.lists='';
+
+
         $scope.param_add = function() {
-          console.log($scope.selected_field);
+          // console.log($scope.selected_field);
+          // console.log($scope.selected_type);
+
+            number_query +=1
+            console.log("number_query");
+            console.log(number_query);
+            if($scope.research == ''){
+                $scope.research="*";
+            }
+            else{
+              $scope.research ="*"+$scope.research+"*";
+            }
+
             if($scope.selected_type == 'projects'){
-              var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.projects+':'+$scope.research+')';
+
+                if ($scope.selected_field.projects == ''){
+                    var value = '(_type:'+$scope.selected_type+' AND '+'_all'+':'+$scope.research+')';
+                    //var value=[{'_type': str($scope.selected_type)}, {'selector' : 'AND'}, {'field': '_all', {'search' : str($scope.research)}}]
+                }
+                else{
+                    var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.projects+':'+$scope.research+')';            
+                }
             }
-            if($scope.selected_type == 'studies'){
-              var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.studies+':'+$scope.research+')';
+            else if($scope.selected_type == 'studies'){
+                if($scope.selected_field.studies == ''){
+                    var value = '(_type:'+$scope.selected_type+' AND '+'_all'+':'+$scope.research+')';
+                }
+                else{
+                    var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.studies+':'+$scope.research+')';  
+                }
+                
             }
-            if($scope.selected_type == 'signatures'){
-              var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.signatures+':'+$scope.research+')';
+            else if($scope.selected_type == 'strategies'){
+
+                if($scope.selected_field.strategies== ''){
+                    var value = '(_type:'+$scope.selected_type+' AND '+'_all'+':'+$scope.research+')';
+                    
+                }
+                else{
+                    var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.strategies+':'+$scope.research+')';
+                }
             }
-             if($scope.selected_type == 'all'){
-              var value = $scope.research;
+            else if($scope.selected_type == 'lists'){
+
+                if($scope.selected_field.lists== ''){
+                    var value = '(_type:'+$scope.selected_type+' AND '+'_all'+':'+$scope.research+')';
+                    
+                }
+                else{
+                    var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.lists+':'+$scope.research+')';
+                }
             }
-            console.log(value);
-            console.log($scope.selected_field);
+            else if($scope.selected_type == '_all'){
+              // console.log("we are here");
+                var value = '(_all:'+$scope.research+')';
+                // console.log(value);
+            }
+
+            // console.log(value);
+            // console.log($scope.selected_field);
             if($scope.selected_querymode.mode == undefined){
               console.log("ADD to dico");
               $scope.query[value] = 'AND';
@@ -331,70 +387,426 @@ app.controller('queryCtrl',
             $scope.selected_type = '';
             $scope.selected_field = {};
             $scope.research = '';
+            $scope.selected_field.projects='';
+            $scope.selected_field.studies='';
+            $scope.selected_field.strategies='';
+            $scope.selected_field.lists='';
 
         };
+        // $scope.param_add = function() {
+        //   console.log($scope.selected_field);
+        //     if($scope.selected_type == 'projects'){
+        //       var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.projects+':'+$scope.research+')';
+        //     }
+        //     if($scope.selected_type == 'studies'){
+        //       var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.studies+':'+$scope.research+')';
+        //     }
+        //     if($scope.selected_type == 'signatures'){
+        //       var value = '(_type:'+$scope.selected_type+' AND '+$scope.selected_field.signatures+':'+$scope.research+')';
+        //     }
+        //      if($scope.selected_type == 'all'){
+        //       var value = $scope.research;
+        //     }
+        //     console.log(value);
+        //     console.log($scope.selected_field);
+        //     if($scope.selected_querymode.mode == undefined){
+        //       console.log("ADD to dico");
+        //       $scope.query[value] = 'AND';
+        //       $scope.selected_querymode.mode = 'AND';
+        //     }
+        //     else {
+        //       $scope.query[value] = $scope.selected_querymode.mode;
+        //     }
+        //     $scope.selected_type = '';
+        //     $scope.selected_field = {};
+        //     $scope.research = '';
+
+        // };
 
         $scope.search_history_item = function(item) {
             $scope.query = item;
             $scope.search(false);
         }
 
-        $scope.more = function(stepval,filter){
-            $scope.max = $scope.max + 100;
-            var query_piece = 'status:public ';
-            for(var filter in $scope.query){
-                query_piece = query_piece +$scope.query[filter]+' '+filter+' '
-              //console.log($scope.parameters[i]);
+        $scope.more = function(type){
+            if(type == 'projects'){
+                $scope.pfrom=$scope.pfrom+24
             }
-            //console.log(query_piece)
-            Search.search_index({"query":query_piece,'from':$scope.max}).$promise.then(function(data){
-                $scope.search_results = data;
-                $scope.chemicalList = [];
-                $scope.check = []
-                
-                $scope.signatures = []
-                $scope.results = $scope.search_results.hits.hits;
-                for(var i=0;i<$scope.results.length;i++){
-                  var checkd = $scope.signatures.indexOf($scope.results[i]._source);
-                  if(checkd === -1) {
-                    $scope.signatures.push($scope.results[i]._source);
-                  }
+            else if(type == 'studies'){
+                $scope.sfrom=$scope.sfrom+24       
+            }
+            else if(type == 'strategies'){
+                $scope.stfrom= $scope.stfrom+24
+            }
+            else{
+                $scope.lfrom=$scope.lfrom+24   
+              }
+            
+            var query_piece = '';//'status:public ';
+            for(var filter in $scope.query){
+                query_piece = query_piece +$scope.query[filter]+' '+filter+' ';
+            }
 
+            query_piece=query_piece.substr(4);
+                // console.log(query_piece);
+            console.log(query_piece);
+            Search.search_index({"query":query_piece, 'query_dico':$scope.query,'number_query':number_query, 'pfrom':$scope.pfrom, 'sfrom':$scope.sfrom, 'stfrom':$scope.sgfrom, 'lfrom' : $scope.lfrom}).$promise.then(function(data){
+                console.log("OKKKKK");
+                console.log(data);
+                console.log(number_query);
+                console.log(data['query'] == '(_all:*) ');
+                if(data['query'] == '(_all:*) ' ){
+                    console.log("here");
+                    $location.path('/database'); 
                 }
+
+                  // }
+
+                else if (data['number_query'] == '1'){
+                    console.log("=====1")
+                    console.log(data);
+                    $scope.projects = [];
+                    $scope.studies = [];
+                    $scope.strategies = [];
+                    $scope.lists=[];
+                    $scope.search_results = data['page'];
+                    $scope.results = $scope.search_results.hits.hits;
+
+                    if (query_piece.includes('projects') && data['number'] != 0){
+                        $scope.projects_number= ''+data['number'];
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        $scope.lists_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.projects.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('studies') && data['number'] != 0){
+                        $scope.studies_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        $scope.lists_number = 'No Result'; 
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.studies.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('strategies') && data['number'] != 0){
+                        $scope.strategies_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.lists_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.strategies.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('lists') && data['number'] != 0){
+                        $scope.lists_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.lists.push($scope.results[i]['_source']);
+                        }
+                    }
+                    
+                    else{
+                        $scope.lists_number= 'No Result';
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                    }
+
+
+                      // for(var i =0;i<$scope.results.length;i++){
+                      //   if($scope.results[i]['_type'] == 'projects'){
+                      //     $scope.projects.push($scope.results[i]['_source']);
+                      //   //$scope.project_number ++;
+                      //   }
+                      //   if($scope.results[i]['_type'] == 'studies'){
+                      //     $scope.studies.push($scope.results[i]['_source']);
+                      //   //$scope.studies_number ++;
+                      //   }
+                      //   if($scope.results[i]['_type'] == 'strategies'){
+                      //     $scope.signatures.push($scope.results[i]['_source']);
+                      //   //$scope.signatures_number ++;
+                      //   }
+
+                      // }
+
+                    }
+                    else{
+
+
+
+                        $scope.projects = [];
+                        $scope.studies = [];
+                        $scope.strategies = [];
+                        $scope.lists = [];
+                        $scope.results="true";
+
+                        $scope.projects_number = data['number_project'];
+                        $scope.studies_number=  data['number_study'];                  
+                        $scope.strategies_number = data['number_study'];
+                        $scope.lists_number=data['number_list'];
+
+
+                        if (data['projects'] != null){
+                            $scope.search_projects = data['projects'].hits.hits;
+                            for(var i =0;i<$scope.search_projects.length;i++){
+                                $scope.projects.push($scope.search_projects[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.projects_number="No Result";
+                        }
+
+                        if (data['studies'] != null){
+                            $scope.search_studies = data['studies'].hits.hits;
+                            for(var i =0;i<$scope.search_studies.length;i++){
+                                $scope.studies.push($scope.search_studies[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.studies_number="No Result";
+                        }
+
+
+                        if (data['strategies'] != null){
+                            $scope.search_signatures = data['strategies'].hits.hits;
+                            for(var i =0;i<$scope.search_strategies.length;i++){
+                                $scope.strategies.push($scope.search_strategies[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.strategies_number="No Result";
+                        }
+
+                        if (data['lists'] != null){
+                            $scope.search_lists = data['lists'].hits.hits;
+                            for(var i =0;i<$scope.search_lists.length;i++){
+                                $scope.lists.push($scope.search_lists[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.lists_number="No Result";
+                        }
+
+                        console.log($scope.projects);
+                        console.log($scope.studies);
+                        console.log($scope.signatures);
+
+
+                    }
+
+            });
+
+        };
+        $scope.back = function(type){
+
+
+
+            if(type == 'projects'){
+                $scope.pfrom=$scope.pfrom-24
+            }
+            else if(type == 'studies'){
+                $scope.sfrom=$scope.sfrom-24       
+            }
+            else if(type == 'strategies'){
+                $scope.stfrom= $scope.stfrom-24
+            }
+            else{
+                $scope.lfrom=$scope.lfrom-24   
+              }
+            
+            var query_piece = '';//'status:public ';
+            for(var filter in $scope.query){
+                query_piece = query_piece +$scope.query[filter]+' '+filter+' ';
+            }
+
+            query_piece=query_piece.substr(4);
+                // console.log(query_piece);
+            console.log(query_piece);
+            Search.search_index({"query":query_piece, 'query_dico':$scope.query,'number_query':number_query, 'pfrom':$scope.pfrom, 'sfrom':$scope.sfrom, 'stfrom':$scope.sgfrom, 'lfrom' : $scope.lfrom}).$promise.then(function(data){
+                console.log("OKKKKK");
+                console.log(data);
+                console.log(number_query);
+                console.log(data['query'] == '(_all:*) ');
+                if(data['query'] == '(_all:*) ' ){
+                    console.log("here");
+                    $location.path('/database'); 
+                }
+
+                  // }
+
+                else if (data['number_query'] == '1'){
+                    console.log("=====1")
+                    console.log(data);
+                    $scope.projects = [];
+                    $scope.studies = [];
+                    $scope.strategies = [];
+                    $scope.lists=[];
+                    $scope.search_results = data['page'];
+                    $scope.results = $scope.search_results.hits.hits;
+
+                    if (query_piece.includes('projects') && data['number'] != 0){
+                        $scope.projects_number= ''+data['number'];
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        $scope.lists_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.projects.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('studies') && data['number'] != 0){
+                        $scope.studies_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        $scope.lists_number = 'No Result'; 
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.studies.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('strategies') && data['number'] != 0){
+                        $scope.strategies_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.lists_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.strategies.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('lists') && data['number'] != 0){
+                        $scope.lists_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.lists.push($scope.results[i]['_source']);
+                        }
+                    }
+                    
+                    else{
+                        $scope.lists_number= 'No Result';
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                    }
+
+
+                      // for(var i =0;i<$scope.results.length;i++){
+                      //   if($scope.results[i]['_type'] == 'projects'){
+                      //     $scope.projects.push($scope.results[i]['_source']);
+                      //   //$scope.project_number ++;
+                      //   }
+                      //   if($scope.results[i]['_type'] == 'studies'){
+                      //     $scope.studies.push($scope.results[i]['_source']);
+                      //   //$scope.studies_number ++;
+                      //   }
+                      //   if($scope.results[i]['_type'] == 'strategies'){
+                      //     $scope.signatures.push($scope.results[i]['_source']);
+                      //   //$scope.signatures_number ++;
+                      //   }
+
+                      // }
+
+                    }
+                    else{
+
+
+
+                        $scope.projects = [];
+                        $scope.studies = [];
+                        $scope.strategies = [];
+                        $scope.lists = [];
+                        $scope.results="true";
+
+                        $scope.projects_number = data['number_project'];
+                        $scope.studies_number=  data['number_study'];                  
+                        $scope.strategies_number = data['number_study'];
+                        $scope.lists_number=data['number_list'];
+
+
+                        if (data['projects'] != null){
+                            $scope.search_projects = data['projects'].hits.hits;
+                            for(var i =0;i<$scope.search_projects.length;i++){
+                                $scope.projects.push($scope.search_projects[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.projects_number="No Result";
+                        }
+
+                        if (data['studies'] != null){
+                            $scope.search_studies = data['studies'].hits.hits;
+                            for(var i =0;i<$scope.search_studies.length;i++){
+                                $scope.studies.push($scope.search_studies[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.studies_number="No Result";
+                        }
+
+
+                        if (data['strategies'] != null){
+                            $scope.search_signatures = data['strategies'].hits.hits;
+                            for(var i =0;i<$scope.search_strategies.length;i++){
+                                $scope.strategies.push($scope.search_strategies[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.strategies_number="No Result";
+                        }
+
+                        if (data['lists'] != null){
+                            $scope.search_lists = data['lists'].hits.hits;
+                            for(var i =0;i<$scope.search_lists.length;i++){
+                                $scope.lists.push($scope.search_lists[i]['_source']);
+                            }
+                        }
+                        else{
+                            $scope.lists_number="No Result";
+                        }
+
+                        console.log($scope.projects);
+                        console.log($scope.studies);
+                        console.log($scope.signatures);
+
+
+                    }
+
+          // $scope.max = $scope.max - 100;
+          // var query_piece = 'status:public ';
+          //   for(var filter in $scope.query){
+          //       query_piece = query_piece +$scope.query[filter]+' '+filter+' '
+          //     //console.log($scope.parameters[i]);
+          //   }
+          //   //console.log(query_piece)
+          // Search.search_index({"query":query_piece,'from':$scope.max}).$promise.then(function(data){
+          //       $scope.search_results = data;
+          //       $scope.chemicalList = [];
+          //       $scope.check = []
+                
+          //       $scope.signatures = []
+          //       $scope.results = $scope.search_results.hits.hits;
+          //       for(var i=0;i<$scope.results.length;i++){
+          //         var checkd = $scope.signatures.indexOf($scope.results[i]._source);
+          //         if(checkd === -1) {
+          //           $scope.signatures.push($scope.results[i]._source);
+          //         }
+
+          //       }
                 ////console.log($scope.signatures);
                 ////console.log($scope.results._source.studies.id);
                 ////console.log($scope.results._source.studies[0].id);
             });
 
-        }
-        $scope.back = function(stepval,filter){
-          $scope.max = $scope.max - 100;
-          var query_piece = 'status:public ';
-            for(var filter in $scope.query){
-                query_piece = query_piece +$scope.query[filter]+' '+filter+' '
-              //console.log($scope.parameters[i]);
-            }
-            //console.log(query_piece)
-          Search.search_index({"query":query_piece,'from':$scope.max}).$promise.then(function(data){
-                $scope.search_results = data;
-                $scope.chemicalList = [];
-                $scope.check = []
-                
-                $scope.signatures = []
-                $scope.results = $scope.search_results.hits.hits;
-                for(var i=0;i<$scope.results.length;i++){
-                  var checkd = $scope.signatures.indexOf($scope.results[i]._source);
-                  if(checkd === -1) {
-                    $scope.signatures.push($scope.results[i]._source);
-                  }
-
-                }
-                ////console.log($scope.signatures);
-                ////console.log($scope.results._source.studies.id);
-                ////console.log($scope.results._source.studies[0].id);
-            });
-
-        }
+        };
 
 
 
@@ -425,50 +837,209 @@ app.controller('queryCtrl',
             if(do_save) {
                 $scope.search_history.push(JSON.parse(JSON.stringify($scope.query)));
             }
-            var query_piece = 'status:public ';
-            for(var filter in $scope.query){
-                query_piece = query_piece +$scope.query[filter]+' '+filter+' '
-              //console.log($scope.parameters[i]);
-            }
-            console.log(query_piece)
-            Search.search_index({"query":query_piece,'from':0}).$promise.then(function(data){
-                $scope.projects = [];
-                $scope.studies = [];
-                $scope.assays = [];
-                $scope.signatures = [];
-                $scope.project_number = 0
-                $scope.studies_number = 0
-                $scope.assay_number = 0
-                $scope.signatures_number = 0
-                $scope.search_results = data;
-                console.log(data);
-                $scope.results = $scope.search_results.hits.hits;
-                console.log($scope.results);
-                console.log($scope.search_results.hits);
 
-                for(var i =0;i<$scope.results.length;i++){
-                  if($scope.results[i]['_type'] == 'projects'){
-                    $scope.projects.push($scope.results[i]['_source']);
-                    $scope.project_number ++;
-                  }
-                  if($scope.results[i]['_type'] == 'studies'){
-                    $scope.studies.push($scope.results[i]['_source']);
-                    $scope.studies_number ++;
-                  }
-                  if($scope.results[i]['_type'] == 'assays'){
-                    $scope.assays.push($scope.results[i]['_source']);
-                    $scope.assay_number ++;
-                  }
-                  if($scope.results[i]['_type'] == 'signatures'){
-                    $scope.signatures.push($scope.results[i]['_source']);
-                    $scope.signatures_number ++;
-                  }
+
+            var query_piece = '';//'status:public ';
+            for(var filter in $scope.query){
+                query_piece = query_piece +$scope.query[filter]+' '+filter+' ';
+            }
+
+            query_piece=query_piece.substr(4);
+                // console.log(query_piece);
+            console.log(query_piece);
+            Search.search_index({"query":query_piece, 'query_dico':$scope.query,'number_query':number_query, 'pfrom':$scope.pfrom, 'sfrom':$scope.sfrom, 'stfrom':$scope.sgfrom, 'lfrom' : $scope.lfrom}).$promise.then(function(data){
+                console.log("OKKKKK");
+                console.log(data);
+                console.log(number_query);
+                console.log(data['query'] == '(_all:*) ');
+                if(data['query'] == '(_all:*) ' ){
+                    console.log("here");
+                    $location.path('/database'); 
+                }
+
+                  // }
+
+                else if (data['number_query'] == '1'){
+                    console.log("=====1")
+                    console.log(data);
+                    $scope.projects = [];
+                    $scope.studies = [];
+                    $scope.strategies = [];
+                    $scope.lists=[];
+                    $scope.search_results = data['page'];
+                    $scope.results = $scope.search_results.hits.hits;
+
+                    if (query_piece.includes('projects') && data['number'] != 0){
+                        $scope.projects_number= ''+data['number'];
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        $scope.lists_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.projects.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('studies') && data['number'] != 0){
+                        $scope.studies_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        $scope.lists_number = 'No Result'; 
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.studies.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('strategies') && data['number'] != 0){
+                        $scope.strategies_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.lists_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.strategies.push($scope.results[i]['_source']);
+                        }
+                    }
+
+                    else if(query_piece.includes('lists') && data['number'] != 0){
+                        $scope.lists_number= data['number'];
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                        for(var i =0;i<$scope.results.length;i++){
+                            $scope.lists.push($scope.results[i]['_source']);
+                        }
+                    }
+                    
+                    else{
+                        $scope.lists_number= 'No Result';
+                        $scope.projects_number = 'No Result';
+                        $scope.studies_number = 'No Result';
+                        $scope.strategies_number = 'No Result';
+                    }
 
                 }
-                console.log($scope.results);
-            });
+                else{
 
-        }
+
+
+                    $scope.projects = [];
+                    $scope.studies = [];
+                    $scope.strategies = [];
+                    $scope.lists = [];
+                    $scope.results="true";
+
+                    $scope.projects_number = data['number_project'];
+                    $scope.studies_number=  data['number_study'];                  
+                    $scope.strategies_number = data['number_study'];
+                    $scope.lists_number=data['number_list'];
+
+
+                    if (data['projects'] != null){
+                        $scope.search_projects = data['projects'].hits.hits;
+                        for(var i =0;i<$scope.search_projects.length;i++){
+                            $scope.projects.push($scope.search_projects[i]['_source']);
+                        }
+                    }
+                    else{
+                        $scope.projects_number="No Result";
+                    }
+
+                    if (data['studies'] != null){
+                        $scope.search_studies = data['studies'].hits.hits;
+                        for(var i =0;i<$scope.search_studies.length;i++){
+                            $scope.studies.push($scope.search_studies[i]['_source']);
+                        }
+                    }
+                    else{
+                        $scope.studies_number="No Result";
+                    }
+
+
+                    if (data['strategies'] != null){
+                        $scope.search_signatures = data['strategies'].hits.hits;
+                        for(var i =0;i<$scope.search_strategies.length;i++){
+                            $scope.strategies.push($scope.search_strategies[i]['_source']);
+                        }
+                    }
+                    else{
+                        $scope.strategies_number="No Result";
+                    }
+
+                    if (data['lists'] != null){
+                        $scope.search_lists = data['lists'].hits.hits;
+                        for(var i =0;i<$scope.search_lists.length;i++){
+                            $scope.lists.push($scope.search_lists[i]['_source']);
+                        }
+                    }
+                    else{
+                        $scope.lists_number="No Result";
+                    }
+
+                    console.log($scope.projects);
+                    console.log($scope.studies);
+                    console.log($scope.signatures);
+
+
+                }
+            });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //     var query_piece = 'status:public ';
+        //     for(var filter in $scope.query){
+        //         query_piece = query_piece +$scope.query[filter]+' '+filter+' '
+        //       //console.log($scope.parameters[i]);
+        //     }
+        //     console.log(query_piece)
+        //     Search.search_index({"query":query_piece,'from':0}).$promise.then(function(data){
+        //         $scope.projects = [];
+        //         $scope.studies = [];
+        //         $scope.assays = [];
+        //         $scope.signatures = [];
+        //         $scope.project_number = 0
+        //         $scope.studies_number = 0
+        //         $scope.assay_number = 0
+        //         $scope.signatures_number = 0
+        //         $scope.search_results = data;
+        //         console.log(data);
+        //         $scope.results = $scope.search_results.hits.hits;
+        //         console.log($scope.results);
+        //         console.log($scope.search_results.hits);
+
+        //         for(var i =0;i<$scope.results.length;i++){
+        //           if($scope.results[i]['_type'] == 'projects'){
+        //             $scope.projects.push($scope.results[i]['_source']);
+        //             $scope.project_number ++;
+        //           }
+        //           if($scope.results[i]['_type'] == 'studies'){
+        //             $scope.studies.push($scope.results[i]['_source']);
+        //             $scope.studies_number ++;
+        //           }
+        //           if($scope.results[i]['_type'] == 'assays'){
+        //             $scope.assays.push($scope.results[i]['_source']);
+        //             $scope.assay_number ++;
+        //           }
+        //           if($scope.results[i]['_type'] == 'signatures'){
+        //             $scope.signatures.push($scope.results[i]['_source']);
+        //             $scope.signatures_number ++;
+        //           }
+
+        //         }
+        //         console.log($scope.results);
+        //     });
+        // }
 });
 
 app.controller('searchCtrl',
@@ -944,7 +1515,7 @@ app.controller('convertCtrl',
         //   //   $cookieStore.put('selectedID', newcookie);
         //   // }
         //   else{
-        //     $scope.selected = $scope.user.selectedID.split(',');
+        //     $scope.selected = $scope.user.selectedID.split(',');fredirect
         //     console.log($scope.selected);
         //     var index = $scope.selected.indexOf(signature_id);
         //     $scope.selected.splice(index, 1);
@@ -2543,71 +3114,81 @@ app.controller('databaseCtrl',
       };
 
       $scope.more = function(type){
+
         if(type=="projects"){
           console.log($scope.pfrom)
           console.log($scope.pto)
-          $scope.pfrom = $scope.pto + 1;
-          $scope.pto = $scope.pto + 26;
+          $scope.pfrom = $scope.pto + 0;
+          $scope.pto = $scope.pto + 25;
           console.log($scope.pfrom)
           console.log($scope.pto)
-          Dataset.get({'filter':'public','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status'}).$promise.then(function(data){
+          Dataset.get({'filter':'private','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status'}).$promise.then(function(data){
             $scope.projects = data.request;
           });
-        };
-        if(type=="studies"){
-          $scope.sfrom = $scope.sto + 1;
-          $scope.sto = $scope.sto + 26;
-          Dataset.get({'filter':'public','from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'status'}).$promise.then(function(data){
+        }
+        else if(type=="studies"){
+          $scope.sfrom = $scope.sto + 0;
+          $scope.sto = $scope.sto + 25;
+          Dataset.get({'filter':'private','from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'status'}).$promise.then(function(data){
             $scope.studies = data.request;
           });
-        };
-        if(type=="assays"){
-          $scope.afrom = $scope.ato + 1;
-          $scope.ato = $scope.ato + 26;
-          Dataset.get({'filter':'public','from':$scope.afrom,'to': $scope.ato,'collection':'assays','field':'status'}).$promise.then(function(data){
-            $scope.assays = data.request;
+        }
+        else if(type=="strategies"){
+          $scope.afrom = $scope.ato + 0;
+          $scope.ato = $scope.ato + 25;
+          Dataset.get({'filter':'privateate','from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'status'}).$promise.then(function(data){
+            $scope.strategies = data.request;
           });
-        };
-        if(type=="signatures"){
-          $scope.sgfrom = $scope.sgto + 1;
-          $scope.sgto = $scope.sgto + 26;
-          Dataset.get({'filter':'public','from':$scope.sgfrom,'to': $scope.sgto,'collection':'signatures','field':'status'}).$promise.then(function(data){
-            $scope.signatures = data.request;
+        }
+        else if(type=="lists"){
+        console.log("here")
+          $scope.sgfrom = $scope.sgto + 0;
+          $scope.sgto = $scope.sgto + 25;
+          Dataset.get({'filter':'private','from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'status'}).$promise.then(function(data){
+            $scope.lists = data.request;
+            console.log(data);
           });
-        };
-      }
+        }
+        else{
+            $scope.msg="Error - Please cotnact the administrator";
+        }
+      };
+
       $scope.back = function(type){
 
         if(type=="projects"){
-          $scope.pfrom = $scope.pfrom - 26 ;
-          $scope.pto = $scope.pto - 26;
-          Dataset.get({'filter':'public','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status'}).$promise.then(function(data){
+          $scope.pfrom = $scope.pfrom - 25 ;
+          $scope.pto = $scope.pto - 25;
+          Dataset.get({'filter':'private','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status'}).$promise.then(function(data){
             $scope.projects = data.request;
           });
-        };
-        if(type=="studies"){
-          $scope.sfrom = $scope.sfrom - 26 ;
-          $scope.sto = $scope.sto - 26;
-          Dataset.get({'filter':'public','from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'status'}).$promise.then(function(data){
+        }
+        else if(type=="studies"){
+          $scope.sfrom = $scope.sfrom - 25 ;
+          $scope.sto = $scope.sto - 25;
+          Dataset.get({'filter':'private','from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'status'}).$promise.then(function(data){
             $scope.studies = data.request;
           });
-        };
-        if(type=="assays"){
-          $scope.afrom = $scope.afrom - 26;
-          $scope.ato = $scope.ato - 26;
-          Dataset.get({'filter':'public','from':$scope.afrom,'to': $scope.ato,'collection':'assays','field':'status'}).$promise.then(function(data){
-            $scope.assays = data.request;
+        }
+        else if(type=="strategies"){
+          $scope.afrom = $scope.afrom - 25;
+          $scope.ato = $scope.ato - 25;
+          Dataset.get({'filter':'private','from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'status'}).$promise.then(function(data){
+            $scope.studies = data.request;
           });
-        };
-        if(type=="signatures"){
-          $scope.sgfrom = $scope.sgfrom - 26;
-          $scope.sgto = $scope.sgto - 26;
-          Dataset.get({'filter':'public','from':$scope.sgfrom,'to': $scope.sgto,'collection':'signatures','field':'status'}).$promise.then(function(data){
-            $scope.signatures = data.request;
+        }
+        else if(type=="lists"){
+          $scope.sgfrom = $scope.sgfrom - 25;
+          $scope.sgto = $scope.sgto - 25;
+          Dataset.get({'filter':'private','from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'status'}).$promise.then(function(data){
+            $scope.lists = data.request;
           });
-        };
+        }
+        else{
+            $scope.msg="Error - Please cotnact the administrator";
+        }
 
-      }
+      };
 
 
       $scope.convert_timestamp_to_date = function(UNIX_timestamp){
@@ -2626,7 +3207,7 @@ app.controller('databaseCtrl',
 
       $scope.open_info = function(id){
         ngDialog.open({ template: id, className: 'ngdialog-theme-default'});
-      }    
+      };    
 
 });
 

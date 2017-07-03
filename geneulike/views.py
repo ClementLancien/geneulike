@@ -479,7 +479,6 @@ def getdata(request):
         if number>=30:
             result = list(request.registry.db_mongo[collection].find({field:select_filter}).skip(request.registry.db_mongo[collection].count() - 15))
         else:
-            ress = request.registry.db_mongo[collection].find({field:select_filter})
             result= list(request.registry.db_mongo[collection].find({field:select_filter}).skip(request.registry.db_mongo[collection].count()-number))
         result.reverse()
         return {'msg':'','request':result} 
@@ -491,7 +490,7 @@ def getdata(request):
             collec=collection
         result = request.registry.db_mongo[collection].find_one({collec + "_id" :select_filter})
         print collection + "_id" +" : "+ select_filter
-        pprint.pprint(result)
+        #pprint.pprint(result)
         if result is not None :
             if 'edges' in result:
                 if result['edges'] is not None :
@@ -504,12 +503,20 @@ def getdata(request):
             return {'msg':'','request':result}
 
     else :
+        print "here"
         selected = []
         if int(form['from']) < 0 :
             form['from'] = 0
+        print collection
+        print field
+        print select_filter
+        
         result = request.registry.db_mongo[collection].find({field :select_filter})
+        #pprint.pprint(result)
         for res in result :
             selected.append(res)
+        #print selected
+        print str(len(selected))
         if len(selected) < int(form['from']) :
             form['from'] = len(selected) - 15
         if len(selected) < int(form['to']) :
@@ -2260,13 +2267,56 @@ def save_excel(request):
         entrez=[]
         homologene=[]
         gpl='GPL'
+
+        for _list in lists:
+
+            identifiers=_list.identifiers.split(',')
+            newIdentifiers = []
+            for index in range(len(identifiers)):
+                if identifiers[index] == 'GPL':
+                    newIdentifiers.append(_list.identifier_extended.split(',')[index])
+                else:
+                    newIdentifiers.append(identifiers[index])
+
+            dico={}
+            for _listID in _list.list.split(','):
+                for identifier in newIdentifiers:
+                    Entrez_gene = list(request.registery.db_mongo[identifier].find({"BD" : str(identifer), "BDID" : str(_listID)}, {'GeneID': 1, '_id':0}))
+                    dico1={}
+                    if Entrez_gene is not None:
+                        for elt in Entrez_gene:
+                            homologene= request.registery.db_mongo['HomoloGene'].find({"BD" : str(identifer), "GeneID" : str(elt)}, {'BDID': 1, '_id':0}).limit(1)
+                            if homologene is None:
+                                dico1[str(elt)] = '-'
+                            else:
+                                dico1[str(elt)] = str(homologne['BDID'])
+                        dico[_listID]= dico1
+                    else:
+                        dico[str(identifier)] = '-'
+            pprint.pprint(dico)
+
+
+
+
+
+
+
+
+
+
+
+            # _lists = _list.list.split(",")
+            # for _listID in _lists:
+            #     Entrez_gene=list(requiest.registry.db_)
         #print 'start'
         #[Rat230_2] Affymetrix Rat Genome 230 2.0 Array
         #[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array
+        return
         for _list in lists:
             has = _list.list.split(",")
+
             print str(len(has))
-            ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Rat230_2] Affymetrix Rat Genome 230 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
+            ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
             print(str(len(ahs)))
             ahs=delDoublon(ahs)
             print(str(len(ahs)))
@@ -5490,21 +5540,277 @@ def update_dataset(request):
 def search(request):
     form = json.loads(request.body, encoding=request.charset)
     request_query = form['query']
-    if 'from' in form :
-        from_val = form['from']
-    else :
-        from_val = 0
+    
+    
+    size=25
 
-    page = request.registry.es.search(
-    index = request.registry.es_db,
-      search_type = 'query_then_fetch',
-      size = 1000,
-      body =  {"query" : { "query_string" : {"query" :request_query,"default_operator":"AND",'analyzer': "standard"}}})
+    
+    #return {'query':request_query}
+
+    if 'search' in form:
+        
+        query=form['query']
+        pfrom=form['pfrom']
+        sfrom=form['sfrom']
+        sgfrom=form['sgfrom']
+        query_project=changeQuery(query,'projects')
+        query_study=changeQuery(query,'studies')
+        query_srategy=changeQuery(query,'strategies')
+        queyy_list=changeQuery(query,'lists')
+
+        # return {'query_project':query_project, 'query_study':query_study, 'query_signature':query_signature}
 
 
-    body = {"query" : { "query_string" : {"query" :request_query,"default_operator":"AND",'analyzer': "standard"}}}
-    print body
-    return page
+
+        # page=request.registry.es.search(
+        #     index = request.registry.es_db,
+        #     search_type = 'query_then_fetch',
+        #     size = size,
+        #     from_= from_val,
+        #     body = {"query" : { "query_string" : {"query" :'_type:_all AND ' +request_query,"default_operator":"AND",'analyzer': "standard"}}})
+        
+
+        project = request.registry.es.search(
+            index = request.registry.es_db,
+            search_type = 'query_then_fetch',
+            from_= pfrom,
+            size = size, 
+            body = {"query" : { "query_string" : {"query" :query_project,"default_operator":"AND",'analyzer': "standard"}}})
+        
+        study = request.registry.es.search(
+            index = request.registry.es_db,
+            search_type = 'query_then_fetch',
+            from_= sfrom,
+            size = size,
+            body = {"query" : { "query_string" : {"query" :query_study,"default_operator":"AND",'analyzer': "standard"}}})
+        
+        strategy = request.registry.es.search(
+            index = request.registry.es_db,
+            search_type = 'query_then_fetch',
+            from_= sgfrom,
+            size = size,         
+            body = {"query" : { "query_string" : {"query" :query_strategy,"default_operator":"AND",'analyzer': "standard"}}})
+
+        _list = request.registry.es.search(
+            index = request.registry.es_db,
+            search_type = 'query_then_fetch',
+            from_= sgfrom,
+            size = size,         
+            body = {"query" : { "query_string" : {"query" :query_list,"default_operator":"AND",'analyzer': "standard"}}})
+
+
+        number_project=str(project['hits']['total'])
+        if number_project=="0":
+            number_project="No Result"
+
+        number_study=str(study['hits']['total'])
+        if number_study=="0":
+            number_study="No result"
+
+        number_strategy=str(strategy['hits']['total'])
+        if number_strategy=="0":
+            number_signature="No Result"
+
+        number_list=str(_list['hits']['total'])
+        if number_list=="0":
+            number_list="No Result"
+
+
+        return {'projects' : project, 'studies':study , 'strategies' : strategy , 'lists' : _list, 'query': query_project, \
+                    'number_project' : number_project, 'number_study' : number_study,\
+                    'number_strategy' :number_strategy, 'number_list' : number_list, 'query':query}
+        # return page
+
+    request_number_query=form['number_query']
+    request_pfrom=form['pfrom']
+    request_sfrom=form['sfrom']
+    request_stfrom=form['stfrom']
+    request_lfrom=form['lfrom']
+
+    if request_pfrom<0:
+        request.pfrom=0
+    # if 'from' in form :
+    #     from_val = form['from']
+    # else :
+    #     from_val = 0
+
+    if request_query == '(_all:*) ':
+        return {'query':request_query}
+
+    elif request_number_query == 1:
+        # page= request.registry.es.search(index = request.registry.es_db) \
+        # .filter("term", category="search") \
+        # .query("kidney", title="title")
+        if('projects' in request_query):
+            _from=request_pfrom
+
+        elif('studies' in request_query):
+            _from=request_sfrom
+
+        elif('strategies' in request_query):
+            _from=requesy_stfrom
+
+        else:
+            _from=request_lfrom
+
+        page = request.registry.es.search(
+            index = request.registry.es_db,
+            search_type = 'query_then_fetch',
+            from_=_from,
+            size=size,
+            #from_=#form['from'],
+            #size=(form['from']+25),
+            body =  {"query" : { "query_string" : {"query" :request_query,"default_operator":"AND",'analyzer': "standard"}}}
+        )
+        return {'page' : page , 'number': str(page['hits']['total']), 'query' : request_query , 'number_query' :'1'}
+    else:
+        #return {'ok1111'}
+        request_query_dico=form['query_dico']
+
+        projects={}
+        studies={}
+        strategies={}
+        lists={}
+
+        for _type in request_query_dico.keys():
+            if("projects" in _type):
+                projects[_type]=request_query_dico[_type]
+            elif("studies" in _type):
+                studies[_type]=request_query_dico[_type]
+            elif("strategies" in _type):
+                strategies[_type]=request_query_dico[_type]
+            elif("lists" in _type ):
+                lists[_type]=request_query_dico[_type]
+        
+        if projects != {}:
+            projects_keys = projects.keys()
+            projects_values = projects.values()
+            projects_query= str(projects_keys[0])
+            if(len(projects_keys)!=0):
+                for index in range(1,len(projects_keys)):
+                    projects_query+= ' '+str(projects_values[index])+ ' ' +str(projects_keys[index])
+        else:
+            projects_query=None
+
+
+        if studies != {}:
+            studies_keys = studies.keys()
+            studies_values = studies.values()
+            studies_query= str(studies_keys[0])
+            if(len(studies_keys)!=0):
+                for index in range(1,len(studies_keys)):
+                    studies_query+= ' '+str(studies_values[index])+ ' ' +str(studies_keys[index])
+        else:
+            studies_query=None
+
+        if strategies !={}:
+            strategies_keys = strategies.keys()
+            strategies_values = strategies.values()
+            strategies_query= str(strategies_keys[0])
+            if(len(strategies_keys)!=0):
+                for index in range(1,len(strategies_keys)):
+                    strategies_query+= ' '+str(strategies_values[index])+ ' ' +str(strategies_keys[index])
+        else:
+            strategies_query=None
+
+        if lists !={}:
+            lists_keys = listss.keys()
+            lists_values = lists.values()
+            lists_query= str(lists_keys[0])
+            if(len(lists_keys)!=0):
+                for index in range(1,len(lists_keys)):
+                    lists_query+= ' '+str(lists_values[index])+ ' ' +str(lists_keys[index])
+        else:
+            lists_query=None
+
+
+        #return{'projects' : projects_query, 'studies' : studies_query, 'signatures': signatures_query}
+        #return {'projects':projects_query}
+        if projects_query != None:
+            project =request.registry.es.search(
+                index = request.registry.es_db,
+                search_type = 'query_then_fetch',
+                from_=request_pfrom,
+                size=size,
+                #from_=#form['from'],
+                #size=(form['from']+25),
+                body =  {"query" : { "query_string" : {"query" :projects_query,"default_operator":"AND",'analyzer': "standard"}}}
+            )
+            number_project=str(project['hits']['total'])
+        else:
+            project=None
+            number_project="0"
+
+        if studies_query !=None:
+            study =request.registry.es.search(
+                index = request.registry.es_db,
+                search_type = 'query_then_fetch',
+                from_=request_sfrom,
+                size=size,
+                #from_=#form['from'],
+                #size=(form['from']+25),
+                body =  {"query" : { "query_string" : {"query" :studies_query,"default_operator":"AND",'analyzer': "standard"}}}
+            )
+            number_study=str(study['hits']['total'])
+        else:
+            study=None
+            number_study="0"
+
+        if strategies_query:
+            strategy =request.registry.es.search(
+                index = request.registry.es_db,
+                search_type = 'query_then_fetch',
+                from_=request_stfrom,
+                size=size,
+                #from_=#form['from'],
+                #size=(form['from']+25),
+                body =  {"query" : { "query_string" : {"query" :strategies_query,"default_operator":"AND",'analyzer': "standard"}}}
+            )
+            number_strategy=str(strategies['hits']['total'])
+        else:
+            strategy=None
+            number_strategy="0"
+
+        if lists_query:
+            _list =request.registry.es.search(
+                index = request.registry.es_db,
+                search_type = 'query_then_fetch',
+                from_=request_lfrom,
+                size=size,
+                #from_=#form['from'],
+                #size=(form['from']+25),
+                body =  {"query" : { "query_string" : {"query" :lists_query,"default_operator":"AND",'analyzer': "standard"}}}
+            )
+            number_strategy=str(strategies['hits']['total'])
+        else:
+            _list=None
+            number_list="0"
+
+ 
+        return {'projects' : project, 'studies':study , 'signatures' : strategy, 'lists' : _list, 'query': request_query, \
+                    'number_project' : number_project, 'number_study' : number_study,\
+                    'number_strategy' : number_strategy, 'number_list' : number_list}
+
+
+
+
+    # form = json.loads(request.body, encoding=request.charset)
+    # request_query = form['query']
+    # if 'from' in form :
+    #     from_val = form['from']
+    # else :
+    #     from_val = 0
+
+    # page = request.registry.es.search(
+    # index = request.registry.es_db,
+    #   search_type = 'query_then_fetch',
+    #   size = 1000,
+    #   body =  {"query" : { "query_string" : {"query" :request_query,"default_operator":"AND",'analyzer': "standard"}}})
+
+
+    # body = {"query" : { "query_string" : {"query" :request_query,"default_operator":"AND",'analyzer': "standard"}}}
+    # print body
+    # return page
   
 
     #page = request.registry.es.search(

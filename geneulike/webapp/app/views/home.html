@@ -122,7 +122,7 @@
           <div ng-repeat="sign in last_sign">
             <h4>{{sign.project_id}} - {{sign.title}}</h4>
             <ul>
-              <li><b>Description :</b> {{sign.description}}</li>
+              <li><b>Description :</b>{{sign.description}}</li>
               <li><b>Studies :</b> <span ng-repeat="stud in sign.studies_id.split(',')"><a href="#/browse?dataset={{stud}}">{{stud}}</a> </span></li>
               <li><b>Strategies :</b> <span ng-repeat="strat in sign.strategies_id.split(',')"><a href="#/browse?dataset={{strat}}">{{strat}}</a> </span></li>
               <li><b>Lists :</b> <span ng-repeat="list in sign.lists_id.split(',')"><a href="#/browse?dataset={{list}}">{{list}}</a> </span></li>
