@@ -286,7 +286,7 @@ app.controller('appCtrl',
          
         Dataset.get({'filter':'private','collection':'projects','field':'status', 'obs':true}).$promise.then(function(data){
             $scope.last_sign = data.request;
-            console.log($scope.last_sign);
+            //console.log($scope.last_sign);
         });
 
         //INSERT FUNCTION GET LAST
@@ -1947,8 +1947,8 @@ app.controller('userprojectCtrl',
         if(type=="projects"){
           console.log($scope.pfrom)
           console.log($scope.pto)
-          $scope.pfrom = $scope.pto + 1;
-          $scope.pto = $scope.pto + 26;
+          $scope.pfrom = $scope.pto + 0;
+          $scope.pto = $scope.pto + 25;
           console.log($scope.pfrom)
           console.log($scope.pto)
           Dataset.get({'filter':$scope.user.id,'from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'owner'}).$promise.then(function(data){
@@ -1957,22 +1957,22 @@ app.controller('userprojectCtrl',
           });
         };
         if(type=="studies"){
-          $scope.sfrom = $scope.sto + 1;
-          $scope.sto = $scope.sto + 26;
+          $scope.sfrom = $scope.sto + 0;
+          $scope.sto = $scope.sto + 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'owner'}).$promise.then(function(data){
             $scope.studies = data.request;
           });
         };
         if(type=="strategies"){
-          $scope.afrom = $scope.ato + 1;
-          $scope.ato = $scope.ato + 26;
+          $scope.afrom = $scope.ato + 0;
+          $scope.ato = $scope.ato + 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'owner'}).$promise.then(function(data){
             $scope.strategies = data.request;
           });
         };
         if(type=="lists"){
-          $scope.sgfrom = $scope.sgto + 1;
-          $scope.sgto = $scope.sgto + 26;
+          $scope.sgfrom = $scope.sgto + 0;
+          $scope.sgto = $scope.sgto + 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'owner'}).$promise.then(function(data){
             $scope.lists = data.request;
           });
@@ -1981,29 +1981,29 @@ app.controller('userprojectCtrl',
       $scope.back = function(type){
 
         if(type=="projects"){
-          $scope.pfrom = $scope.pfrom - 26 ;
-          $scope.pto = $scope.pto - 26;
+          $scope.pfrom = $scope.pfrom - 25 ;
+          $scope.pto = $scope.pto - 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'owner'}).$promise.then(function(data){
             $scope.projects = data.request;
           });
         };
         if(type=="studies"){
-          $scope.sfrom = $scope.sfrom - 26 ;
-          $scope.sto = $scope.sto - 26;
+          $scope.sfrom = $scope.sfrom - 25 ;
+          $scope.sto = $scope.sto - 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.sfrom,'to': $scope.sto,'collection':'studies','field':'owner'}).$promise.then(function(data){
             $scope.studies = data.request;
           });
         };
         if(type=="strategies"){
-          $scope.afrom = $scope.afrom - 26;
-          $scope.ato = $scope.ato - 26;
+          $scope.afrom = $scope.afrom - 25;
+          $scope.ato = $scope.ato - 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.afrom,'to': $scope.ato,'collection':'strategies','field':'owner'}).$promise.then(function(data){
             $scope.strategies = data.request;
           });
         };
         if(type=="lists"){
-          $scope.sgfrom = $scope.sgfrom - 26;
-          $scope.sgto = $scope.sgto - 26;
+          $scope.sgfrom = $scope.sgfrom - 25;
+          $scope.sgto = $scope.sgto - 25;
           Dataset.get({'filter':$scope.user.id,'from':$scope.sgfrom,'to': $scope.sgto,'collection':'lists','field':'owner'}).$promise.then(function(data){
             $scope.lists = data.request;
           });
@@ -3081,10 +3081,10 @@ app.controller('databaseCtrl',
 
       Dataset.get({'filter':'private','from':$scope.pfrom,'to': $scope.pto,'collection':'projects','field':'status','all_info':'true'}).$promise.then(function(data){
         $scope.projects = data.request;
-        console.log('start');
-        console
-        console.log($scope.projects[0].lists_id);
-        console.log('stop');
+        //console.log('start');
+        //
+        //console.log($scope.projects[0].lists_id);
+        //console.log('stop');
         $scope.projects_number = data.project_number;
         $scope.studies_number = data.study_number;
         $scope.strategies_number = data.strategy_number;

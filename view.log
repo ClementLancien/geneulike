@@ -6819,3 +6819,33 @@ KeyError: 'from'
 2017-07-03 15:56:26,312 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('range() integer end argument expected, got list.',), <traceback object at 0x7f5d412dd170>)
 2017-07-03 15:57:00,229 :: WARNING :: Error - Save excel file
 2017-07-03 15:57:00,230 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'identifier' referenced before assignment",), <traceback object at 0x7f44176ff908>)
+2017-07-04 10:59:04,393 :: WARNING :: Error - Save excel file
+2017-07-04 10:59:04,433 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'identififiers' is not defined",), <traceback object at 0x7fa6cf3e47e8>)
+2017-07-04 11:00:45,121 :: WARNING :: Error - Save excel file
+2017-07-04 11:00:45,131 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Request' object has no attribute 'registery'",), <traceback object at 0x7f0f80096368>)
+2017-07-04 11:02:39,660 :: WARNING :: Error - Save excel file
+2017-07-04 11:02:39,660 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not str',), <traceback object at 0x7f0d6ea03758>)
+2017-07-04 11:03:31,553 :: WARNING :: Error - Save excel file
+2017-07-04 11:03:31,554 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not str',), <traceback object at 0x7f8038fc1f38>)
+2017-07-04 11:04:12,311 :: WARNING :: Error - Save excel file
+2017-07-04 11:04:12,313 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not str',), <traceback object at 0x7f3e97820d88>)
+2017-07-04 11:05:36,570 :: WARNING :: Error - Save excel file
+2017-07-04 11:05:36,573 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not str',), <traceback object at 0x7f69b8fed758>)
+2017-07-04 11:24:40,271 :: WARNING :: 1 thread(s) still running
+2017-07-04 11:25:41,612 :: WARNING :: 1 thread(s) still running
+2017-07-04 11:26:21,240 :: WARNING :: 1 thread(s) still running
+2017-07-04 14:02:59,690 :: WARNING :: 1 thread(s) still running
+2017-07-04 14:11:04,609 :: WARNING :: Error - Save excel file
+2017-07-04 14:11:04,667 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not str',), <traceback object at 0x7f548d2e4758>)
+2017-07-04 14:29:42,875 :: WARNING :: Error - Save excel file
+2017-07-04 14:29:42,899 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list indices must be integers, not str',), <traceback object at 0x7f55a4d2d710>)
+2017-07-04 15:14:15,647 :: WARNING :: Error - Save excel file
+2017-07-04 15:14:15,661 :: WARNING :: (<type 'exceptions.NameError'>, NameError("global name 'program_id' is not defined",), <traceback object at 0x7f5fd9549518>)
+2017-07-04 15:14:42,178 :: WARNING :: Error - Save excel file
+2017-07-04 15:14:42,179 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Cursor' object has no attribute 'map'",), <traceback object at 0x7f980292e518>)
+2017-07-04 15:16:06,993 :: WARNING :: Error - Save excel file
+2017-07-04 15:16:06,994 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Cursor' object has no attribute 'map_reduce'",), <traceback object at 0x7f227777dea8>)
+2017-07-04 15:17:11,002 :: WARNING :: Error - Save excel file
+2017-07-04 15:17:11,003 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Cursor' object has no attribute 'mapReduce'",), <traceback object at 0x7fadb10f0368>)
+2017-07-04 15:30:38,177 :: WARNING :: Error - Save excel file
+2017-07-04 15:30:38,178 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Cursor' object has no attribute 'toArray'",), <traceback object at 0x7fdab7595200>)

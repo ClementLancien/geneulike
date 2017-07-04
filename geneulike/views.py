@@ -8,7 +8,7 @@ from pyramid.response import Response, FileResponse
 
 import unicodedata
 import re
-
+import time # delete pour el deploiement seulement pour tester el temps de conversion
 import os
 import json
 from bson import json_util
@@ -1030,7 +1030,7 @@ def excel_signature_upload(request):
         return HTTPForbidden('no input file')
 
     try :
-        tmp_file_name = uuid.uuid4().hex
+        tmp_file_name = uuid.uuid4().hex +".xls"
         file_path = os.path.join('/tmp', '%s.sig' % tmp_file_name)
         temp_file_path = file_path + '~'
 
@@ -2262,6 +2262,9 @@ def save_excel(request):
                 newListe.append(element)
         return newListe
     def get_Convert(upload_path):
+
+        """ajouter une exception pour collections qui sont des entiers naturels positifs"""
+
         print "enter get_convert"
         raw=[]
         entrez=[]
@@ -2270,30 +2273,135 @@ def save_excel(request):
 
         for _list in lists:
 
-            identifiers=_list.identifiers.split(',')
+            identifiers=_list.identifiers.split(' , ')
             newIdentifiers = []
+           
             for index in range(len(identifiers)):
                 if identifiers[index] == 'GPL':
                     newIdentifiers.append(_list.identifier_extended.split(',')[index])
+
                 else:
                     newIdentifiers.append(identifiers[index])
 
-            dico={}
-            for _listID in _list.list.split(','):
-                for identifier in newIdentifiers:
-                    Entrez_gene = list(request.registery.db_mongo[identifier].find({"BD" : str(identifer), "BDID" : str(_listID)}, {'GeneID': 1, '_id':0}))
-                    dico1={}
-                    if Entrez_gene is not None:
-                        for elt in Entrez_gene:
-                            homologene= request.registery.db_mongo['HomoloGene'].find({"BD" : str(identifer), "GeneID" : str(elt)}, {'BDID': 1, '_id':0}).limit(1)
-                            if homologene is None:
-                                dico1[str(elt)] = '-'
-                            else:
-                                dico1[str(elt)] = str(homologne['BDID'])
-                        dico[_listID]= dico1
-                    else:
-                        dico[str(identifier)] = '-'
-            pprint.pprint(dico)
+            print "newidentfiers : ",newIdentifiers
+            #dico=[]
+            #print _list.list.split(',')
+
+            #list_identifiers = _list.list.split
+
+
+
+            # t0 = time.time()
+            # list(request.registry.db_mongo[identifiers[index]].find({'BDname' : {"$regex" : str(newIdentifiers[index])},'BDID':{"$in" : _list.list.split(',')}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+            # print time.time() - t0, "seconds wall time"
+            # result=[]
+            # query=list(request.registry.db_mongo['BDname'].find({'BDname' : {"$regex" : str(newIdentifiers[index])},"BDID":{"$nin": _list.list.split(',')}}, {'GeneID' : 1 , '_id' :0}))
+            # for i in query:
+            #     result.append(i['GeneID'])
+            # print str(len(result))
+
+
+            def search(collection, BDname, _list):
+                if  collection == "GPL":
+                    res= list(request.registry.db_mongo[collection].find({'BDname' : {"$regex" : BDname},'BDID':_list},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+                    not_found =list(request.registry.db_mongo[collection].find({'BDname' : {"$regex" : BDname},"BDID":{"$nin": _list}}, {'GeneID' : 1 , '_id' :0}))
+
+                else:
+                    res = list(request.registry.db_mongo[collection].find({'BDID':{"$in" :_list}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+                    not_found=list(request.registry.db_mongo[collection].find({'BDID':{"$nin" :_list}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+                newSearch=[]
+                for elt in not_found:
+                    newSearch.append(elt['BDID'])
+                return res, newSearch
+
+
+            res, not_found =search(next(identifiers), next(newIdentifiers),_list.list.split(','))
+            
+            while next(identifiers) and not_found:
+                _res, _not_found= search(next(identifiers), next(newIdentifiers),not_found)
+                for elt in _res:
+                    res.append(elt)
+                not_found=_not_found
+            
+            with open(os.path.join(upload_path, str(_list.project_id), str(_list.lists_id), str(_list.lists_id))+".txt" , 'w') as output:
+                for elt in res:
+                    output.write(str(elt['BDID']) + "\t" + str(elt['GeneID']) + "\t" + str(elt['HomoloGene']) + "\n" )
+                for elt in not_found:
+                    output.write(str(elt) + "\t" + "-" + "\t" + "-" + "\n")
+
+            #print time.time() - t0, "seconds wall time"
+
+
+           #other way START
+            # dico={}
+            # t0 = time.time()
+            # for _listID in _list.list.split(','):
+            #     a=[]
+                
+            #     for index in range(len(identifiers)):
+            #         try:
+            #             #print identifiers[index]
+            #             if identifiers[index] == "GPL":
+            #                 # print "start"
+            #                 # print str(identifiers[index])
+            #                 # print str(newIdentifiers[index])
+            #                 # print str(_listID)
+            #                 res = list(request.registry.db_mongo[identifiers[index]].find({'BDname' : {"$regex" : str(newIdentifiers[index])},'BDID':str(_listID)},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+            #                 # print res
+            #                 # print "stop \n"
+
+            #             else:
+            #                 res = list(request.registry.db_mongo[identifiers[index]].find({'BDID':str(_listID)},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+            #             #print res
+            #             if res is not None:
+            #                 for elt in res:
+            #                     a.append(elt)
+            #         except:
+            #             print "error"
+            #             # return
+            #     if a:
+            #         dico[str(_listID)]=a
+            #     else:
+            #         dico[str(_listID)] ="-"
+
+            # with open(os.path.join(upload_path, str(_list.project_id), str(_list.lists_id), str(_list.lists_id))+".txt" , 'w') as output:
+
+            #     for elt in dico.keys():
+            #         #print elt
+            #         if dico[elt] == '-':
+            #             output.write(str(elt) + "\t" + "-" + "\t" + "-" + "\n")
+            #         else:
+            #             for line in dico[elt]:
+            #                 print line
+            #                 output.write(str(elt) + "\t" + str(line['GeneID']) + "\t" + str(line['HomoloGene']) + "\n" )
+            # print time.time() - t0, "seconds wall time"
+            #Other way END
+
+
+
+
+
+
+
+
+            #ajouterune bouckle pour écrire dans un fichier le nom du fichier est égale a GUL (lists_id)
+
+            # dico={}
+            # for _listID in _list.list.split(','):
+            #     for identifier in newIdentifiers:
+            #         Entrez_gene = list(request.registery.db_mongo[identifier].find({"BD" : str(identifer), "BDID" : str(_listID)}, {'GeneID': 1, '_id':0}))
+            #         dico1={}
+            #         if Entrez_gene is not None:
+            #             for elt in Entrez_gene:
+            #                 homologene= request.registery.db_mongo['HomoloGene'].find({"BD" : str(identifer), "GeneID" : str(elt)}, {'BDID': 1, '_id':0}).limit(1)
+            #                 if homologene is None:
+            #                     dico1[str(elt)] = '-'
+            #                 else:
+            #                     dico1[str(elt)] = str(homologne['BDID'])
+            #             dico[_listID]= dico1
+            #         else:
+            #             dico[str(identifier)] = '-'
+            # pprint.pprint(dico)
 
 
 
@@ -2311,43 +2419,70 @@ def save_excel(request):
         #print 'start'
         #[Rat230_2] Affymetrix Rat Genome 230 2.0 Array
         #[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array
-        return
-        for _list in lists:
-            has = _list.list.split(",")
-
-            print str(len(has))
-            ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
-            print(str(len(ahs)))
-            ahs=delDoublon(ahs)
-            print(str(len(ahs)))
-            entrez=[]
-
-            for toto in ahs:
-                entrez.append(toto['GeneID'])
 
 
-            #print entrez
-            homolo=[]
-            hre=list(request.registry.db_mongo['HomoloGene'].find({'GeneID':{"$in" :entrez}}, {'BDID':1, '_id':0}))
 
-            for the in hre:
+
+
+
+
+
+
+
+        # return
+        # for _list in lists:
+        #     has = _list.list.split(",")
+
+        #     print str(len(has))
+        #     ahs=list(request.registry.db_mongo['GPL'].find({"BD" : "[Mouse430_2] Affymetrix Mouse Genome 430 2.0 Array" ,'BDID':{"$in" :has}}, {'GeneID':1, '_id':0}))
+        #     print(str(len(ahs)))
+        #     ahs=delDoublon(ahs)
+        #     print(str(len(ahs)))
+        #     entrez=[]
+
+        #     for toto in ahs:
+        #         entrez.append(toto['GeneID'])
+
+
+        #     #print entrez
+        #     homolo=[]
+        #     hre=list(request.registry.db_mongo['HomoloGene'].find({'GeneID':{"$in" :entrez}}, {'BDID':1, '_id':0}))
+
+        #     for the in hre:
                 
-                homolo.append(the['BDID'])
+        #         homolo.append(the['BDID'])
             
-                #for the in hre:
-                    #homolo.append(the['BDID'])
-            with open(os.path.join(upload_path, "MusEntrezGene"+ str(_list.title)) , 'w') as output:
-                for entre in entrez:
+        #         #for the in hre:
+        #             #homolo.append(the['BDID'])
+        #     with open(os.path.join(upload_path, "MusEntrezGene"+ str(_list.title)) , 'w') as output:
+        #         for entre in entrez:
 
-                    output.write(str(entre)+"\n")
+        #             output.write(str(entre)+"\n")
 
-            with open(os.path.join(upload_path, "MusHomologene"+ str(_list.title)) , 'w') as output:
-                for hom in homolo:
+        #     with open(os.path.join(upload_path, "MusHomologene"+ str(_list.title)) , 'w') as output:
+        #         for hom in homolo:
   
-                    output.write(str(hom) + "\n")    
+        #             output.write(str(hom) + "\n")    
 
-            print 'name list : ' + str(_list.title)+ " found len : " + str(len(ahs)) + "for original len " + str(len(has)) + "nombre HomologenID : "+ str(len(homolo))
+        #     print 'name list : ' + str(_list.title)+ " found len : " + str(len(ahs)) + "for original len " + str(len(has)) + "nombre HomologenID : "+ str(len(homolo))
             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             #ncbi=[]
             #print ahs
             #for entre in ahs:
@@ -2503,15 +2638,21 @@ def save_excel(request):
         #                         homologene.append(str(homologene_id))
         #                 else:
         #                      homologene.append('-')
-            print "path"
-            print upload_path
-            print _list.project_id
-            print _list.lists_id
-            print _list.lists_id
-            with open(os.path.join(upload_path, _list.project_id, _list.lists_id, _list.lists_id) , 'w') as output:
-                for index in range(len(raw)):
-                    output.write(str(raw[index]) + "\t" + str(entrez[index]) + "\t" + str(homologene[index]) + "\n")
-                    print "has write"
+
+
+
+
+
+
+            # print "path"
+            # print upload_path
+            # print _list.project_id
+            # print _list.lists_id
+            # print _list.lists_id
+            # with open(os.path.join(upload_path, _list.project_id, _list.lists_id, _list.lists_id) , 'w') as output:
+            #     for index in range(len(raw)):
+            #         output.write(str(raw[index]) + "\t" + str(entrez[index]) + "\t" + str(homologene[index]) + "\n")
+            #         print "has write"
 
 
 
@@ -2579,7 +2720,9 @@ def save_excel(request):
             #_list.file_path= get_str(os.path.join(upload_path, _list.project_id, _list.lists_id, namefile))
             #pprint.pprint(request.registry.db_mongo['lists'].find_one({'project_id' : 'GPR0'}))
         print "try"
+        #t0 = time.time()
         get_Convert(upload_path)
+        #print time.time() - t0, "seconds wall time"
         return {'msg':"File checked and uploded !", 'status':'0'}
 
     except:
