@@ -3150,7 +3150,7 @@ app.controller('databaseCtrl',
           });
         }
         else{
-            $scope.msg="Error - Please cotnact the administrator";
+            $scope.msg="Error - Please contact the administrator";
         }
       };
 
@@ -3269,10 +3269,10 @@ app.controller('adminCtrl',
       $scope.users = null;
       $scope.pendings = null;
       Admin.dbinfo().$promise.then(function(data){
-        $scope.project_number = data.project_number;
-        $scope.study_number = data.study_number;
-        $scope.assay_number = data.assay_number;
-        $scope.signature_number = data.signature_number;
+        $scope.project_number = data['project_number'];
+        $scope.study_number = data['study_number'];
+        $scope.strategy_number = data['strategy_number'];
+        $scope.list_number = data['list_number'];
         $scope.users = data.users;
         $scope.pendings = data.pendings;
       });

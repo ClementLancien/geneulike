@@ -85,12 +85,23 @@
               <li ng-if="! is_logged"><a href="#/login" class="btn">
                   <span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
               <li ng-if="! is_logged"><a href="#/signin" class="btn"><span class="glyphicon glyphicon-user"></span> Sign in</a>
-              <li ng-if="is_logged" class="btn-group" dropdown is-open="status.isopen">
+
+
+
+
+               <li ng-if="is_logged" class="btn-group" dropdown is-open="status.isopen">
                   <a type="button" dropdown-toggle ng-disabled="disabled">
                     {{user.first_name}}<span class="caret"></span>
                   </a>
-                  <ul class="dropdown-menu" role="menu">
+                  <ul ng-if="user.id != 'geneulike@gmail.com'"class="dropdown-menu" role="menu">
                     <li><a href="#/user/{{user.id}}"> Profile</a></li>
+                    <li><a href="#/user/{{user.id}}/myproject"> My projects</a></li>
+                    <li><a href="#/jobs">Running jobs</a></li>
+                    <li ng-if="is_logged && user.admin"><a href="#/admin" active-link="active"><i class="glyphicon glyphicon-cog"></i> Admin</a></li>
+                    <li class="divider"></li>
+                    <li><a href="" ng-click="logout()"> Logout</a></li>
+                  </ul>
+                  <ul ng-if="user.id == 'geneulike@gmail.com'"class="dropdown-menu" role="menu">
                     <li><a href="#/user/{{user.id}}/myproject"> My projects</a></li>
                     <li><a href="#/jobs">Running jobs</a></li>
                     <li ng-if="is_logged && user.admin"><a href="#/admin" active-link="active"><i class="glyphicon glyphicon-cog"></i> Admin</a></li>

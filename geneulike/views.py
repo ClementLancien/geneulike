@@ -319,10 +319,10 @@ def infodatabase(request):
         return HTTPUnauthorized('Not authorized to access this resource')
     if not (user['id'] in request.registry.admin_list):
         return HTTPUnauthorized('Not authorized to access this resource')
-    project_number = request.registry.db_mongo['projects'].find({'status' :'public'}).count()
-    study_number = request.registry.db_mongo['studies'].find({'status' :'public'}).count()
-    assay_number = request.registry.db_mongo['assays'].find({'status' :'public'}).count()
-    signature_number = request.registry.db_mongo['signatures'].find({'status' :'public'}).count()
+    project_number = request.registry.db_mongo['projects'].find({'status' :'private'}).count()
+    study_number = request.registry.db_mongo['studies'].find({'status' :'private'}).count()
+    strategy_number = request.registry.db_mongo['strategies'].find({'status' :'private'}).count()
+    list_number = request.registry.db_mongo['lists'].find({'status' :'private'}).count()
     user_request = request.registry.db_mongo['users'].find()
     users = []
     for user in user_request:
@@ -331,7 +331,7 @@ def infodatabase(request):
     pendings = []
     for pending in pending_request:
         pendings.append(pending)
-    return {'msg':'Database ok','project_number':project_number,'study_number':study_number,'assay_number':assay_number,'signature_number':signature_number,'users':users,'pendings':pendings}
+    return {'msg':'Database ok','project_number':project_number,'study_number':study_number,'strategy_number': strategy_number,'list_number': list_number, 'users':users, 'pendings':pendings}
 
 @view_config(route_name='validate', renderer='json', request_method='POST')
 def validate(request):
@@ -2159,9 +2159,18 @@ def save_excel(request):
                     index_list_identifiants =  get_Col_List(get_str(row_value[0]), idLists)
                     list_identifiants=[]
                     for name in idList_sheet.col_values(index_list_identifiants, start_rowx=1, end_rowx=None):
+                        
+                        
                         if name != "":
                             a=re.sub(r" ", '', str(name))
-                            list_identifiants.append(str(a)) 
+                            try:
+                                a=int(float(a))
+                                list_identifiants.append(str(a))
+
+                            except:
+                                list_identifiants.append(str(a))
+
+
                     #print list_identifiants
                     list_identifiants = ",".join(str(name) for name in list_identifiants)
                     #print list_identifiants
@@ -2300,34 +2309,52 @@ def save_excel(request):
             #     result.append(i['GeneID'])
             # print str(len(result))
 
-
+            
             def search(collection, BDname, _list):
-                if  collection == "GPL":
-                    res= list(request.registry.db_mongo[collection].find({'BDname' : {"$regex" : BDname},'BDID':_list},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
-                    not_found =list(request.registry.db_mongo[collection].find({'BDname' : {"$regex" : BDname},"BDID":{"$nin": _list}}, {'GeneID' : 1 , '_id' :0}))
+
+                if collection == "GPL":
+                    print BDname
+                    res= list(request.registry.db_mongo[collection].find({'GPLname' : {"$regex" : str(BDname)},'BDID':{"$in":_list}}))#,{'Homologene':1, 'BDID' : 1, 'GeneName':1, 'GeneDescription':1,  'GeneID' : 1 ,'TaxID':1, '_id' :0}))
 
                 else:
-                    res = list(request.registry.db_mongo[collection].find({'BDID':{"$in" :_list}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
-                    not_found=list(request.registry.db_mongo[collection].find({'BDID':{"$nin" :_list}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
-                newSearch=[]
-                for elt in not_found:
-                    newSearch.append(elt['BDID'])
-                return res, newSearch
-
-
-            res, not_found =search(next(identifiers), next(newIdentifiers),_list.list.split(','))
-            
-            while next(identifiers) and not_found:
-                _res, _not_found= search(next(identifiers), next(newIdentifiers),not_found)
-                for elt in _res:
-                    res.append(elt)
-                not_found=_not_found
+                    res = list(request.registry.db_mongo[collection].find({'BDID':{"$in" :_list}},{'Homologene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+                
+                not_found=[]
+                for elt in res:
+                    not_found.append(elt['BDID'])
+                not_found=list(set(_list).symmetric_difference(set(not_found)))   
+                # newSearch=[]
+                # for elt in res:
+                #     #print elt
+                #     if elt['GeneID'] not in newSearch:
+                #         newSearch.append(elt['GeneID'])
+                # #print newSearch[:5]
+                # not_found=[]
+                # for item in _list:
+                #     if item not in newSearch:
+                #         not_found.append(str(item))
+                return res, not_found
+                
+            res, not_found =search(identifiers[0], newIdentifiers[0],_list.list.split(','))
+           # print not_found
+            #return
+            if len(identifiers) > 1:
+                for i in range(1,len(identifiers),1):
+                    if not_found:
+                        break
+                    else:
+                        _res, _not_found= search(identifiers[i], newIdentifiers[i], not_found)
+                    for elt in _res:
+                        res.append(elt)
+                    not_found=_not_found
+               # while next(identifiers) and not_found is :
+                    
             
             with open(os.path.join(upload_path, str(_list.project_id), str(_list.lists_id), str(_list.lists_id))+".txt" , 'w') as output:
                 for elt in res:
-                    output.write(str(elt['BDID']) + "\t" + str(elt['GeneID']) + "\t" + str(elt['HomoloGene']) + "\n" )
+                    output.write(str(elt['BDID']) + "\t" + str(elt['GeneID']) + "\t" + str(elt['Homologene']) + "\t" + str(elt['GeneName'])+ "\t" + str(elt['GeneDescription'])+ "\t" + str(elt['TaxID'])+"\n" )
                 for elt in not_found:
-                    output.write(str(elt) + "\t" + "-" + "\t" + "-" + "\n")
+                    output.write(str(elt) + "\t" + "-" + "\t" + "-" +  "\t" + "-" + "\t" + "-" +"\t" + "-" +"\n")
 
             #print time.time() - t0, "seconds wall time"
 

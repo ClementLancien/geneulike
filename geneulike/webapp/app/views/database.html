@@ -34,8 +34,8 @@
       <div ng-repeat='study in studies'>
         <h3>{{study.studies_id}} - {{study.title}}</h3>(<a href="#/browse?dataset={{study.studies_id}}">view</a>)
         <p><b>Description : </b>{{study.description}}</p>
-        <p><b>Associated Project : </b>{study.project_id}} <!-- <a href="#/browse?dataset={{list.project_id}}" >{{study.project_id}}</a></p> -->
-        <p><b>Associated Strategies : </b><span ng-repeat='strategy in study.strategies_id.split(",")'> {{strategy}} </span> <<!-- a href="#/browse?dataset={{strategy}}" >{{strategy}}</a></span></p> -->
+        <p><b>Associated Project : </b>{{study.project_id}} <!-- <a href="#/browse?dataset={{list.project_id}}" >{{study.project_id}}</a></p> -->
+        <p><b>Associated Strategies : </b><span ng-repeat='strategy in study.strategies_id.split(",")'> {{strategy}} <span> <!-- a href="#/browse?dataset={{strategy}}" >{{strategy}}</a></span></p> -->
         <p><b>Associated Lists : </b><span ng-repeat='list in study.lists_id.split(",")'> {{list}} </span><!-- <a href="#/browse?dataset={{lists}}" >{{list}}</a></span></p> -->
         <hr>
       </div>

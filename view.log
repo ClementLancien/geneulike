@@ -6849,3 +6849,205 @@ KeyError: 'from'
 2017-07-04 15:17:11,003 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Cursor' object has no attribute 'mapReduce'",), <traceback object at 0x7fadb10f0368>)
 2017-07-04 15:30:38,177 :: WARNING :: Error - Save excel file
 2017-07-04 15:30:38,178 :: WARNING :: (<type 'exceptions.AttributeError'>, AttributeError("'Cursor' object has no attribute 'toArray'",), <traceback object at 0x7fdab7595200>)
+2017-07-05 13:36:38,939 :: WARNING :: Error - Save excel file
+2017-07-05 13:36:38,966 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list object is not an iterator',), <traceback object at 0x7fb511e71170>)
+2017-07-05 13:59:34,574 :: WARNING :: Error - Save excel file
+2017-07-05 13:59:34,574 :: WARNING :: (<type 'exceptions.TypeError'>, TypeError('list object is not an iterator',), <traceback object at 0x7f62595ab2d8>)
+2017-07-05 14:01:29,950 :: WARNING :: Error - Save excel file
+2017-07-05 14:01:29,950 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'not_found' referenced before assignment",), <traceback object at 0x7f75d73f5830>)
+2017-07-05 14:03:10,969 :: WARNING :: Error - Save excel file
+2017-07-05 14:03:10,970 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'not_found' referenced before assignment",), <traceback object at 0x7f1a6ac554d0>)
+2017-07-05 14:04:50,280 :: WARNING :: Error - Save excel file
+2017-07-05 14:04:50,281 :: WARNING :: (<type 'exceptions.UnboundLocalError'>, UnboundLocalError("local variable 'not_found' referenced before assignment",), <traceback object at 0x7f8e858a8ab8>)
+2017-07-06 10:43:20,632 :: ERROR :: Exception at http://localhost:6543/validate
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=e95c697a4c9fc2b3ed35&tb=140537458032784
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 403, in validate
+    cmd = "python %s --signature a --script gopublic --job b --user none" % (os.path.join(request.registry.script_path, 'jobLauncher.py'))
+AttributeError: 'Registry' object has no attribute 'script_path'
+2017-07-06 11:16:27,489 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=4587b7f8db0300ae52e1&tb=139675588319248
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 462, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-07-06 11:16:27,492 :: ERROR :: Exception at http://localhost:6543/1
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=4587b7f8db0300ae52e1&tb=139675589019088
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 462, in getdata
+    select_filter = form['filter']
+KeyError: 'filter'
+2017-07-06 13:13:17,969 :: WARNING :: Error - Save excel file
+2017-07-06 13:13:18,006 :: WARNING :: (<type 'exceptions.ValueError'>, ValueError("invalid literal for int() with base 10: '1415672_at'",), <traceback object at 0x7fd3b0c92200>)
+2017-07-07 15:14:19,465 :: WARNING :: Error - Save excel file
+2017-07-07 15:14:19,601 :: WARNING :: (<class 'pymongo.errors.OperationFailure'>, OperationFailure(u"database error: Can't canonicalize query: BadValue: Projection cannot have a mix of inclusion and exclusion.",), <traceback object at 0x7f47b40edcb0>)
+2017-07-07 15:16:01,273 :: WARNING :: 1 thread(s) still running
+2017-07-07 15:20:09,746 :: WARNING :: 1 thread(s) still running
+2017-07-07 15:53:52,517 :: WARNING :: Error - Save excel file
+2017-07-07 15:53:52,550 :: WARNING :: (<type 'exceptions.KeyError'>, KeyError('HomoloGene',), <traceback object at 0x7f27dc591a70>)
+2017-07-07 15:54:45,102 :: WARNING :: Error - Save excel file
+2017-07-07 15:54:45,103 :: WARNING :: (<type 'exceptions.KeyError'>, KeyError('HomoloGene',), <traceback object at 0x7f54200c6560>)
+2017-07-10 10:51:55,531 :: ERROR :: Exception at http://localhost:6543/search
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=ea1e5c823df6c82604ea&tb=140488198081104
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 5794, in search
+    request_number_query=form['number_query']
+KeyError: 'number_query'
+2017-07-10 10:52:02,787 :: ERROR :: Exception at http://localhost:6543/search
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=ea1e5c823df6c82604ea&tb=140488196083664
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 5794, in search
+    request_number_query=form['number_query']
+KeyError: 'number_query'
+2017-07-10 10:55:09,666 :: ERROR :: Exception at http://localhost:6543/run
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=ea1e5c823df6c82604ea&tb=140488211373776
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 665, in run
+    signature = json.loads(form['signature'])
+KeyError: 'signature'
+2017-07-11 13:50:46,365 :: ERROR :: Exception at http://localhost:6543/validate
+traceback url: http://localhost:6543/_debug_toolbar/exception?token=bb31f764d8e2714f0d04&tb=140182313803536
+Traceback (most recent call last):
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/toolbar.py", line 215, in toolbar_tween
+    response = _handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid_debugtoolbar/panels/performance.py", line 57, in resource_timer_handler
+    result = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 62, in excview_tween
+    reraise(*attrs['exc_info'])
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/tweens.py", line 22, in excview_tween
+    response = handler(request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/router.py", line 155, in handle_request
+    view_name
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/view.py", line 612, in _call_view
+    response = view_callable(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 389, in attr_view
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 367, in predicate_wrapper
+    return view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 438, in rendered_view
+    result = view(context, request)
+  File "/home/clancien/.local/lib/python2.7/site-packages/pyramid/viewderivers.py", line 147, in _requestonly_view
+    response = view(request)
+  File "/home/clancien/Desktop/site/geneulike/geneulike/views.py", line 399, in validate
+    cmd = "python %s --signature a --script gohomo --job b --user none" % (os.path.join(request.registry.script_path, 'jobLauncher.py'))
+AttributeError: 'Registry' object has no attribute 'script_path'
