@@ -5,6 +5,7 @@ Created on Wed Jul 12 11:43:10 2017
 @author: clancien
 """
 mongoimport -d geneulike -c test --type tsv Entrez_GeneToEnsembl_gene -f GeneID.string\(\),BDID.string\(\) --columnsHaveTypes
+mongoimport -d geneulike -c test --type tsv GPL_all -f GeneID.string\(\),GPLcode.string\(\),BDID.string\(\),GPLname.string\(\) --columnsHaveTypes
 
 import pandas
 from itertools import (takewhile,repeat)
