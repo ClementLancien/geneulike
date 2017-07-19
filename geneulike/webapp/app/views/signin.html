@@ -1,3 +1,87 @@
+
+<script>
+$(function() {
+    $('.required-icon').tooltip({
+        placement: 'left',
+        title: 'Required field'
+        });
+});
+</script>
+<style type="text/css">
+    nput, textarea, button { margin-top:10px }
+
+/* Required field START */
+
+.required-field-block {
+    position: relative;   
+}
+
+.required-field-block .required-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin: -0.25em 0.25em 0em;
+    background-color: #E8E8E8;
+    border-color: #E8E8E8;
+    padding: 0.5em 0.8em;
+    color: rgba(0, 0, 0, 0.65);
+    text-transform: uppercase;
+    font-weight: normal;
+    border-radius: 0.325em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: background 0.1s linear;
+    -moz-transition: background 0.1s linear;
+    transition: background 0.1s linear;
+    font-size: 75%;
+}
+    
+.required-field-block .required-icon {
+    background-color: transparent;
+    position: absolute;
+    top: 0em;
+    right: 0em;
+    z-index: 10;
+    margin: 0em;
+    width: 30px;
+    height: 30px;
+    padding: 0em;
+    text-align: center;
+    -webkit-transition: color 0.2s ease;
+    -moz-transition: color 0.2s ease;
+    transition: color 0.2s ease;
+}
+
+.required-field-block .required-icon:after {
+    position: absolute;
+    content: "";
+    right: 1px;
+    top: 1px;
+    z-index: -1;
+    width: 0em;
+    height: 0em;
+    border-top: 0em solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+    border-left: 0em solid transparent;
+    border-right-color: inherit;
+    -webkit-transition: border-color 0.2s ease;
+    -moz-transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease;
+}
+
+.required-field-block .required-icon .text {
+    color: #B80000;
+    font-size: 26px;
+    margin: -3px 0 0 12px;
+}
+/* Required field END */
+
+
+
+
+</style>
 <div class="well">
 <legend style="color:#6a90c5">Registration Form</legend>
           <div ng-if="danger" class="alert alert-danger">
@@ -16,14 +100,21 @@
 
 
             <form class="form-horizontal">
+
+
+
+                <div class="form-group">
+                    
                 
                 <div class="form-group">
                     <label class="control-label col-sm-3" for="first_name">First Name</label>
                     <div class="col-sm-6">
-                        <div class="form-group input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                          <input ng-model="newUser.firstname" id="first_name" placeholder="Enter your first name" type="text" class="form-control">
-
+                        <div class="form-group input-group required-field-block">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input ng-model="newUser.firstname" id="first_name" placeholder="Enter your first name" type="text" class="form-control">
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -31,9 +122,12 @@
                 <div class="form-group">
                     <label class="control-label col-sm-3" for="first_name">Last Name</label>
                     <div class="col-sm-6">
-                        <div class="form-group input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                          <input ng-model="newUser.lastname" id="last_name" placeholder="Enter your last name" type="text" class="form-control">
+                        <div class="form-group input-group required-field-block">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input ng-model="newUser.lastname" id="last_name" placeholder="Enter your last name" type="text" class="form-control">
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,9 +145,12 @@
                 <div class="form-group">
                     <label class="control-label col-sm-3" for="email">Email</label>
                     <div class="col-sm-6">
-                        <div class="form-group input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                          <input ng-model="newUser.email" id="email" placeholder="Enter your email" type="text" class="form-control" >
+                        <div class="form-group input-group required-field-block">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                            <input ng-model="newUser.email" id="email" placeholder="Enter your email" type="text" class="form-control" >
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
                         </div>
                     </div>
                 </div>

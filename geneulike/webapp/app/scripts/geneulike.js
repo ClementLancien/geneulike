@@ -289,6 +289,75 @@ app.controller('appCtrl',
             //console.log($scope.last_sign);
         });
 
+        $(document).ready(function(){
+  
+        var $randomnbr = $('.nbr');
+        var $timer= 10;
+        var $it;
+        var $data = 0;
+        var index;
+        var change;
+        var letters = ["W", "e", "l", "c", "o", "m", "e", "&nbsp;", "t", "o", "&nbsp;", "G", "e", "n", "e", "U", "L", "i", "k", "e"];
+
+  //var letters = ["W", "e", "l", "c", "o", "m", "e", "t" "o", "G", "e", "n", "e", "u", "l", "i", "k", "e"];
+  
+        $randomnbr.each(function(){
+      
+        change = Math.round(Math.random()*100);
+        $(this).attr('data-change', change);
+    
+        });
+  
+        function random(){
+            return Math.round(Math.random()*9);
+        };
+  
+        function select(){
+            return Math.round(Math.random()*$randomnbr.length+1);
+        };
+  
+        function value(){
+            $('.nbr:nth-child('+select()+')').html(''+random()+'');
+            $('.nbr:nth-child('+select()+')').attr('data-number', $data);
+            $data++;
+    
+            $randomnbr.each(function(){
+            if(parseInt($(this).attr('data-number')) > parseInt($(this).attr('data-change'))){
+                index = $('.ltr').index(this);
+                $(this).html(letters[index]);
+                $(this).removeClass('nbr');
+            }
+            });
+    
+        };
+  
+        $it = setInterval(value, $timer);
+    
+});
+
+        // var text = $(".split");
+
+        // var split = new SplitText(text);
+
+        // function random(min, max){
+        //     return (Math.random() * (max - min)) + min;
+        // }
+
+        // $(split.chars).each(function(i){
+        // TweenMax.from($(this), 2.5, {
+        // opacity: 0,
+        // x: random(-500, 500),
+        // y: random(-500, 500),
+        // z: random(-500, 500),
+        // scale: .1,
+        // delay: i * .02,
+        // yoyo: true,
+        // repeat: false,
+        // repeatDelay: 10
+        // });
+        // });   
+
+
         //INSERT FUNCTION GET LAST
         //Get last updated signature on TOXsIgN
 
