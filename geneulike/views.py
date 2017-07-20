@@ -2317,7 +2317,7 @@ def save_excel(request):
                     res= list(request.registry.db_mongo[collection].find({'GPLname' : {"$regex" : str(BDname)},'BDID':{"$in":_list}}))#,{'Homologene':1, 'BDID' : 1, 'GeneName':1, 'GeneDescription':1,  'GeneID' : 1 ,'TaxID':1, '_id' :0}))
 
                 else:
-                    res = list(request.registry.db_mongo[collection].find({'BDID':{"$in" :_list}},{'Homologene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+                    res = list(request.registry.db_mongo[collection].find({'BDID':{"$in" :_list}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
                 
                 not_found=[]
                 for elt in res:
