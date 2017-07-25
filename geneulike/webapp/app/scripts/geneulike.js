@@ -2188,36 +2188,40 @@ app.controller('compareCtrl',
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location, Auth, User,Upload,ngDialog) {
 
-        var example = document.getElementById('table'),hot1;
+        // var example = document.getElementById('table'),hot1;
 
-        hot1 = new Handsontable(example,{
-                                            data: Handsontable.helper.createSpreadsheetData(1000, 1000),
-                                            width: 584,
-                                            height: 320,
-                                            colWidths: 47,
-                                            rowHeights: 23,
-                                            rowHeaders: true,
-                                            colHeaders: true
-               });
+        // hot1 = new Handsontable(example,{
+        //                                     data: Handsontable.helper.createSpreadsheetData(1000, 1000),
+        //                                     width: 584,
+        //                                     height: 320,
+        //                                     colWidths: 47,
+        //                                     rowHeights: 23,
+        //                                     rowHeaders: true,
+        //                                     colHeaders: true
+        //        });
 
-        // var data = [
-        //                 ["Project ID(s)", "Ford", "Volvo", "Toyota", "Honda"],
-        //                 ["Parent project ID(s)", 10, 11, 12, 13],
-        //                 ["Contributors (comma or semicolon separated)", 20, 11, 14, 13],
-        //                 ["Title", 30, 15, 12, 13],
-        //                 ["Description", 30, 15, 12, 13],
-        //                 ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", 30, 15, 12, 13],
-        //                 ["Crosslink(s) (comma or semicolon separated)", 30, 15, 12, 13],
-        //                 ["Additional Information", 30, 15, 12, 13],
-        //                 ["PubMedID(s)  (comma or semicolon separated)", 30, 15, 12, 13],
-        //             ];
+        var data = [
+                        ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],
+                        ["Parent project ID(s)", 10, 11, 12, 13],
+                        ["Contributors (comma or semicolon separated)", 20, 11, 14, 13],
+                        ["Title", 30, 15, 12, 13],
+                        ["Description", 30, 15, 12, 13],
+                        ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", 30, 15, 12, 13],
+                        ["Crosslink(s) (comma or semicolon separated)", 30, 15, 12, 13],
+                        ["Additional Information", 30, 15, 12, 13],
+                        ["PubMedID(s)  (comma or semicolon separated)", 30, 15, 12, 13],
+                    ];
 
-        // var container = document.getElementById('table');
-        // var hot = new Handsontable(container, {
-        //     data: data,
-        //     rowHeaders: true,
-        //     colHeaders: true
-        // });
+        var container = document.getElementById('table');
+        var hot = new Handsontable(container, {
+            data: data,
+            width: 584,
+            height: 320,
+            colWidths: 47,
+            rowHeights: 23,
+            rowHeaders: true,
+            colHeaders: true
+        });
 
 
 
