@@ -2200,32 +2200,156 @@ app.controller('createCtrl',
         //                                     colHeaders: true
         //        });
 
-        var data = [
-                        ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],
-                        ["Parent project ID(s)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["Contributors (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["Title", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["Description","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["Crosslink(s) (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["Additional Information", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                        ["PubMedID(s)  (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                    ];
+        // var data = [
+        //                 ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],
+        //                 ["Parent project ID(s)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["Contributors (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["Title", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["Description","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["Crosslink(s) (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["Additional Information", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //                 ["PubMedID(s)  (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        //             ];
 
-        var container = document.getElementById('table');
-        var hot = new Handsontable(container, {
-            data: data,
-            //data: data,
-            // width: auto,
-            // height: 500,
-            renderAllRows: true,
-            rowHeaders: true,
-            colHeaders: true,
-            fixedColumnsLeft: 1,
-            //contextMenu: true,
-            manualColumnFreeze: true
+        // var container = document.getElementById('table');
+        // var hot = new Handsontable(container, {
+        //     data: data,
+        //     //data: data,
+        //     // width: auto,
+        //     // height: 500,
+        //     renderAllRows: true,
+        //     rowHeaders: true,
+        //     colHeaders: true,
+        //     fixedColumnsLeft: 1,
+        //     //contextMenu: true,
+        //     manualColumnFreeze: true
+        // });
+        // hot.updateSettings();
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+  var totalRowsCount = 6;   
+  var totalColumnsCount  = 40;
+  var fixedRowsTop = 1;
+  var fixedColumnsLeft = 3;
+  
+  var example1 = document.getElementById('example1');
+    console.log('new Handsontable');    
+  var hot = new Handsontable(example1, {
+       undo: false,
+       outsideClickDeselects: false,
+       viewportColumnRenderingOffset: 50,
+       rowHeights: 22
+   });
+
+  var createDataRowMapping = function() {
+    console.log('createDataRowMapping');    
+    var rows = [];
+    for (var i = 0; i < totalRowsCount; i++) {
+
+        // create empty data row arrays with index value
+        var newRow = [];
+        var columnsToCreate = i === 0 ? totalColumnsCount : 1;
+        for (var j = 0; j < columnsToCreate; j++) {
+            newRow.push(i);
+        }
+        rows.push(newRow);
+    }
+
+    return rows;
+  };
+
+  var createDataColumnMapping = function() {
+        console.log('createDataColumnMapping');    
+ 
+    var cellAccessor = function (dataColumnIndex) {
+      return function (row) {
+          if (!row) {
+                   console.log('cellAccessor' + dataColumnIndex + "/" + "-");
+             return "";
+          }
+          var dataRowIndex = row[0];
+                console.log('cellAccessor' + dataColumnIndex + "/" + dataRowIndex);                   
+          return dataColumnIndex + "/" + dataRowIndex;
+      };
+    };
+    
+    var columnList = new Array();
+    var i;
+    for (i = 0; i < totalColumnsCount ; i++) {
+        columnList.push({
+            data: cellAccessor(i)
         });
-        hot.updateSettings();
+    }
+    return columnList;
+  };
+  
+  var initTable = function() {
+    // update handsontable with new settings
+    var data = createDataRowMapping();
+    var columns = createDataColumnMapping();
+        console.log('updateSettings');
+    hot.updateSettings({
+        fixedRowsTop: fixedRowsTop,
+        fixedColumnsLeft: fixedColumnsLeft,
+        data: data,
+        columns: columns,
+        dataSchema: data[0],
+        colHeaders: null,
+        rowHeaders: '<i>X</i>',
+        manualRowMove: [ 0,1,2,3,4,5 ],
+        manualColumnMove: false,
+        manualColumnResize: false,
+        autoColumnSize: true
+    });
+  };
+  
+    console.log('init hot');    
+    initTable(); 
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
