@@ -2216,9 +2216,9 @@ app.controller('createCtrl',
         var hot = new Handsontable(container, {
             data: data,
             //data: data,
-            width: 500,
-            height: 500,
-            renderAllRows: false,
+            // width: auto,
+            // height: 500,
+            renderAllRows: true,
             rowHeaders: true,
             colHeaders: true
         });
