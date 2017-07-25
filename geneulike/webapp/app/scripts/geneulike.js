@@ -2232,18 +2232,17 @@ app.controller('createCtrl',
 
 
 
-var
-    example = document.getElementById('example1'),
-    hot1;
+  var
+    myData = Handsontable.helper.createSpreadsheetData(200, 100),
+    container = document.getElementById('example1'),
+    hot;
   
-  hot1 = new Handsontable(example,{
-    data: Handsontable.helper.createSpreadsheetData(1000, 1000),
-    width: 584,
-    height: 320,
-    colWidths: 47,
-    rowHeights: 23,
-    rowHeaders: true,
-    colHeaders: true
+  hot = new Handsontable(container, {
+    data: myData,
+    rowHeaders: false,
+    colHeaders: true,
+    fixedColumnsLeft: 0,
+    contextMenu: false
   });
   
   function bindDumpButton() {
@@ -2251,7 +2250,7 @@ var
         return;
       }
   
-      Handsontable.dom.addEvent(document.body, 'click', function (e) {
+      Handsontable.Dom.addEvent(document.body, 'click', function (e) {
   
         var element = e.target || e.srcElement;
   
@@ -2264,6 +2263,11 @@ var
       });
     }
   bindDumpButton();
+  
+  hot.updateSettings({
+    fixedColumnsLeft: 3,
+    rowHeaders: false
+  });
 
 
 
