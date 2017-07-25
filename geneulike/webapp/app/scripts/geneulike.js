@@ -2214,7 +2214,7 @@ app.controller('createCtrl',
 
         var container = document.getElementById('table'),data;
         var hot = new Handsontable(container, {
-            data: Handsontable.data.createSpreadsheetData(101, 101),
+            data: data.createSpreadsheetData(101, 101),
             //data: data,
             width: 500,
             height: 500,
