@@ -2230,7 +2230,7 @@ app.controller('createCtrl',
 
 
 
-        document.addEventListener("DOMContentLoaded", function() {
+
 
   var totalRowsCount = 6;   
   var totalColumnsCount  = 40;
@@ -2310,7 +2310,7 @@ app.controller('createCtrl',
   
     console.log('init hot');    
     initTable(); 
-});
+
 
 
 
