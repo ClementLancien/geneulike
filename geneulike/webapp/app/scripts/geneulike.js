@@ -2212,13 +2212,13 @@ app.controller('createCtrl',
                         ["PubMedID(s)  (comma or semicolon separated)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                     ];
 
-        var container = document.getElementById('table'),data;
+        var container = document.getElementById('table');
         var hot = new Handsontable(container, {
-            data: data.createSpreadsheetData(101, 101),
+            data: data,
             //data: data,
             width: 500,
             height: 500,
-
+            renderAllRows: false,
             rowHeaders: true,
             colHeaders: true
         });
