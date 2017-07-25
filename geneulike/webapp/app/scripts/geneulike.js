@@ -2188,25 +2188,36 @@ app.controller('compareCtrl',
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location, Auth, User,Upload,ngDialog) {
 
+        var example = document.getElementById('table'),hot1;
 
-        var data = [
-                        ["Project ID(s)", "Ford", "Volvo", "Toyota", "Honda"],
-                        ["Parent project ID(s)", 10, 11, 12, 13],
-                        ["Contributors (comma or semicolon separated)", 20, 11, 14, 13],
-                        ["Title", 30, 15, 12, 13],
-                        ["Description", 30, 15, 12, 13],
-                        ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", 30, 15, 12, 13],
-                        ["Crosslink(s) (comma or semicolon separated)", 30, 15, 12, 13],
-                        ["Additional Information", 30, 15, 12, 13],
-                        ["PubMedID(s)  (comma or semicolon separated)", 30, 15, 12, 13],
-                    ];
+        hot1 = new Handsontable(example,{
+                                            data: Handsontable.helper.createSpreadsheetData(1000, 1000),
+                                            width: 584,
+                                            height: 320,
+                                            colWidths: 47,
+                                            rowHeights: 23,
+                                            rowHeaders: true,
+                                            colHeaders: true
+               });
 
-        var container = document.getElementById('table');
-        var hot = new Handsontable(container, {
-            data: data,
-            rowHeaders: true,
-            colHeaders: true
-        });
+        // var data = [
+        //                 ["Project ID(s)", "Ford", "Volvo", "Toyota", "Honda"],
+        //                 ["Parent project ID(s)", 10, 11, 12, 13],
+        //                 ["Contributors (comma or semicolon separated)", 20, 11, 14, 13],
+        //                 ["Title", 30, 15, 12, 13],
+        //                 ["Description", 30, 15, 12, 13],
+        //                 ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", 30, 15, 12, 13],
+        //                 ["Crosslink(s) (comma or semicolon separated)", 30, 15, 12, 13],
+        //                 ["Additional Information", 30, 15, 12, 13],
+        //                 ["PubMedID(s)  (comma or semicolon separated)", 30, 15, 12, 13],
+        //             ];
+
+        // var container = document.getElementById('table');
+        // var hot = new Handsontable(container, {
+        //     data: data,
+        //     rowHeaders: true,
+        //     colHeaders: true
+        // });
 
 
 
