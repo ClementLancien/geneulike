@@ -2225,6 +2225,7 @@ app.controller('createCtrl',
             //contextMenu: true,
             manualColumnFreeze: true
         });
+        hot.updateSettings();
 
 
 
