@@ -2190,10 +2190,15 @@ app.controller('createCtrl',
 
 
         var data = [
-                        ["", "Ford", "Volvo", "Toyota", "Honda"],
-                        ["2016", 10, 11, 12, 13],
-                        ["2017", 20, 11, 14, 13],
-                        ["2018", 30, 15, 12, 13]
+                        ["Project ID(s)", "Ford", "Volvo", "Toyota", "Honda"],
+                        ["Parent project ID(s)", 10, 11, 12, 13],
+                        ["Contributors (comma or semicolon separated)", 20, 11, 14, 13],
+                        ["Title", 30, 15, 12, 13],
+                        ["Description", 30, 15, 12, 13],
+                        ["Project’s controlled vocabularies (please paste the text from the ontology blabla)", 30, 15, 12, 13],
+                        ["Crosslink(s) (comma or semicolon separated)", 30, 15, 12, 13],
+                        ["Additional Information", 30, 15, 12, 13],
+                        ["PubMedID(s)  (comma or semicolon separated)", 30, 15, 12, 13],
                     ];
 
         var container = document.getElementById('table');
