@@ -2220,7 +2220,10 @@ app.controller('createCtrl',
             // height: 500,
             renderAllRows: true,
             rowHeaders: true,
-            colHeaders: true
+            colHeaders: true,
+            fixedColumnsLeft: 1,
+            //contextMenu: true,
+            manualColumnFreeze: true
         });
 
 
