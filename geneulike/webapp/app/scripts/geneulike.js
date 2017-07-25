@@ -2232,85 +2232,38 @@ app.controller('createCtrl',
 
 
 
-  var totalRowsCount = 6;   
-  var totalColumnsCount  = 40;
-  var fixedRowsTop = 1;
-  var fixedColumnsLeft = 3;
+var
+    example = document.getElementById('example1'),
+    hot1;
   
-  var example1 = document.getElementById('example1');
-    console.log('new Handsontable');    
-  var hot = new Handsontable(example1, {
-       undo: false,
-       outsideClickDeselects: false,
-       viewportColumnRenderingOffset: 50,
-       rowHeights: 22
-   });
-
-  var createDataRowMapping = function() {
-    console.log('createDataRowMapping');    
-    var rows = [];
-    for (var i = 0; i < totalRowsCount; i++) {
-
-        // create empty data row arrays with index value
-        var newRow = [];
-        var columnsToCreate = i === 0 ? totalColumnsCount : 1;
-        for (var j = 0; j < columnsToCreate; j++) {
-            newRow.push(i);
+  hot1 = new Handsontable(example,{
+    data: Handsontable.helper.createSpreadsheetData(1000, 1000),
+    width: 584,
+    height: 320,
+    colWidths: 47,
+    rowHeights: 23,
+    rowHeaders: true,
+    colHeaders: true
+  });
+  
+  function bindDumpButton() {
+      if (typeof Handsontable === "undefined") {
+        return;
+      }
+  
+      Handsontable.dom.addEvent(document.body, 'click', function (e) {
+  
+        var element = e.target || e.srcElement;
+  
+        if (element.nodeName == "BUTTON" && element.name == 'dump') {
+          var name = element.getAttribute('data-dump');
+          var instance = element.getAttribute('data-instance');
+          var hot = window[instance];
+          console.log('data of ' + name, hot.getData());
         }
-        rows.push(newRow);
+      });
     }
-
-    return rows;
-  };
-
-  var createDataColumnMapping = function() {
-        console.log('createDataColumnMapping');    
- 
-    var cellAccessor = function (dataColumnIndex) {
-      return function (row) {
-          if (!row) {
-                   console.log('cellAccessor' + dataColumnIndex + "/" + "-");
-             return "";
-          }
-          var dataRowIndex = row[0];
-                console.log('cellAccessor' + dataColumnIndex + "/" + dataRowIndex);                   
-          return dataColumnIndex + "/" + dataRowIndex;
-      };
-    };
-    
-    var columnList = new Array();
-    var i;
-    for (i = 0; i < totalColumnsCount ; i++) {
-        columnList.push({
-            data: cellAccessor(i)
-        });
-    }
-    return columnList;
-  };
-  
-  var initTable = function() {
-    // update handsontable with new settings
-    var data = createDataRowMapping();
-    var columns = createDataColumnMapping();
-        console.log('updateSettings');
-    hot.updateSettings({
-        fixedRowsTop: fixedRowsTop,
-        fixedColumnsLeft: fixedColumnsLeft,
-        data: data,
-        columns: columns,
-        dataSchema: data[0],
-        colHeaders: null,
-        rowHeaders: '<i>X</i>',
-        manualRowMove: [ 0,1,2,3,4,5 ],
-        manualColumnMove: false,
-        manualColumnResize: false,
-        autoColumnSize: true
-    });
-  };
-  
-    console.log('init hot');    
-    initTable(); 
-
+  bindDumpButton();
 
 
 
