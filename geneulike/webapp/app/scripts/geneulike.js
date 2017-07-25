@@ -2212,9 +2212,10 @@ app.controller('createCtrl',
                         ["PubMedID(s)  (comma or semicolon separated)", 30, 15, 12, 13],
                     ];
 
-        var container = document.getElementById('table');
+        var container = document.getElementById('table'),data;
         var hot = new Handsontable(container, {
-            data: data,
+            data: Handsontable.helper.createSpreadsheetData(101, 101),
+            //data: data,
             width: 1000,
             height: 1000,
 
