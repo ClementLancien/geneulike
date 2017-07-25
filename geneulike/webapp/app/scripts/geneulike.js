@@ -2186,9 +2186,29 @@ app.controller('compareCtrl',
 });
 
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location, Auth, User,Upload,ngDialog) {
+    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User,Upload,ngDialog) {
 
-        
+        $scope.get_onto = function(val,database) {
+        //console.log(database);
+        return Dataset.ontologies({},{'database':database,'search':val}).$promise.then(function(data){
+            //console.log(data);
+            return data.map(function(item){
+                var search_result = [];
+                Object.keys(item).map(function(key, index) {
+                    search_result.push(item[key]);
+                    //console.log(item[key], 'toto');
+                });
+                return console.log(JSON.stringify(search_result));
+                return search_result
+                //     console.log(nitem);
+                //     return nitem
+                // });
+                // item = Object.values(item)
+                // console.log(item)
+                // return item;
+           });
+         });
+       };
         var project_table = document.getElementById('project_table'), project_option;
         var project_data =[
 

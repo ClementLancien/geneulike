@@ -526,6 +526,26 @@ def getdata(request):
 
 @view_config(route_name='ontologies', renderer='json', request_method='POST')
 def ontologies(request):
+    REST_URL = "http://data.bioontology.org"
+    API_KEY = "27f3a22f-92f8-4587-a884-e81953e113e6"
+    form = json.loads(request.body, encoding=request.charset)
+    term = form['search'].replace(' ','%20')
+    database = form['database']
+
+    def get_json(url):
+        opener = urllib2.build_opener()
+        opener.addheaders = [('Authorization', 'apikey token=' + API_KEY)]
+        return json.loads(opener.open(url).read())
+
+    # Get list of search terms
+    search_results = []
+    print REST_URL + "/search?q=" + term+'&ontology=' + database
+    #print get_json(REST_URL + "/search?q=" + term+'&ontology=' + database)
+    search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)["collection"])
+    #print search_results
+
+    return search_results
+    
     form = json.loads(request.body, encoding=request.charset)
     search = form['search']
     database = form['database']

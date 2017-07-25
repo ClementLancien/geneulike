@@ -48,9 +48,7 @@ hr {
 
 <script type="text/javascript">
 
-$scope.toto=[0:{'name':'1','prefLabel':'toto'},
-1:{'name':'2','prefLabel':'titi'},
-]
+
 // var data =[
 
 //             [" ","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
@@ -153,6 +151,17 @@ $scope.toto=[0:{'name':'1','prefLabel':'toto'},
 
 </script>
 <!-- {} format http://jsfiddle.net/7u1kxjLe/16/ -->
+<input class="form-control" id="organism_vivo" type="text" ng-model="selectOnto" placeholder="Species"
+                            typeahead-min-length="4" typeahead-on-select="selected_tissue($item, $model,label)" typeahead="item for item in get_onto($viewValue,'NCBITAXON')" typeahead-loading="loading"
+                            class="form-control" >
+<button type="btn" 
+    class="btn btn-success btn-large"
+    ng-dialog="views/selectonto.html"
+    ng-dialog-class="ngdialog-theme-default"
+    ng-dialog-close-previous>
+    Open modal text
+</button>
+
 
 
 
@@ -184,6 +193,26 @@ $scope.toto=[0:{'name':'1','prefLabel':'toto'},
   <div id="list" class="tab-pane fade in active">
 
   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- <div id="example1" class="hot handsontable htRowHeaders htColumnHeaders" style=" overflow: hidden;" data-originalstyle="height: 500px; overflow: hidden; width: 500px;"></div> -->
   <!-- <div id="table"></div> -->
