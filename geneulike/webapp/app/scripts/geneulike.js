@@ -2215,10 +2215,9 @@ app.controller('createCtrl',
         var container = document.getElementById('table');
         var hot = new Handsontable(container, {
             data: data,
-            width: 584,
-            height: 320,
-            colWidths: 47,
-            rowHeights: 23,
+            width: 1000,
+            height: 1000,
+
             rowHeaders: true,
             colHeaders: true
         });
