@@ -18,7 +18,8 @@ var app = angular.module('geneulike', [
     'ui.tree',
     'uuid',
     'ngTable',
-    'angucomplete-alt']).
+    'angucomplete-alt',
+    ]).
 
 config(['$routeProvider','$logProvider',
     function ($routeProvider) {
@@ -2186,182 +2187,793 @@ app.controller('compareCtrl',
 });
 
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User,Upload,ngDialog) {
+    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User,Upload,ngDialog, $timeout) {
+        $scope.auth_user = Auth.getUser();
+              // $scope.$on('$viewContentLoaded', function() {
+        //     $timeout(function(){
+        //         var example = document.getElementById('project_table'),
+        //         hot1;
+  
+        //         hot1 = new Handsontable(example,{
+        //             data: Handsontable.helper.createSpreadsheetData(500, 35),
+        //             width: 1100,
+        //             height: 400,
+        //             colWidths: 47,
+        //             rowHeights: 23,
+        //             rowHeaders: true,
+        //             colHeaders: true,
+        //             manualColumnResize: true,
+        //         });
+        //     });
+        // });
 
-        $scope.get_onto = function(val,database) {
-        //console.log(database);
-        return Dataset.ontologies({},{'database':database,'search':val}).$promise.then(function(data){
-            //console.log(data);
-            return data.map(function(item){
-                var search_result = [];
-                Object.keys(item).map(function(key, index) {
-                    search_result.push(item[key]);
-                    //console.log(item[key], 'toto');
+        // function createArray(row,col) {
+        //     var arr = new Array();
+            
+        //     for (var i= 0; i < row; i++){
+        //         arr.push(new Array(col));
+        //     };
+        //     return arr;
+            
+        // };
+
+// var cellChanges = [];
+
+// $(document).ready(function () {
+
+
+//     $timeout(function(){$("#editOrders").handsontable({
+//         data: Handsontable.helper.createSpreadsheetData(1, 3),
+//         width: 1100,
+//         height: 400,
+//         colWidths: 47,
+//         rowHeights: 23,
+//         rowHeaders: true,
+//         colHeaders: true,
+//         manualColumnResize: true,
+//         autoInsertRow: false,
+
+//         colHeaders: true,
+//         afterChange: function (changes, source) {
+//             if (!changes) {
+//                 return;
+//             }
+//             $.each(changes, function (index, element) {
+//                 var change = element;
+//                 var rowIndex = change[0];
+//                 var columnIndex = change[1];
+
+//                 var oldValue = change[2];
+//                 var newValue = change[3];
+
+//                 var cellChange = {
+//                     'rowIndex': rowIndex,
+//                     'columnIndex': columnIndex
+//                 };
+
+//                 if(oldValue != newValue){
+//                     cellChanges.push(cellChange);
+//                 }
+//             });
+//         },
+//         afterRender: function () {
+//             var instance = $('#editOrders').handsontable('getInstance');
+//             $.each(cellChanges, function (index, element) {
+//                 var cellChange = element;
+//                 var rowIndex = cellChange['rowIndex'];
+//                 var columnIndex = cellChange['columnIndex'];
+//                 var cell = instance.getCell(rowIndex, columnIndex);
+//                 var foreColor = '#000';
+//                 var backgroundColor = '#ff00dd';
+//                 cell.style.color = foreColor;
+//                 cell.style.background = backgroundColor;
+//             });
+//         },
+//         columns: [{
+//             //LINE
+//             data: 0
+//         }, {
+//             //LINE
+//             data: 1
+//         }, {
+//             //LINE
+//             data: 2
+//         },
+
+//         ]
+//     });
+// });
+
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        var cellChanges = [];
+        var cellChange=[];
+        function table(name_table){
+            $scope.$on('$viewContentLoaded', function() {
+            $timeout(function(){
+                //console.log(data);
+                var table = document.getElementById(name_table), option_table;
+                var newdata = Handsontable.helper.createSpreadsheetData(9, 100);
+                cellChanges = newdata;
+                option_table = new Handsontable(table,{
+                    
+                    data: newdata,//Handsontable.helper.createSpreadsheetData(10, 10),
+                    width: 1100,
+                    height: 250,
+                    maxRows:9,
+                    maxCols:100,
+                    rowHeaderWidth: [325],
+                    //columnHeaderHeight:
+                    autoColumnSize: true,
+                    autoColumnSize: {syncLimit: '100%'},
+                    rowHeaders: [   "Project ID(s)",
+                                    "Parent project ID(s)",
+                                    "Contributors (comma or semicolon separated)",
+                                    "Title",
+                                    "Description",
+                                    "Project’s controlled vocabularies ",
+                                    "Crosslink(s) (comma or semicolon separated)",
+                                    "Additional Information",
+                                    "PubMedID(s)  (comma or semicolon separated)"
+                                ],//true,
+                    colHeaders: ["GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],//true,
+                    manualColumnResize: true,
+                    autoInsertRow: false,
+                    allowEmpty: true,
+                    afterChange: function (changes, source) {
+                        if (!changes) {
+                            return;
+                        }
+                        $.each(changes, function (index, element) {
+                            var change = element;
+                            var rowIndex = change[0];
+                            var columnIndex = change[1];
+                            var cellChange = {
+                                'rowIndex': rowIndex,
+                                'columnIndex': columnIndex
+                            };
+                            // console.log('indexrow',rowIndex);
+                            // console.log('indexrcol',columnIndex);
+                            cellChanges[rowIndex][columnIndex]=element[3]
+                            //cellChange.push(element[3]);
+                            //cellChanges.push(element);
+                            //console.log('element',element);
+                            //console.log('elementchangevalue',element[3]);
+                        });
+
+                        //console.log('elementchange',changes);
+                        console.log('allelementchanger',cellChanges);
+                     },
+
+                    // afterRender: function () {
+                    //     //var instance = this.handsontable('getInstance');
+                    //     $.each(cellChanges, function (index, element) {
+                    //         var cellChange = element;
+                    //         var rowIndex = cellChange['rowIndex'];
+                    //         var columnIndex = cellChange['columnIndex'];
+                    //         //var cell = instance.getCell(rowIndex, columnIndex);
+                    //         var foreColor = '#000';
+                    //         var backgroundColor = '#ff00dd';
+                    //         //cell.style.color = foreColor;
+                    //         //cell.style.background = backgroundColor;
+                    //     });
+                    // },
+
                 });
-                return console.log(JSON.stringify(search_result));
-                return search_result
-                //     console.log(nitem);
-                //     return nitem
-                // });
-                // item = Object.values(item)
-                // console.log(item)
-                // return item;
-           });
-         });
-       };
-        var project_table = document.getElementById('project_table'), project_option;
-        var project_data =[
-
-            ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
-            // ["", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
-            ["Parent project ID(s)", "", "", "", "", "", " aa", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], 
-            // ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2", "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2", "Y2", "Z2"], 
-            ["Contributors (comma or semicolon separated)", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3", "M3", "N3", "O3", "P3", "Q3", "R3", "S3", "T3", "U3", "V3", "W3", "X3"], 
-            ["Title", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4", "J4", "K4", "L4", "M4", "N4", "O4", "P4", "Q4", "R4", "S4", "T4", "U4", "V4", "W4", "X4", "Y4", "Z4"], 
-            ["Description", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "I5", "J5", "K5", "L5", "M5", "N5", "O5", "P5", "Q5", "R5", "S5", "T5", "U5", "V5", "W5", "X5", "Y5", "Z5"], 
-            ["Project’s controlled vocabularies", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6", "K6", "L6", "M6", "N6", "O6", "P6", "Q6", "R6", "S6", "T6", "U6", "V6", "W6", "X6", "Y6", "Z6"], 
-            ["Crosslink(s) (comma or semicolon separated)", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "K7", "L7", "M7", "N7", "O7", "P7", "Q7", "R7", "S7", "T7", "U7", "V7", "W7", "X7", "Y7", "Z7"], 
-            ["Additional Information", "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "K8", "L8", "M8", "N8", "O8", "P8", "Q8", "R8", "S8", "T8", "U8", "V8", "W8", "X8", "Y8", "Z8"], 
-            ["PubMedID(s) (comma or semicolon separated", "B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9", "J9", "K9", "L9", "M9", "N9", "O9", "P9", "Q9", "R9", "S9", "T9", "U9", "V9", "W9", "X9", "Y9", "Z9"], 
-            ["File Name"] 
-        ];
-
-        function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
-            Handsontable.renderers.TextRenderer.apply(this, arguments);
-            td.style.fontWeight = 'bold';
-            td.style.color = 'green';
-            td.style.background = '#CEC';
-        };            // ["", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
-
-        function firstColRenderer(instance, td, row, col, prop, value, cellProperties) {
-            Handsontable.renderers.TextRenderer.apply(this, arguments);
-            td.style.fontWeight = 'bold';
-            td.style.color = 'red';
-            td.style.background = '#eecccc';
+            });
+        });
         };
-        project_option = new Handsontable(project_table,{
-            data: project_data,
-            width: 1100,
-            height: 400,
-            // colWidths: 47,
-            // rowHeights: 23,
-            rowHeaders: false,
-            colHeaders: false,
-            allowEmpty: true,
-            manualColumnMove: false,
-            manualRowMove: false,
-            //fixedColumnsLeft: 1,
+        table("project_table");
+        // var pp = table("project_table",false);
+        // // var strat = table("strategy_table",false);
 
-            autoColumnSize: true,
-            autoColumnSize: {syncLimit: '100%'},
 
-            //colWidths: [650]
+        // $scope.showStrategies = function(){
+        //     pp= table("project_table",false);
+        //     // strat = table("strategy_table",true);
+        // };
+
+        // $scope.showStrategies =     $scope.$on('$viewContentLoaded', function() {
+        //     $timeout(function(){
+        //         var example = document.getElementById('strategy_table'),
+        //         hot1;
+  
+        //         hot1 = new Handsontable(example,{
+        //             data: Handsontable.helper.createSpreadsheetData(5, 5),
+        //             width: 1100,
+        //             height: 400,
+        //             colWidths: 47,
+        //             rowHeights: 23,
+        //             rowHeaders: true,
+        //             colHeaders: true,
+        //             manualColumnResize: true,
+        //             autoInsertRow: false,
+        //         });
+        //     });
+        // });
+        // };
+
+});
+
+// $scope.data = [
+//         {name: 'b', age:10, 1 : 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:10, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'b', age:11, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//         {name: 'c', age:12, 1 : '', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
+//     ]
+//     $("div#table").handsontable({
+//         data: $scope.data,
+//         colWidths: 47,
+//         rowHeights: 23,
+//         columns: [{data: 'name'}, {data: 'age'}, {data: '1'}, {data: '2'}, {data: '3'}, {data: '4'}, {data: '5'}, {data: '6'}, {data: '7'}, {data: '8'}] ,
+//         colHeaders: true,
+//         rowHeaders: true,
+//         manualColumnResize: true,
+//         renderAllRows: false,
+// //             manualRowResize: true,               
+//     })    
+
+
+// document.addEventListener("DOMContentLoaded", function(){
+//     var example = document.getElementById('demo'),
+            
+//             maxed = false,
+//             resizeTimeout,
+//             availableWidth,
+//             availableHeight,
+//             hot1;
+
+//         hot1 = new Handsontable(example,{
+//             data: Handsontable.helper.createSpreadsheetData(250, 15),
+//             colWidths: 47,
+//             rowHeights: 23,
+//             rowHeaders: true,
+//             colHeaders: true,
+//             renderAllRows: false,
+//              manualColumnResize: true,
+//             manualRowResize: true,
+//         });
+
+// },false);
+
+// var x = document.getElementById("myBtn")
+// if(x){
+// var y = x.addEventListener("DOMContentLoaded", function(){
+//     var example = document.getElementById('demo'),
+            
+//             maxed = false,
+//             resizeTimeout,
+//             availableWidth,
+//             availableHeight,
+//             hot1;
+
+//         hot1 = new Handsontable(example,{
+//             data: Handsontable.helper.createSpreadsheetData(250, 15),
+//             colWidths: 47,
+//             rowHeights: 23,
+//             rowHeaders: true,
+//             colHeaders: true,
+//             renderAllRows: false,
+//              manualColumnResize: true,
+//             manualRowResize: true,
+//         });
+
+// },false);
+
+// }
+
+
+//         var x = document.getElementById("myBtn")
+//         var y = x.addEventListener("click", function(){
+//     var example = document.getElementById('demo'),
+            
+//             maxed = false,
+//             resizeTimeout,
+//             availableWidth,
+//             availableHeight,
+//             hot1;
+
+//         hot1 = new Handsontable(example,{
+//             data: Handsontable.helper.createSpreadsheetData(250, 15),
+//             colWidths: 47,
+//             rowHeights: 23,
+//             rowHeaders: true,
+//             colHeaders: true,
+//             renderAllRows: false,
+//              manualColumnResize: true,
+//             manualRowResize: true,
+//         });
+
+// },false);
+
+//          document.getElementById("myBtn").addEventListener("click", function(){
+//     var example = document.getElementById('demo'),
+            
+//             maxed = false,
+//             resizeTimeout,
+//             availableWidth,
+//             availableHeight,
+//             hot1;
+
+//         hot1 = new Handsontable(example,{
+//             data: Handsontable.helper.createSpreadsheetData(250, 15),
+//             colWidths: 47,
+//             rowHeights: 23,
+//             rowHeaders: true,
+//             colHeaders: true,
+//             renderAllRows: false,
+//              manualColumnResize: true,
+//             manualRowResize: true,
+//         });
+
+// },false);
+
+
+//          document.getElementById("myBtn1").addEventListener("click", function(){
+//     var example = document.getElementById('demo1'),
+            
+//             maxed = false,
+//             resizeTimeout,
+//             availableWidth,
+//             availableHeight,
+//             hot1;
+
+//         hot1 = new Handsontable(example,{
+//             data: Handsontable.helper.createSpreadsheetData(50, 4),
+//             colWidths: 47,
+//             rowHeights: 23,
+//             rowHeaders: true,
+//             colHeaders: true,
+//             renderAllRows: false,
+//             manualColumnResize: true,
+//             manualRowResize: true,
+//         });
+
+//         }, false);
+
+
+
+// app.directive('toto', function() {
+//         return {
+//             restrict: 'A',
+//             link: function(scope, element, attrs) {
+//                 var data = scope.data
+//                 $(element).handsontable({
+//                     data: data,
+//                     colHeaders: ["Name", "Age"],
+//                     rowHeaders: true,
+//                     renderAllRows: false,
+//                 });
+//             }
+//         };
+//     })
+
+    //     $scope.showStrategies = (function(){ document.getElementById("str").addEventListener("click", function(){
+    // var example = document.getElementById('_str'),
+            
+    //         maxed = false,
+    //         resizeTimeout,
+    //         availableWidth,
+    //         availableHeight,
+    //         hot1;
+
+    //     hot1 = new Handsontable(example,{
+    //         data: Handsontable.helper.createSpreadsheetData(50, 4),
+    //         colWidths: 47,
+    //         rowHeights: 23,
+    //         rowHeaders: true,
+    //         colHeaders: true,
+    //         renderAllRows: false,
+    //         manualColumnResize: true,
+    //         manualRowResize: true,
+    //     });
+
+    //     })})();
+        // var example = document.getElementById('example1').addEventListener("DOMContentLoaded", function() {
+        //     hot1 = new Handsontable(example,{
+        //     data: Handsontable.helper.createSpreadsheetData(250, 15),
+        //     colWidths: 47,
+        //     rowHeights: 23,
+        //     rowHeaders: true,
+        //     colHeaders: true,
+        //     renderAllRows: false
+        // });})
+            
+            // maxed = false,
+            // resizeTimeout,
+            // availableWidth,
+            // availableHeight,
+            // hot1;
+
+        // hot1 = new Handsontable(example,{
+        //     data: Handsontable.helper.createSpreadsheetData(250, 15),
+        //     colWidths: 47,
+        //     rowHeights: 23,
+        //     rowHeaders: true,
+        //     colHeaders: true,
+        //     renderAllRows: false
+        // });
+
+
+
+
+
+
+        // v
+
+        // $scope.data1 = [
+        // {name: 'b', age:10, un:'a' , deux:'a', trois:'a', quatre:'a', 5:'a', 6:'a', 7:'a', 8:'a', 9:'a', 10:'a', 11:'a', 12:'a', 13:'a', 14:'a', 15:'a'},
+        // {name: 'b', age:11, un:'' , deux:'', trois:'', quatre:'', 5:'', 6:'', 7:'', 8:'', 9:'', 10:'', 11:'', 12:'', 13:'', 14:'', 15:''},
+        // {name: 'c', age:12, un:'' , deux:'', trois:'', quatre:'', 5:'', 6:'', 7:'', 8:'', 9:'', 10:'', 11:'', 12:'', 13:'', 14:'', 15:''}
+        // ];
+        // $("div#table").handsontable({
+        //     data: $scope.data,
+        //     columns: [{data: 'name'}, {data: 'age'}]                
+        // });    
+
+// });
+
+
+
+// ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
+        //     // // ["", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
+        //     // ["Parent project ID(s)", "", "", "", "", "", " aa", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], 
+        //     // // ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2", "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2", "Y2", "Z2"], 
+        //     // ["Contributors (comma or semicolon separated)", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3", "M3", "N3", "O3", "P3", "Q3", "R3", "S3", "T3", "U3", "V3", "W3", "X3"], 
+        //     // ["Title", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4", "J4", "K4", "L4", "M4", "N4", "O4", "P4", "Q4", "R4", "S4", "T4", "U4", "V4", "W4", "X4", "Y4", "Z4"], 
+        //     // ["Description", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "I5", "J5", "K5", "L5", "M5", "N5", "O5", "P5", "Q5", "R5", "S5", "T5", "U5", "V5", "W5", "X5", "Y5", "Z5"], 
+        //     // ["Project’s controlled vocabularies", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6", "K6", "L6", "M6", "N6", "O6", "P6", "Q6", "R6", "S6", "T6", "U6", "V6", "W6", "X6", "Y6", "Z6"], 
+        //     // ["Crosslink(s) (comma or semicolon separated)", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "K7", "L7", "M7", "N7", "O7", "P7", "Q7", "R7", "S7", "T7", "U7", "V7", "W7", "X7", "Y7", "Z7"], 
+        //     // ["Additional Information", "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "K8", "L8", "M8", "N8", "O8", "P8", "Q8", "R8", "S8", "T8", "U8", "V8", "W8", "X8", "Y8", "Z8"], 
+        //     // ["PubMedID(s) (comma or semicolon separated", "B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9", "J9", "K9", "L9", "M9", "N9", "O9", "P9", "Q9", "R9", "S9", "T9", "U9", "V9", "W9", "X9", "Y9", "Z9"], 
+        //     // // ["File Name"] 
+// app.directive( 'elemReady', function( $parse ) {
+//    return {
+//        restrict: 'A',
+//        link: function( $scope, elem, attrs ) {    
+//           elem.ready(function(){
+//             $scope.$apply(function(){
+//                  $(element).handsontable({
+//                     data: data,
+//                      width: 500,
+//                      height: 400,
+//                     colHeaders : ["name","age","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]
+//                 })
+//             })
+//         })
+//         }
+//     }
+// });
+
+                // var func = $parse(attrs.elemReady);
+                // func($scope);
+            
+//http://jsfiddle.net/U57Fp/21/
+// app.directive('handsometable', function() {
+//         return {
+//             restrict: 'A',
+//             link: function(scope, element, attrs) {
+//                 var data = scope.data1
+        
+//                 $(element).handsontable({
+//                     data: data,
+                     
+//                     colHeaders : ["name","age","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],
+
+//                     //colHeaders: ["Project ID(s)", "Age","Tioto"],
+//                     // rowHeaders: true,
+//                     // manualColumnResize: true,
+//                     // manualRowResize: true,
+
+//                     allowEmpty: true,
             // manualColumnMove: true,
             // manualRowMove: true,
-            // rowHeaders: true,
-            // colHeaders: true
-            cells: function (row, col, prop) {
-                var cellProperties = {};
+        //     colHeaders : ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100"],
+        //     //rowHeaders : ["a",["b"]],
+        //     // ["Parent project ID(s)",
+        //     //               "Contributors (comma or semicolon separated)",
+        //     //               "Title",
+        //     //               "Description",
+        //     //               "Project’s controlled vocabularies",
+        //     //               "Crosslink(s) (comma or semicolon separated)",
+        //     //               "Additional Information",
+        //     //               "PubMedID(s) (comma or semicolon separated"],
+        //     //fixedColumnsLeft: 1,
 
-                if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
-                    cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
-                }
-                if (row === 0 && col !== 0) {
-                    cellProperties.renderer = firstRowRenderer; // uses function directly
-                }
-                if (col === 0) {
-                    cellProperties.readOnly = true; // uses function directly
-                }
-                if (col === 0 ) {
-                    cellProperties.renderer = firstColRenderer; // uses function directly
-                }
-                if(col === 0 && row === 0){
-                        cellProperties.renderer = firstColRenderer;
-                }
-                return cellProperties;
-            }
+        //     // autoColumnSize: true,
+        //     // autoColumnSize: {syncLimit: '100%'},
 
-        });
+        //     //colWidths: [650]
+        //     // manualColumnMove: true,
+        //     // manualRowMove: true,
+        //     // rowHeaders: true,
+        //     // colHeaders: true
+    //             });
+    //         }
+    //     };
+    // });
+
+
+
+
+
+
+
+
+
+
+
+
+// Handsontable.helper['createSpreadsheetData'](100, 12);
+//Save Onto ***********************************************************************************************************
+      //   $scope.onto_selected="";
+        
+      //   console.log($scope.onto_selected);
+      //   $scope.get_onto = function() {
+      //   ////console.log(database);
+      //   var database = $scope.onto_selected;
+
+      //   var val = document.getElementById('organism_vivo').value;
+      //   console.log(val);
+      //    Dataset.ontologies({},{'database':database,'search':val}).
+      //    $promise.then(function(data){
+      //       //console.log(data);
+      //        data.map(function(item){
+      //           $scope.search_result = [];
+      //           Object.keys(item).map(function(key, index) {
+      //               console.log(item[key]);
+      //               //console.log(Object.entries(item[key]));
+      //              $scope.search_result.push(item[key]);
+      //              //console.log($scope.search_result);
+      //           });
+      //           //     console.log(nitem);
+      //           //     return nitem
+      //           // });
+      //           // item = Object.values(item)
+      //           // console.log(item)
+      //           // return item;
+      //      });
+      //    });
+      //  };
+      //  $scope.selected_tissue = function(item, model,label){
+      //    var toto = item;
+      //    console.log(toto);
+      // };
+
+//End Onto***********************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+        
+
+        // var project_table = document.getElementById('project_table'), project_option;
+        // var project_data =[
+        //     ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
+        //     ["Parent project ID(s)","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["Contributors (comma or semicolon separated)","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+        //     ["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],
+
+        //     // ["Project ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
+        //     // // ["", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
+        //     // ["Parent project ID(s)", "", "", "", "", "", " aa", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], 
+        //     // // ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2", "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2", "Y2", "Z2"], 
+        //     // ["Contributors (comma or semicolon separated)", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3", "M3", "N3", "O3", "P3", "Q3", "R3", "S3", "T3", "U3", "V3", "W3", "X3"], 
+        //     // ["Title", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4", "J4", "K4", "L4", "M4", "N4", "O4", "P4", "Q4", "R4", "S4", "T4", "U4", "V4", "W4", "X4", "Y4", "Z4"], 
+        //     // ["Description", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "I5", "J5", "K5", "L5", "M5", "N5", "O5", "P5", "Q5", "R5", "S5", "T5", "U5", "V5", "W5", "X5", "Y5", "Z5"], 
+        //     // ["Project’s controlled vocabularies", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6", "K6", "L6", "M6", "N6", "O6", "P6", "Q6", "R6", "S6", "T6", "U6", "V6", "W6", "X6", "Y6", "Z6"], 
+        //     // ["Crosslink(s) (comma or semicolon separated)", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "K7", "L7", "M7", "N7", "O7", "P7", "Q7", "R7", "S7", "T7", "U7", "V7", "W7", "X7", "Y7", "Z7"], 
+        //     // ["Additional Information", "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "K8", "L8", "M8", "N8", "O8", "P8", "Q8", "R8", "S8", "T8", "U8", "V8", "W8", "X8", "Y8", "Z8"], 
+        //     // ["PubMedID(s) (comma or semicolon separated", "B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9", "J9", "K9", "L9", "M9", "N9", "O9", "P9", "Q9", "R9", "S9", "T9", "U9", "V9", "W9", "X9", "Y9", "Z9"], 
+        //     // // ["File Name"] 
+        // ];
+
+        // function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
+        //     Handsontable.renderers.TextRenderer.apply(this, arguments);
+        //     td.style.fontWeight = 'bold';
+        //     td.style.color = 'green';
+        //     td.style.background = '#CEC';
+        // };            // ["", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
+
+        // function firstColRenderer(instance, td, row, col, prop, value, cellProperties) {
+        //     Handsontable.renderers.TextRenderer.apply(this, arguments);
+        //     td.style.fontWeight = 'bold';
+        //     td.style.color = 'red';
+        //     td.style.background = '#eecccc';
+        // };
+        // project_option = new Handsontable(project_table,{
+        //     data: project_data,
+        //     width: 1100,
+        //     height: 400,
+        //     // colWidths: 47,
+        //     // rowHeights: 23,
+        //     manualColumnResize: true,
+        //     manualRowResize: true,
+        //     // rowHeaderWidth:500,
+        //     rowHeaders: true,
+        //     // colHeaders:true,
+        //     maxRows:9,
+        //     maxCols:101,
+        //     viewportColumnRenderingOffsetNumber:10,
+        //     // allowEmpty: true,
+        //     manualColumnMove: true,
+        //     manualRowMove: true,
+        //     colHeaders : ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100"],
+        //     //rowHeaders : ["a",["b"]],
+        //     // ["Parent project ID(s)",
+        //     //               "Contributors (comma or semicolon separated)",
+        //     //               "Title",
+        //     //               "Description",
+        //     //               "Project’s controlled vocabularies",
+        //     //               "Crosslink(s) (comma or semicolon separated)",
+        //     //               "Additional Information",
+        //     //               "PubMedID(s) (comma or semicolon separated"],
+        //     //fixedColumnsLeft: 1,
+
+        //     // autoColumnSize: true,
+        //     // autoColumnSize: {syncLimit: '100%'},
+
+        //     //colWidths: [650]
+        //     // manualColumnMove: true,
+        //     // manualRowMove: true,
+        //     // rowHeaders: true,
+        //     // colHeaders: true
+        //     // cells: function (row, col, prop) {
+        //     //     var cellProperties = {};
+
+        //     //     if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
+        //     //         var i = 0;
+        //     //         //cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
+        //     //     }
+        //     //     if (row === 0 && col !== 0) {
+        //     //         cellProperties.renderer = firstRowRenderer; // uses function directly
+        //     //     }
+        //     //     if (col === 0) {
+        //     //         var z = 0;
+        //     //         //cellProperties.readOnly = true; // uses function directly
+        //     //     }
+        //     //     if (col === 0 ) {
+        //     //         cellProperties.renderer = firstColRenderer; // uses function directly
+        //     //     }
+        //     //     if(col === 0 && row === 0){
+        //     //             cellProperties.renderer = firstColRenderer;
+        //     //     }
+        //     //     return cellProperties;
+        //     // }
+
+        // });
         
 
 
-        $scope.showStrategies = function(){
-            console.log("OK");
-            var strategy_table = document.getElementById('strategy_table'), strategy_option;
-            var strategy_data =[
+        // $scope.showStrategies = function(){
+        //     console.log("OK");
+        //     var strategy_table = document.getElementById('strategy_table'), strategy_option;
+        //     var strategy_data =[
 
-                        ["Strategy ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
-                        ["Associated project ID(s)", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
-                        ["Input list ID(s) (comma or semicolon separated)", "", "", "", "", "", " aa", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], 
-                        // ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2", "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2", "Y2", "Z2"], 
-                        ["Output list ID(s) (comma or semicolon separated)", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3", "M3", "N3", "O3", "P3", "Q3", "R3", "S3", "T3", "U3", "V3", "W3", "X3"], 
-                        ["Title", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4", "J4", "K4", "L4", "M4", "N4", "O4", "P4", "Q4", "R4", "S4", "T4", "U4", "V4", "W4", "X4", "Y4", "Z4"], 
-                        ["Material and methods", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "I5", "J5", "K5", "L5", "M5", "N5", "O5", "P5", "Q5", "R5", "S5", "T5", "U5", "V5", "W5", "X5", "Y5", "Z5"], 
-                        ["Strategy’s controlled vocabularies", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6", "K6", "L6", "M6", "N6", "O6", "P6", "Q6", "R6", "S6", "T6", "U6", "V6", "W6", "X6", "Y6", "Z6"], 
-                        ["Additional Information", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "K7", "L7", "M7", "N7", "O7", "P7", "Q7", "R7", "S7", "T7", "U7", "V7", "W7", "X7", "Y7", "Z7"], 
-                        // ["Additional Information", "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "K8", "L8", "M8", "N8", "O8", "P8", "Q8", "R8", "S8", "T8", "U8", "V8", "W8", "X8", "Y8", "Z8"], 
-                        // ["PubMedID(s) (comma or semicolon separated", "B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9", "J9", "K9", "L9", "M9", "N9", "O9", "P9", "Q9", "R9", "S9", "T9", "U9", "V9", "W9", "X9", "Y9", "Z9"] 
+        //                 ["Strategy ID(s)","GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25"],
+        //                 ["Associated project ID(s)", "B1", "C1", "D1", "E1", "F1", "G1", "H1", "I1", "J1", "K1", "L1", "M1", "N1", "O1", "P1", "Q1", "R1", "S1", "T1", "U1", "V1", "W1", "X1", "Y1", "Z1"], 
+        //                 ["Input list ID(s) (comma or semicolon separated)", "", "", "", "", "", " aa", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""], 
+        //                 // ["A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2", "I2", "J2", "K2", "L2", "M2", "N2", "O2", "P2", "Q2", "R2", "S2", "T2", "U2", "V2", "W2", "X2", "Y2", "Z2"], 
+        //                 ["Output list ID(s) (comma or semicolon separated)", "B3", "C3", "D3", "E3", "F3", "G3", "H3", "I3", "J3", "K3", "L3", "M3", "N3", "O3", "P3", "Q3", "R3", "S3", "T3", "U3", "V3", "W3", "X3"], 
+        //                 ["Title", "B4", "C4", "D4", "E4", "F4", "G4", "H4", "I4", "J4", "K4", "L4", "M4", "N4", "O4", "P4", "Q4", "R4", "S4", "T4", "U4", "V4", "W4", "X4", "Y4", "Z4"], 
+        //                 ["Material and methods", "B5", "C5", "D5", "E5", "F5", "G5", "H5", "I5", "J5", "K5", "L5", "M5", "N5", "O5", "P5", "Q5", "R5", "S5", "T5", "U5", "V5", "W5", "X5", "Y5", "Z5"], 
+        //                 ["Strategy’s controlled vocabularies", "B6", "C6", "D6", "E6", "F6", "G6", "H6", "I6", "J6", "K6", "L6", "M6", "N6", "O6", "P6", "Q6", "R6", "S6", "T6", "U6", "V6", "W6", "X6", "Y6", "Z6"], 
+        //                 ["Additional Information", "B7", "C7", "D7", "E7", "F7", "G7", "H7", "I7", "J7", "K7", "L7", "M7", "N7", "O7", "P7", "Q7", "R7", "S7", "T7", "U7", "V7", "W7", "X7", "Y7", "Z7"], 
+        //                 // ["Additional Information", "B8", "C8", "D8", "E8", "F8", "G8", "H8", "I8", "J8", "K8", "L8", "M8", "N8", "O8", "P8", "Q8", "R8", "S8", "T8", "U8", "V8", "W8", "X8", "Y8", "Z8"], 
+        //                 // ["PubMedID(s) (comma or semicolon separated", "B9", "C9", "D9", "E9", "F9", "G9", "H9", "I9", "J9", "K9", "L9", "M9", "N9", "O9", "P9", "Q9", "R9", "S9", "T9", "U9", "V9", "W9", "X9", "Y9", "Z9"] 
             
-                    ];
+        //             ];
 
 
-            function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
-                Handsontable.renderers.TextRenderer.apply(this, arguments);
-                td.style.fontWeight = 'bold';
-                td.style.color = 'orange';
-                td.style.background = '#CEC';
-            };
-            function firstColRenderer(instance, td, row, col, prop, value, cellProperties) {
-                Handsontable.renderers.TextRenderer.apply(this, arguments);
-                td.style.fontWeight = 'bold';
-                td.style.color = 'green';
-                td.style.background = '#eecccc';
-            };
-            strategy_option = new Handsontable(strategy_table,{
-                data: strategy_data,
-                width: 1100,
-                height: 400,
-                // colWidths: 47,
-                // rowHeights: 23,
-                rowHeaders: false,
-                colHeaders: false,
-                allowEmpty: true,
-                manualColumnMove: false,
-                manualRowMove: false,
-                //fixedColumnsLeft: 0,
+        //     function _firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
+        //         Handsontable.renderers.TextRenderer.apply(this, arguments);
+        //         td.style.fontWeight = 'bold';
+        //         td.style.color = 'orange';
+        //         td.style.background = '#CEC';
+        //     };
+        //     function _firstColRenderer(instance, td, row, col, prop, value, cellProperties) {
+        //         Handsontable.renderers.TextRenderer.apply(this, arguments);
+        //         td.style.fontWeight = 'bold';
+        //         td.style.color = 'green';
+        //         td.style.background = '#eecccc';
+        //     };
+        //     strategy_option = new Handsontable(strategy_table,{
+        //         data: strategy_data,
+        //         width: 1100,
+        //         height: 400,
+        //         // colWidths: 47,
+        //         // rowHeights: 23,
+        //         rowHeaders: false,
+        //         colHeaders: false,
+        //         allowEmpty: true,
+        //         manualColumnMove: true,
+        //         manualRowMove: false,
+        //         //fixedColumnsLeft: 1,
 
-                autoColumnSize: true,
-                autoColumnSize: {syncLimit: '100%'},
+        //          //autoColumnSize: true,
+        //         // autoColumnSize: {syncLimit: '100%'},
 
-                //colWidths: [650]
-                // manualColumnMove: true,
-                // manualRowMove: true,
-                // rowHeaders: true,
-                // colHeaders: true
-                cells: function (row, col, prop) {
-                    var cellProperties = {};
+        //         //colWidths: [650]
+        //         // manualColumnMove: true,
+        //         // manualRowMove: true,
+        //         // rowHeaders: true,
+        //         // colHeaders: true
+        //         cells: function (row, col, prop) {
+        //             var cellProperties = {};
 
-                    if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
-                        cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
-                    }
-                    if (row === 0 && col !== 0) {
-                        cellProperties.renderer = firstRowRenderer; // uses function directly
-                    }
-                    if (col === 0) {
-                        cellProperties.readOnly = true; // uses function directly
-                    }
-                    if (col === 0 && row !== 0) {
-                        cellProperties.renderer = firstColRenderer; // uses function directly
-                    }
+        //             if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
+        //             cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
+        //             }
+        //             if (row === 0 && col !== 0) {
+        //                 cellProperties.renderer = _firstRowRenderer; // uses function directly
+        //             }
+        //             if (col === 0) {
+        //                 cellProperties.readOnly = true; // uses function directly
+        //             }
+        //             if (col === 0 ) {
+        //                 cellProperties.renderer = _firstColRenderer; // uses function directly
+        //             }
+        //             if(col === 0 && row === 0){
+        //                 cellProperties.renderer = _firstColRenderer;
+        //             }
 
-                    return cellProperties;
-                }
+        //                 return cellProperties;
+        //             }
 
-            });
+        //     });
             
 
 
-        };
+        // };
 
 
 
@@ -2594,74 +3206,96 @@ app.controller('createCtrl',
 //             console.log(resultInfo);    
 //       };
 // });
-        $scope.user = null;
-
-        User.get({'uid': $routeParams['id']}).$promise.then(function(data){
-            $scope.user = data;
-        });
-        console.log("herer");
-        console.log($scope.user);
-      $scope.auth_user = Auth.getUser();
-
-      $scope.upExcel = function (obj){
-        console.log(obj);
-        ngDialog.open({ template: 'saving', className: 'ngdialog-theme-default'})
-        User.project_save({'uid': $routeParams['id'], 'file': obj}).$promise.then(function(data){
-                alert(data.msg);
-                ngDialog.close();
-        });
-      }
 
 
-      $scope.openDefault = function () {
-        ngDialog.open({
-          template: 'firstDialogId',
-          className: 'ngdialog-theme-default'
-        });
-      };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//SAVE******************************************************************************************************
+//         $scope.user = null;
+
+//         User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+//             $scope.user = data;
+//         });
+//         console.log("herer");
+//         console.log($scope.user);
+//       $scope.auth_user = Auth.getUser();
+
+//       $scope.upExcel = function (obj){
+//         console.log(obj);
+//         ngDialog.open({ template: 'saving', className: 'ngdialog-theme-default'})
+//         User.project_save({'uid': $routeParams['id'], 'file': obj}).$promise.then(function(data){
+//                 alert(data.msg);
+//                 ngDialog.close();
+//         });
+//       }
+
+
+//       $scope.openDefault = function () {
+//         ngDialog.open({
+//           template: 'firstDialogId',
+//           className: 'ngdialog-theme-default'
+//         });
+//       };
      
 
-      //INSERT FUNCTION UPLOAD EXCEL FILE
-      //use user id to upload en read excel file
-      $scope.signature_upload = function(excel_file) {
-            console.log("gere we are");
-            var resultInfo={'error':"",'critical':""};
-            Upload.upload({
-                url: '/upload/'+$scope.user.id+'/excelupload',
-                fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
-                file: excel_file
-            }).progress(function (evt) {
-                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                ngDialog.open({ template: 'checking', className: 'ngdialog-theme-default'})
-                console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-            }).success(function (data, status, headers, config) {
-                if(data.status == '0'){
-                  console.log('file ' + config.file.name + ' uploaded.');
-                  console.log('is' + data.error_idList);
-                  console.log(data);
-                  resultInfo['error_p'] = data.error_project;
-                  resultInfo['error_s'] = data.error_study;
-                  resultInfo['error_a'] = data.error_strategy;
-                  resultInfo['error_l'] = data.error_list;
-                  resultInfo['error_idList'] = data.error_idList;
-                  resultInfo['critical'] = data.critical;
-                  resultInfo['file'] = data.file;
-                  ngDialog.close();
-                  ngDialog.open({ template: 'firstDialogId', scope: $scope, className: 'ngdialog-theme-default',data: resultInfo})
-                }
-                if (data.status == '1'){
-                  alert(data.msg);
-                }
+//       //INSERT FUNCTION UPLOAD EXCEL FILE
+//       //use user id to upload en read excel file
+//       $scope.signature_upload = function(excel_file) {
+//             console.log("gere we are");
+//             var resultInfo={'error':"",'critical':""};
+//             Upload.upload({
+//                 url: '/upload/'+$scope.user.id+'/excelupload',
+//                 fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+//                 file: excel_file
+//             }).progress(function (evt) {
+//                 var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+//                 ngDialog.open({ template: 'checking', className: 'ngdialog-theme-default'})
+//                 console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+//             }).success(function (data, status, headers, config) {
+//                 if(data.status == '0'){
+//                   console.log('file ' + config.file.name + ' uploaded.');
+//                   console.log('is' + data.error_idList);
+//                   console.log(data);
+//                   resultInfo['error_p'] = data.error_project;
+//                   resultInfo['error_s'] = data.error_study;
+//                   resultInfo['error_a'] = data.error_strategy;
+//                   resultInfo['error_l'] = data.error_list;
+//                   resultInfo['error_idList'] = data.error_idList;
+//                   resultInfo['critical'] = data.critical;
+//                   resultInfo['file'] = data.file;
+//                   ngDialog.close();
+//                   ngDialog.open({ template: 'firstDialogId', scope: $scope, className: 'ngdialog-theme-default',data: resultInfo})
+//                 }
+//                 if (data.status == '1'){
+//                   alert(data.msg);
+//                 }
                 
                 
-            }).error(function (data, status, headers, config) {
-                ////console.log('error status: ' + status);
-            })
-            console.log(resultInfo);
+//             }).error(function (data, status, headers, config) {
+//                 ////console.log('error status: ' + status);
+//             })
+//             console.log(resultInfo);
             
-      };
+//       };
 
-});
+// });
+
+//END Save ******************************************************************************************************************
 
 
       //INSERT PREVALIDATION FILE VISUALISATION
