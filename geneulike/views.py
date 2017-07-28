@@ -1040,6 +1040,7 @@ def get_str(string):
 @view_config(route_name='excel_upload', renderer='json', request_method='POST')
 def excel_signature_upload(request):
     print "excel_signature_upload"
+
     session_user = is_authenticated(request)
     if session_user is None:
         return 'HTTPForbidden()'
@@ -1074,6 +1075,49 @@ def excel_signature_upload(request):
         logger.warning(upload_path)
         logger.warning(sys.exc_info())
         return {'msg':'An error occurred while uploading your file. If the error persists please contact TOXsIgN support ','status':'1'}
+
+
+
+    
+
+###Test###
+
+    #Read excel file
+    wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1251")
+
+    projects=[]
+    strategies=[]
+    lists=[] 
+    for row_number in range(0, wb.sheet_by_index(0).nrows):
+            projects.append(wb.sheet_by_index(0).row_values(row_number,start_colx=1, end_colx=101))
+
+    for row_number in range(0, wb.sheet_by_index(2).nrows):
+            strategies.append(wb.sheet_by_index(2).row_values(row_number,start_colx=1, end_colx=201))
+    print wb.sheet_by_index(1).nrows
+    for row_number in range(0, wb.sheet_by_index(1).nrows):
+            lists.append(wb.sheet_by_index(1).row_values(row_number,start_colx=1, end_colx=1001))
+    for i in lists:
+        print i[0]         
+    return{'projects':projects[1:], 'strategies':strategies[1:], 'lists':lists[1:]}
+
+
+
+
+    for line in wb.sheet_by_index(0).row_values(row_number, start_colx=0, end_colx=101):
+        for i in line:
+            print i
+    return
+
+    # add_project(wb.sheet_by_index(0)) 
+        
+    # add_study(wb.sheet_by_index(1))
+        
+    # add_strategy(wb.sheet_by_index(2))
+        
+    # add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
+###End#Test####
+
+
 
     #Create error list
     projects_errors = {'Critical':[],'Warning':[],'Info':[]}
@@ -2046,13 +2090,25 @@ def save_excel(request):
 
 
 
-    #Read excel file
-    wb = xlrd.open_workbook(input_file,encoding_override="cp1251")
+    # #Read excel file
+    # wb = xlrd.open_workbook(input_file,encoding_override="cp1251")
 
+    # projects=[]
+    # strategies=[]
+    # lists=[] 
 
+    # for line in wb.sheet_by_index(0).row_values(row_number, start_colx=0, end_colx=None):
+    #     for i in line:
+    #         print i
+    # return
 
-
-
+    # add_project(wb.sheet_by_index(0)) 
+        
+    # add_study(wb.sheet_by_index(1))
+        
+    # add_strategy(wb.sheet_by_index(2))
+        
+    # add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
 
 
     projects=[]

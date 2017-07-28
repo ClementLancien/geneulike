@@ -19,6 +19,7 @@ var app = angular.module('geneulike', [
     'uuid',
     'ngTable',
     'angucomplete-alt',
+    'ngHandsontable',
     ]).
 
 config(['$routeProvider','$logProvider',
@@ -2188,7 +2189,225 @@ app.controller('compareCtrl',
 
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User,Upload,ngDialog, $timeout) {
+        $scope.user = null;
+        $scope.hasData=false;
+
+
+
+
+
+        var projects=null;
+        var strategies=null;
+        var lists=null;
+
+        var project_rowHeaders=[//"Project ID(s)",
+                                "Parent project ID(s)",
+                                "Contributors (comma or semicolon separated)",
+                                "Title",
+                                "Description",
+                                "Project’s controlled vocabularies (please paste the text from the ontology blabla)",
+                                "Crosslink(s) (comma or semicolon separated)",
+                                "Additional Information",
+                                "PubMedID(s)  (comma or semicolon separated)"]
+                        
+        var strategies_rowHeaders=[ //"Strategy ID(s)",
+                                    "Associated project ID(s)",
+                                    "Input list ID(s) (comma or semicolon separated)",
+                                    "Output list ID(s) (comma or semicolon separated)",
+                                    "Title",
+                                    "Material and methods",
+                                    "Strategy’s controlled vocabularies (please paste the text from the ontology blabla)",
+                                    "Additional Information"]
+
+        var lists_rowHeaders=[  //"List ID(s)",
+                                "Title",
+                                "Description",
+                                "Results and interpretation",
+                                "List’s controlled vocabularies (please paste the text from the ontology blabla) gene meiotique",
+                                "Database(onglet)",
+                                "Additional Information",
+                                "Make it available for comparison",
+                                "FileName"]
+
+        var projects_colHeaders=["GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"];
+        var strategies_colHeaders=["GUS1", "GUS2", "GUS3", "GUS4", "GUS5", "GUS6", "GUS7", "GUS8", "GUS9", "GUS10", "GUS11", "GUS12", "GUS13", "GUS14", "GUS15", "GUS16", "GUS17", "GUS18", "GUS19", "GUS20", "GUS21", "GUS22", "GUS23", "GUS24", "GUS25", "GUS26", "GUS27", "GUS28", "GUS29", "GUS30", "GUS31", "GUS32", "GUS33", "GUS34", "GUS35", "GUS36", "GUS37", "GUS38", "GUS39", "GUS40", "GUS41", "GUS42", "GUS43", "GUS44", "GUS45", "GUS46", "GUS47", "GUS48", "GUS49", "GUS50", "GUS51", "GUS52", "GUS53", "GUS54", "GUS55", "GUS56", "GUS57", "GUS58", "GUS59", "GUS60", "GUS61", "GUS62", "GUS63", "GUS64", "GUS65", "GUS66", "GUS67", "GUS68", "GUS69", "GUS70", "GUS71", "GUS72", "GUS73", "GUS74", "GUS75", "GUS76", "GUS77", "GUS78", "GUS79", "GUS80", "GUS81", "GUS82", "GUS83", "GUS84", "GUS85", "GUS86", "GUS87", "GUS88", "GUS89", "GUS90", "GUS91", "GUS92", "GUS93", "GUS94", "GUS95", "GUS96", "GUS97", "GUS98", "GUS99", "GUS100", "GUS101", "GUS102", "GUS103", "GUS104", "GUS105", "GUS106", "GUS107", "GUS108", "GUS109", "GUS110", "GUS111", "GUS112", "GUS113", "GUS114", "GUS115", "GUS116", "GUS117", "GUS118", "GUS119", "GUS120", "GUS121", "GUS122", "GUS123", "GUS124", "GUS125", "GUS126", "GUS127", "GUS128", "GUS129", "GUS130", "GUS131", "GUS132", "GUS133", "GUS134", "GUS135", "GUS136", "GUS137", "GUS138", "GUS139", "GUS140", "GUS141", "GUS142", "GUS143", "GUS144", "GUS145", "GUS146", "GUS147", "GUS148", "GUS149", "GUS150", "GUS151", "GUS152", "GUS153", "GUS154", "GUS155", "GUS156", "GUS157", "GUS158", "GUS159", "GUS160", "GUS161", "GUS162", "GUS163", "GUS164", "GUS165", "GUS166", "GUS167", "GUS168", "GUS169", "GUS170", "GUS171", "GUS172", "GUS173", "GUS174", "GUS175", "GUS176", "GUS177", "GUS178", "GUS179", "GUS180", "GUS181", "GUS182", "GUS183", "GUS184", "GUS185", "GUS186", "GUS187", "GUS188", "GUS189", "GUS190", "GUS191", "GUS192", "GUS193", "GUS194", "GUS195", "GUS196", "GUS197", "GUS198", "GUS199", "GUS200"];
+        var lists_colHeaders=["GUL1", "GUL2", "GUL3", "GUL4", "GUL5", "GUL6", "GUL7", "GUL8", "GUL9", "GUL10", "GUL11", "GUL12", "GUL13", "GUL14", "GUL15", "GUL16", "GUL17", "GUL18", "GUL19", "GUL20", "GUL21", "GUL22", "GUL23", "GUL24", "GUL25", "GUL26", "GUL27", "GUL28", "GUL29", "GUL30", "GUL31", "GUL32", "GUL33", "GUL34", "GUL35", "GUL36", "GUL37", "GUL38", "GUL39", "GUL40", "GUL41", "GUL42", "GUL43", "GUL44", "GUL45", "GUL46", "GUL47", "GUL48", "GUL49", "GUL50", "GUL51", "GUL52", "GUL53", "GUL54", "GUL55", "GUL56", "GUL57", "GUL58", "GUL59", "GUL60", "GUL61", "GUL62", "GUL63", "GUL64", "GUL65", "GUL66", "GUL67", "GUL68", "GUL69", "GUL70", "GUL71", "GUL72", "GUL73", "GUL74", "GUL75", "GUL76", "GUL77", "GUL78", "GUL79", "GUL80", "GUL81", "GUL82", "GUL83", "GUL84", "GUL85", "GUL86", "GUL87", "GUL88", "GUL89", "GUL90", "GUL91", "GUL92", "GUL93", "GUL94", "GUL95", "GUL96", "GUL97", "GUL98", "GUL99", "GUL100", "GUL101", "GUL102", "GUL103", "GUL104", "GUL105", "GUL106", "GUL107", "GUL108", "GUL109", "GUL110", "GUL111", "GUL112", "GUL113", "GUL114", "GUL115", "GUL116", "GUL117", "GUL118", "GUL119", "GUL120", "GUL121", "GUL122", "GUL123", "GUL124", "GUL125", "GUL126", "GUL127", "GUL128", "GUL129", "GUL130", "GUL131", "GUL132", "GUL133", "GUL134", "GUL135", "GUL136", "GUL137", "GUL138", "GUL139", "GUL140", "GUL141", "GUL142", "GUL143", "GUL144", "GUL145", "GUL146", "GUL147", "GUL148", "GUL149", "GUL150", "GUL151", "GUL152", "GUL153", "GUL154", "GUL155", "GUL156", "GUL157", "GUL158", "GUL159", "GUL160", "GUL161", "GUL162", "GUL163", "GUL164", "GUL165", "GUL166", "GUL167", "GUL168", "GUL169", "GUL170", "GUL171", "GUL172", "GUL173", "GUL174", "GUL175", "GUL176", "GUL177", "GUL178", "GUL179", "GUL180", "GUL181", "GUL182", "GUL183", "GUL184", "GUL185", "GUL186", "GUL187", "GUL188", "GUL189", "GUL190", "GUL191", "GUL192", "GUL193", "GUL194", "GUL195", "GUL196", "GUL197", "GUL198", "GUL199", "GUL200", "GUL201", "GUL202", "GUL203", "GUL204", "GUL205", "GUL206", "GUL207", "GUL208", "GUL209", "GUL210", "GUL211", "GUL212", "GUL213", "GUL214", "GUL215", "GUL216", "GUL217", "GUL218", "GUL219", "GUL220", "GUL221", "GUL222", "GUL223", "GUL224", "GUL225", "GUL226", "GUL227", "GUL228", "GUL229", "GUL230", "GUL231", "GUL232", "GUL233", "GUL234", "GUL235", "GUL236", "GUL237", "GUL238", "GUL239", "GUL240", "GUL241", "GUL242", "GUL243", "GUL244", "GUL245", "GUL246", "GUL247", "GUL248", "GUL249", "GUL250", "GUL251", "GUL252", "GUL253", "GUL254", "GUL255", "GUL256", "GUL257", "GUL258", "GUL259", "GUL260", "GUL261", "GUL262", "GUL263", "GUL264", "GUL265", "GUL266", "GUL267", "GUL268", "GUL269", "GUL270", "GUL271", "GUL272", "GUL273", "GUL274", "GUL275", "GUL276", "GUL277", "GUL278", "GUL279", "GUL280", "GUL281", "GUL282", "GUL283", "GUL284", "GUL285", "GUL286", "GUL287", "GUL288", "GUL289", "GUL290", "GUL291", "GUL292", "GUL293", "GUL294", "GUL295", "GUL296", "GUL297", "GUL298", "GUL299", "GUL300", "GUL301", "GUL302", "GUL303", "GUL304", "GUL305", "GUL306", "GUL307", "GUL308", "GUL309", "GUL310", "GUL311", "GUL312", "GUL313", "GUL314", "GUL315", "GUL316", "GUL317", "GUL318", "GUL319", "GUL320", "GUL321", "GUL322", "GUL323", "GUL324", "GUL325", "GUL326", "GUL327", "GUL328", "GUL329", "GUL330", "GUL331", "GUL332", "GUL333", "GUL334", "GUL335", "GUL336", "GUL337", "GUL338", "GUL339", "GUL340", "GUL341", "GUL342", "GUL343", "GUL344", "GUL345", "GUL346", "GUL347", "GUL348", "GUL349", "GUL350", "GUL351", "GUL352", "GUL353", "GUL354", "GUL355", "GUL356", "GUL357", "GUL358", "GUL359", "GUL360", "GUL361", "GUL362", "GUL363", "GUL364", "GUL365", "GUL366", "GUL367", "GUL368", "GUL369", "GUL370", "GUL371", "GUL372", "GUL373", "GUL374", "GUL375", "GUL376", "GUL377", "GUL378", "GUL379", "GUL380", "GUL381", "GUL382", "GUL383", "GUL384", "GUL385", "GUL386", "GUL387", "GUL388", "GUL389", "GUL390", "GUL391", "GUL392", "GUL393", "GUL394", "GUL395", "GUL396", "GUL397", "GUL398", "GUL399", "GUL400", "GUL401", "GUL402", "GUL403", "GUL404", "GUL405", "GUL406", "GUL407", "GUL408", "GUL409", "GUL410", "GUL411", "GUL412", "GUL413", "GUL414", "GUL415", "GUL416", "GUL417", "GUL418", "GUL419", "GUL420", "GUL421", "GUL422", "GUL423", "GUL424", "GUL425", "GUL426", "GUL427", "GUL428", "GUL429", "GUL430", "GUL431", "GUL432", "GUL433", "GUL434", "GUL435", "GUL436", "GUL437", "GUL438", "GUL439", "GUL440", "GUL441", "GUL442", "GUL443", "GUL444", "GUL445", "GUL446", "GUL447", "GUL448", "GUL449", "GUL450", "GUL451", "GUL452", "GUL453", "GUL454", "GUL455", "GUL456", "GUL457", "GUL458", "GUL459", "GUL460", "GUL461", "GUL462", "GUL463", "GUL464", "GUL465", "GUL466", "GUL467", "GUL468", "GUL469", "GUL470", "GUL471", "GUL472", "GUL473", "GUL474", "GUL475", "GUL476", "GUL477", "GUL478", "GUL479", "GUL480", "GUL481", "GUL482", "GUL483", "GUL484", "GUL485", "GUL486", "GUL487", "GUL488", "GUL489", "GUL490", "GUL491", "GUL492", "GUL493", "GUL494", "GUL495", "GUL496", "GUL497", "GUL498", "GUL499", "GUL500", "GUL501", "GUL502", "GUL503", "GUL504", "GUL505", "GUL506", "GUL507", "GUL508", "GUL509", "GUL510", "GUL511", "GUL512", "GUL513", "GUL514", "GUL515", "GUL516", "GUL517", "GUL518", "GUL519", "GUL520", "GUL521", "GUL522", "GUL523", "GUL524", "GUL525", "GUL526", "GUL527", "GUL528", "GUL529", "GUL530", "GUL531", "GUL532", "GUL533", "GUL534", "GUL535", "GUL536", "GUL537", "GUL538", "GUL539", "GUL540", "GUL541", "GUL542", "GUL543", "GUL544", "GUL545", "GUL546", "GUL547", "GUL548", "GUL549", "GUL550", "GUL551", "GUL552", "GUL553", "GUL554", "GUL555", "GUL556", "GUL557", "GUL558", "GUL559", "GUL560", "GUL561", "GUL562", "GUL563", "GUL564", "GUL565", "GUL566", "GUL567", "GUL568", "GUL569", "GUL570", "GUL571", "GUL572", "GUL573", "GUL574", "GUL575", "GUL576", "GUL577", "GUL578", "GUL579", "GUL580", "GUL581", "GUL582", "GUL583", "GUL584", "GUL585", "GUL586", "GUL587", "GUL588", "GUL589", "GUL590", "GUL591", "GUL592", "GUL593", "GUL594", "GUL595", "GUL596", "GUL597", "GUL598", "GUL599", "GUL600", "GUL601", "GUL602", "GUL603", "GUL604", "GUL605", "GUL606", "GUL607", "GUL608", "GUL609", "GUL610", "GUL611", "GUL612", "GUL613", "GUL614", "GUL615", "GUL616", "GUL617", "GUL618", "GUL619", "GUL620", "GUL621", "GUL622", "GUL623", "GUL624", "GUL625", "GUL626", "GUL627", "GUL628", "GUL629", "GUL630", "GUL631", "GUL632", "GUL633", "GUL634", "GUL635", "GUL636", "GUL637", "GUL638", "GUL639", "GUL640", "GUL641", "GUL642", "GUL643", "GUL644", "GUL645", "GUL646", "GUL647", "GUL648", "GUL649", "GUL650", "GUL651", "GUL652", "GUL653", "GUL654", "GUL655", "GUL656", "GUL657", "GUL658", "GUL659", "GUL660", "GUL661", "GUL662", "GUL663", "GUL664", "GUL665", "GUL666", "GUL667", "GUL668", "GUL669", "GUL670", "GUL671", "GUL672", "GUL673", "GUL674", "GUL675", "GUL676", "GUL677", "GUL678", "GUL679", "GUL680", "GUL681", "GUL682", "GUL683", "GUL684", "GUL685", "GUL686", "GUL687", "GUL688", "GUL689", "GUL690", "GUL691", "GUL692", "GUL693", "GUL694", "GUL695", "GUL696", "GUL697", "GUL698", "GUL699", "GUL700", "GUL701", "GUL702", "GUL703", "GUL704", "GUL705", "GUL706", "GUL707", "GUL708", "GUL709", "GUL710", "GUL711", "GUL712", "GUL713", "GUL714", "GUL715", "GUL716", "GUL717", "GUL718", "GUL719", "GUL720", "GUL721", "GUL722", "GUL723", "GUL724", "GUL725", "GUL726", "GUL727", "GUL728", "GUL729", "GUL730", "GUL731", "GUL732", "GUL733", "GUL734", "GUL735", "GUL736", "GUL737", "GUL738", "GUL739", "GUL740", "GUL741", "GUL742", "GUL743", "GUL744", "GUL745", "GUL746", "GUL747", "GUL748", "GUL749", "GUL750", "GUL751", "GUL752", "GUL753", "GUL754", "GUL755", "GUL756", "GUL757", "GUL758", "GUL759", "GUL760", "GUL761", "GUL762", "GUL763", "GUL764", "GUL765", "GUL766", "GUL767", "GUL768", "GUL769", "GUL770", "GUL771", "GUL772", "GUL773", "GUL774", "GUL775", "GUL776", "GUL777", "GUL778", "GUL779", "GUL780", "GUL781", "GUL782", "GUL783", "GUL784", "GUL785", "GUL786", "GUL787", "GUL788", "GUL789", "GUL790", "GUL791", "GUL792", "GUL793", "GUL794", "GUL795", "GUL796", "GUL797", "GUL798", "GUL799", "GUL800", "GUL801", "GUL802", "GUL803", "GUL804", "GUL805", "GUL806", "GUL807", "GUL808", "GUL809", "GUL810", "GUL811", "GUL812", "GUL813", "GUL814", "GUL815", "GUL816", "GUL817", "GUL818", "GUL819", "GUL820", "GUL821", "GUL822", "GUL823", "GUL824", "GUL825", "GUL826", "GUL827", "GUL828", "GUL829", "GUL830", "GUL831", "GUL832", "GUL833", "GUL834", "GUL835", "GUL836", "GUL837", "GUL838", "GUL839", "GUL840", "GUL841", "GUL842", "GUL843", "GUL844", "GUL845", "GUL846", "GUL847", "GUL848", "GUL849", "GUL850", "GUL851", "GUL852", "GUL853", "GUL854", "GUL855", "GUL856", "GUL857", "GUL858", "GUL859", "GUL860", "GUL861", "GUL862", "GUL863", "GUL864", "GUL865", "GUL866", "GUL867", "GUL868", "GUL869", "GUL870", "GUL871", "GUL872", "GUL873", "GUL874", "GUL875", "GUL876", "GUL877", "GUL878", "GUL879", "GUL880", "GUL881", "GUL882", "GUL883", "GUL884", "GUL885", "GUL886", "GUL887", "GUL888", "GUL889", "GUL890", "GUL891", "GUL892", "GUL893", "GUL894", "GUL895", "GUL896", "GUL897", "GUL898", "GUL899", "GUL900", "GUL901", "GUL902", "GUL903", "GUL904", "GUL905", "GUL906", "GUL907", "GUL908", "GUL909", "GUL910", "GUL911", "GUL912", "GUL913", "GUL914", "GUL915", "GUL916", "GUL917", "GUL918", "GUL919", "GUL920", "GUL921", "GUL922", "GUL923", "GUL924", "GUL925", "GUL926", "GUL927", "GUL928", "GUL929", "GUL930", "GUL931", "GUL932", "GUL933", "GUL934", "GUL935", "GUL936", "GUL937", "GUL938", "GUL939", "GUL940", "GUL941", "GUL942", "GUL943", "GUL944", "GUL945", "GUL946", "GUL947", "GUL948", "GUL949", "GUL950", "GUL951", "GUL952", "GUL953", "GUL954", "GUL955", "GUL956", "GUL957", "GUL958", "GUL959", "GUL960", "GUL961", "GUL962", "GUL963", "GUL964", "GUL965", "GUL966", "GUL967", "GUL968", "GUL969", "GUL970", "GUL971", "GUL972", "GUL973", "GUL974", "GUL975", "GUL976", "GUL977", "GUL978", "GUL979", "GUL980", "GUL981", "GUL982", "GUL983", "GUL984", "GUL985", "GUL986", "GUL987", "GUL988", "GUL989", "GUL990", "GUL991", "GUL992", "GUL993", "GUL994", "GUL995", "GUL996", "GUL997", "GUL998", "GUL999", "GUL1000"];
+        User.get({'uid': $routeParams['id']}).$promise.then(function(data){
+            console.log("titi");
+            $scope.user = data;
+            //console.log(data);
+            //console.log(user);
+        });
+
+        console.log("toto");
+
         $scope.auth_user = Auth.getUser();
+
+        $scope.upExcel = function (obj){
+            User.project_save({'uid': $routeParams['id'], 'file': obj}).$promise.then(function(data){
+
+            });
+        }
+        
+
+        $scope.signature_upload = function(excel_file) {
+            console.log('here');
+            ////console.log(signature_file);
+            var resultInfo={'error':"",'critical':""};
+            Upload.upload({
+                url: '/upload/'+$scope.user.id+'/excelupload',
+                fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+                file: excel_file
+            }).progress(function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                ngDialog.open({ template: 'checking', className: 'ngdialog-theme-default'})
+                console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+            }).success(function (data, status, headers, config) {
+                console.log(data)
+                projects = data['projects'];
+                strategies = data['strategies'];
+                lists = data['lists'];
+                $scope.hasData=true;
+                console.log(lists);
+                table(projects,project_rowHeaders,projects_colHeaders);                
+            }).error(function (data, status, headers, config) {
+                ////console.log('error status: ' + status);
+            })
+            console.log(resultInfo);
+            
+         };
+
+
+        function emptyTable(){
+            $scope.$watch('$viewContentLoaded', function() {
+            $timeout( function(){
+                var table = document.getElementById('table'), option_table;
+                option_table = new Handsontable(table,{
+                    
+                    data: Handsontable.helper.createSpreadsheetData(10, 10),
+                    width: 0,
+                    height: 0,
+                    allowEmpty: true,
+
+                });
+            });
+        });
+        };
+        emptyTable()
+
+        //table($scope.data);
+        $scope.showProjects = function(){
+            table(projects,project_rowHeaders,projects_colHeaders);
+        }
+
+        $scope.showStrategies = function(){
+            table(strategies,strategies_rowHeaders,strategies_colHeaders);
+        }
+        $scope.showLists = function(){
+            table(lists,lists_rowHeaders,lists_colHeaders);
+        }
+        
+        var cellChanges = [];
+        var cellChange=[];
+
+        function table(data,rowHeaders,colHeaders){
+            $scope.$watch('$viewContentLoaded', function() {
+            $timeout( function(){
+                //console.log(data);
+                var table = document.getElementById('table'), option_table;
+                var newdata = Handsontable.helper.createSpreadsheetData(9, 100);
+                cellChanges = newdata;
+                option_table = new Handsontable(table,{
+                    
+                    data: data,//Handsontable.helper.createSpreadsheetData(10, 10),
+                    width: 1100,
+                    height: 260,
+                    rowHeaderWidth: [350],
+                    maxRows:rowHeaders.length,
+                    maxCols:colHeaders.length,
+                    
+                    //columnHeaderHeight:
+                    // autoRowSize: true,
+                    // autoRowSize: {syncLimit: '100%'},
+                    autoColumnSize: true,
+                    autoColumnSize: {syncLimit: '100%'},
+                    rowHeaders: rowHeaders,
+                    colHeaders:colHeaders,
+                    // rowHeaders: [   "Project ID(s)",
+                    //                 "Parent project ID(s)",
+                    //                 "Contributors (comma or semicolon separated)",
+                    //                 "Title",
+                    //                 "Description",
+                    //                 "Project’s controlled vocabularies ",
+                    //                 "Crosslink(s) (comma or semicolon separated)",
+                    //                 "Additional Information",
+                    //                 "PubMedID(s)  (comma or semicolon separated)"
+                    //             ],//true,
+                    // colHeaders: ["GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],//true,
+                    manualColumnResize: true,
+                    //manualRowResize: true,
+                    autoInsertRow: false,
+                    allowEmpty: true,
+                    afterChange: function (changes, source) {
+                        if (!changes) {
+                            return;
+                        }
+                        $.each(changes, function (index, element) {
+                            var change = element;
+                            var rowIndex = change[0];
+                            var columnIndex = change[1];
+                            var cellChange = {
+                                'rowIndex': rowIndex,
+                                'columnIndex': columnIndex
+                            };
+                            // console.log('indexrow',rowIndex);
+                            // console.log('indexrcol',columnIndex);
+                            //cellChanges[rowIndex][columnIndex]=element[3]
+                            //cellChange.push(element[3]);
+                            //cellChanges.push(element);
+                            //console.log('element',element);
+                            //console.log('elementchangevalue',element[3]);
+                        });
+
+                        //console.log('elementchange',changes);
+                        console.log('allelementchanger',cellChanges);
+                     },
+
+                    // afterRender: function () {
+                    //     //var instance = this.handsontable('getInstance');
+                    //     $.each(cellChanges, function (index, element) {
+                    //         var cellChange = element;
+                    //         var rowIndex = cellChange['rowIndex'];
+                    //         var columnIndex = cellChange['columnIndex'];
+                    //         //var cell = instance.getCell(rowIndex, columnIndex);
+                    //         var foreColor = '#000';
+                    //         var backgroundColor = '#ff00dd';
+                    //         //cell.style.color = foreColor;
+                    //         //cell.style.background = backgroundColor;
+                    //     });
+                    // },
+
+                });
+            });
+        });
+    };
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               // $scope.$on('$viewContentLoaded', function() {
         //     $timeout(function(){
         //         var example = document.getElementById('project_table'),
@@ -2290,6 +2509,23 @@ app.controller('createCtrl',
 
 
 
+// function Maincontroller(){
+//   this.rowHeaders = true;
+//   this.colHeaders = true;
+//   this.db = {
+//     items: [['a','b'],['1','2']]
+//   };
+//   // ..or as one object
+//   this.settings = {
+//     contextMenu: [
+//       'row_above', 'row_below', 'remove_row'
+//     ]
+//   };
+// }
+// newdata
+
+
+ 
 
 
 
@@ -2304,114 +2540,798 @@ app.controller('createCtrl',
 
 
 
-        var cellChanges = [];
-        var cellChange=[];
-        function table(name_table){
-            $scope.$on('$viewContentLoaded', function() {
-            $timeout(function(){
-                //console.log(data);
-                var table = document.getElementById(name_table), option_table;
-                var newdata = Handsontable.helper.createSpreadsheetData(9, 100);
-                cellChanges = newdata;
-                option_table = new Handsontable(table,{
-                    
-                    data: newdata,//Handsontable.helper.createSpreadsheetData(10, 10),
-                    width: 1100,
-                    height: 250,
-                    maxRows:9,
-                    maxCols:100,
-                    rowHeaderWidth: [325],
-                    //columnHeaderHeight:
-                    autoColumnSize: true,
-                    autoColumnSize: {syncLimit: '100%'},
-                    rowHeaders: [   "Project ID(s)",
-                                    "Parent project ID(s)",
-                                    "Contributors (comma or semicolon separated)",
-                                    "Title",
-                                    "Description",
-                                    "Project’s controlled vocabularies ",
-                                    "Crosslink(s) (comma or semicolon separated)",
-                                    "Additional Information",
-                                    "PubMedID(s)  (comma or semicolon separated)"
-                                ],//true,
-                    colHeaders: ["GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],//true,
-                    manualColumnResize: true,
-                    autoInsertRow: false,
-                    allowEmpty: true,
-                    afterChange: function (changes, source) {
-                        if (!changes) {
-                            return;
-                        }
-                        $.each(changes, function (index, element) {
-                            var change = element;
-                            var rowIndex = change[0];
-                            var columnIndex = change[1];
-                            var cellChange = {
-                                'rowIndex': rowIndex,
-                                'columnIndex': columnIndex
-                            };
-                            // console.log('indexrow',rowIndex);
-                            // console.log('indexrcol',columnIndex);
-                            cellChanges[rowIndex][columnIndex]=element[3]
-                            //cellChange.push(element[3]);
-                            //cellChanges.push(element);
-                            //console.log('element',element);
-                            //console.log('elementchangevalue',element[3]);
+
+
+
+
+
+
+
+
+
+
+
+
+    // $scope.sheet='project';
+    // $scope.data=['project'];
+
+    // $scope.showStrategies = function(){
+    //     console.log('here')
+    //     $scope.sheet='strategy';
+    //     $scope.data=[['strategy']];
+    //     console.log($scope.sheet);
+    // }
+    // $scope.showProjects = function(){
+    //     console.log('here')
+    //     $scope.sheet='project';
+    //     $scope.data=[['projec']];
+    //     console.log($scope.sheet);
+    // }
+    // $scope.other=[["tata"]];
+    // $scope.simple =[
+    //     {
+    //         test: "toto"
+    //         // test: "<a ng-click='doNgClick()'>Test</a>"
+    //     }
+    // ];
+    // $scope.other=[["tata"]];
+    // $scope.titi=[["test"]];
+    
+
+
+app.directive('project',function($compile) {
+//HELP : https://stackoverflow.com/questions/27908659/handsontable-in-an-angularjs-directive-render-an-anchor-that-has-an-ng-click
+
+    return {
+            // restrict: 'A',
+            restrict: 'A',
+            scope: {
+                data : '=',
+                sheet : '=',
+            },
+            //         function table(name_table){
+//             
+//             $timeout( function(){
+            link: function(scope, element, attrs) {
+                scope.$watch('sheet', function(newValue,oldValue) {
+
+                    if(newValue==oldValue){ // init first table (project by default)
+                        $(element).handsontable({
+                        data: scope.data,
+                        colHeaders: true,
+                        rowHeaders: true,
+                        renderAllRows: false,
+                        afterChange: function (changes, source) {
+                            if (!changes) {
+                                return;
+                            }
+                            $.each(changes, function (index, element) {
+                                var change = element;
+                                var rowIndex = change[0];
+                                var columnIndex = change[1];
+                                var cellChange = {
+                                    'rowIndex': rowIndex,
+                                    'columnIndex': columnIndex
+                                };
+
+                                scope.data[rowIndex][columnIndex]=element[3];
+                                // console.log(scope.titi);
+                                // console.log(element[3]);
+
+                            });
+
+                         },
                         });
+                    }
+                    else if(newValue!=oldValue){// when clicking we change value in the directive(table)
+                        if(newValue=='strategy'){
+                            console.log('hasFUCKIIIIINGChange');
+                            $(element).handsontable({
+                            data: scope.data,
+                            colHeaders: true,
+                            rowHeaders: true,
+                            renderAllRows: false,
+                            afterChange: function (changes, source) {
+                                if (!changes) {
+                                    return;
+                                }
+                                $.each(changes, function (index, element) {
+                                    var change = element;
+                                    var rowIndex = change[0];
+                                    var columnIndex = change[1];
+                                    var cellChange = {
+                                        'rowIndex': rowIndex,
+                                        'columnIndex': columnIndex
+                                    };
 
-                        //console.log('elementchange',changes);
-                        console.log('allelementchanger',cellChanges);
-                     },
+                                    scope.titi.push(element[3]);
+                                    // console.log(scope.titi);
+                                    // console.log(element[3]);
 
-                    // afterRender: function () {
-                    //     //var instance = this.handsontable('getInstance');
-                    //     $.each(cellChanges, function (index, element) {
-                    //         var cellChange = element;
-                    //         var rowIndex = cellChange['rowIndex'];
-                    //         var columnIndex = cellChange['columnIndex'];
-                    //         //var cell = instance.getCell(rowIndex, columnIndex);
-                    //         var foreColor = '#000';
-                    //         var backgroundColor = '#ff00dd';
-                    //         //cell.style.color = foreColor;
-                    //         //cell.style.background = backgroundColor;
-                    //     });
-                    // },
+                                });
 
-                });
-            });
-        });
+                             },
+                            });
+                        }
+                        else if(newValue=='project'){
+                            console.log('hasFUCKIIIIINGChange');
+                            $(element).handsontable({
+                            data: scope.data,
+                            colHeaders: true,
+                            rowHeaders: true,
+                            renderAllRows: false,
+                            afterChange: function (changes, source) {
+                                if (!changes) {
+                                    return;
+                                }
+                                $.each(changes, function (index, element) {
+                                    var change = element;
+                                    var rowIndex = change[0];
+                                    var columnIndex = change[1];
+                                    var cellChange = {
+                                        'rowIndex': rowIndex,
+                                        'columnIndex': columnIndex
+                                    };
+
+                                    scope.titi.push(element[3]);
+                                    // console.log(scope.titi);
+                                    // console.log(element[3]);
+
+                                });
+
+                             },
+                            });
+                        }
+                       
+                    }
+                    console.log('haschanged',scope.sheet)
+                    console.log('newValue',newValue);
+                    console.log('newValue',oldValue);
+
+
+                })
+                // $(element).handsontable({
+                //     data: scope.data,
+                //     colHeaders: ["Name", "Age"],
+                //     rowHeaders: true,
+                //     renderAllRows: false,
+                //     afterChange: function (changes, source) {
+                //         if (!changes) {
+                //             return;
+                //         }
+                //         $.each(changes, function (index, element) {
+                //             var change = element;
+                //             var rowIndex = change[0];
+                //             var columnIndex = change[1];
+                //             var cellChange = {
+                //                 'rowIndex': rowIndex,
+                //                 'columnIndex': columnIndex
+                //             };
+
+                //             scope.titi.push(element[3]);
+                //             console.log(scope.titi);
+                //             console.log(element[3]);
+
+                //         });
+
+                //      },
+                // });
+            }
         };
-        table("project_table");
-        // var pp = table("project_table",false);
-        // // var strat = table("strategy_table",false);
+    });
+
+// app.directive('project',function($compile) {
+//     return {
+//         restrict: 'E',
+//         scope: {
+//             data : '=',
+//             sheet : '=',
+//         } ,
+//         link: function($scope,scope, element, attrs) {
+//             $scope.$watch('sheet', function() {
+//                  if(newValue == 'project'){
+
+//                     console.log(scope.sheet);
+//                     $(element).handsontable({
+//                         data: data,
+//                         colHeaders: ["Name", "Age"],
+//                         rowHeaders: true,})
+//                 }
+//                 else if (newValue == 'strategy'){
+//                     console.log(scope.sheet);
+//                     $(element).handsontable({
+//                     data: data,
+//                     colHeaders: ["Name", "Age"],
+//                     rowHeaders: true,})
+//                 }
+                
+//             }, false);
+        
+//     };
+// };
+// });
+            
+                
 
 
-        // $scope.showStrategies = function(){
-        //     pp= table("project_table",false);
-        //     // strat = table("strategy_table",true);
-        // };
 
-        // $scope.showStrategies =     $scope.$on('$viewContentLoaded', function() {
-        //     $timeout(function(){
-        //         var example = document.getElementById('strategy_table'),
-        //         hot1;
+
+
+
+
+
+
+                    // var container = $(element);
+      
+            // var settings = {
+            //     data: scope.data,
+            //     colHeaders: true,
+            //     rowHeaders:true,
+            //     afterChange: function (changes, source) {
+            //                 if (!changes) {
+            //                     return;
+            //                 }
+            //                 $.each(changes, function (index, element) {
+            //                     var change = element;
+            //                     var rowIndex = change[0];
+            //                     var columnIndex = change[1];
+            //                     var cellChange = {
+            //                         'rowIndex': rowIndex,
+            //                         'columnIndex': columnIndex
+            //                     };
+
+            //                     console.log(element[3]);
+            //                 });
+
+            //                 console.log('allelementchanger',cellChanges);
+            //              },
+
+            // };
+            // var hot = new Handsontable( container[0], settings );
+            // hot.render();
+
+            //}
+
+
+                    // var container = $(element);
+              
+                    // var settings = {
+                    //     data: scope.data,
+                    //     colHeaders: true,
+                    //     rowHeaders:true,
+                    //     afterChange: function (changes, source) {
+                    //                 if (!changes) {
+                    //                     return;
+                    //                 }
+                    //                 $.each(changes, function (index, element) {
+                    //                     var change = element;
+                    //                     var rowIndex = change[0];
+                    //                     var columnIndex = change[1];
+                    //                     var cellChange = {
+                    //                         'rowIndex': rowIndex,
+                    //                         'columnIndex': columnIndex
+                    //                     };
+
+                    //                     console.log(element[3]);
+                    //                 });
+
+                    //                 console.log('allelementchanger',cellChanges);
+                    //              },
+
+                    // };
+                    // var hot = new Handsontable( container[0], settings );
+                    // hot.render();
+
+                    // }
+
+
+
+//     var directive = {};
+//     directive.restrict = 'A';
+//     directive.scope = {
+//         data : '=',
+//         sheet : '=',
+//     };
+//     directive.link = function(scope,element,attrs) {
+//         scope.$watch('data', function(newValue, oldValue) {
+//             if(newValue == 'project'){
+//                 console.log(scope.sheet);
+//             var container = $(element);
+      
+//             var settings = {
+//                 data: scope.data,
+//                 colHeaders: true,
+//                 rowHeaders:true,
+//                 afterChange: function (changes, source) {
+//                             if (!changes) {
+//                                 return;
+//                             }
+//                             $.each(changes, function (index, element) {
+//                                 var change = element;
+//                                 var rowIndex = change[0];
+//                                 var columnIndex = change[1];
+//                                 var cellChange = {
+//                                     'rowIndex': rowIndex,
+//                                     'columnIndex': columnIndex
+//                                 };
+
+//                                 console.log(element[3]);
+//                             });
+
+//                             console.log('allelementchanger',cellChanges);
+//                          },
+
+//             };
+//             var hot = new Handsontable( container[0], settings );
+//             hot.render();
+
+//             }
+//                 else if (newValue == 'strategy'){
+//                     console.log(scope.sheet);
+//                     var container = $(element);
+              
+//                     var settings = {
+//                         data: scope.data,
+//                         colHeaders: true,
+//                         rowHeaders:true,
+//                         afterChange: function (changes, source) {
+//                                     if (!changes) {
+//                                         return;
+//                                     }
+//                                     $.each(changes, function (index, element) {
+//                                         var change = element;
+//                                         var rowIndex = change[0];
+//                                         var columnIndex = change[1];
+//                                         var cellChange = {
+//                                             'rowIndex': rowIndex,
+//                                             'columnIndex': columnIndex
+//                                         };
+
+//                                         console.log(element[3]);
+//                                     });
+
+//                                     console.log('allelementchanger',cellChanges);
+//                                  },
+
+//                     };
+//                     var hot = new Handsontable( container[0], settings );
+//                     hot.render();
+
+//                     }
+
+
+//                 }, false);
+        
+    
+//         // if(scope.sheet == 'project'){
+//         //     console.log(scope.sheet);
+//         //     var container = $(element);
+      
+//         //     var settings = {
+//         //         data: scope.data,
+//         //         colHeaders: true,
+//         //         rowHeaders:true,
+//         //         afterChange: function (changes, source) {
+//         //                     if (!changes) {
+//         //                         return;
+//         //                     }
+//         //                     $.each(changes, function (index, element) {
+//         //                         var change = element;
+//         //                         var rowIndex = change[0];
+//         //                         var columnIndex = change[1];
+//         //                         var cellChange = {
+//         //                             'rowIndex': rowIndex,
+//         //                             'columnIndex': columnIndex
+//         //                         };
+
+//         //                         console.log(element[3]);
+//         //                     });
+
+//         //                     console.log('allelementchanger',cellChanges);
+//         //                  },
+
+//         //     };
+//         //     var hot = new Handsontable( container[0], settings );
+//         //     hot.render();
+
+//         // }
+//         // else if(scope.sheet == 'strategy'){
+//         //     console.log(scope.sheet);
+//         //     var container = $(element);
+      
+//         //     var settings = {
+//         //         data: scope.data,
+//         //         colHeaders: true,
+//         //         rowHeaders:true,
+//         //         afterChange: function (changes, source) {
+//         //                     if (!changes) {
+//         //                         return;
+//         //                     }
+//         //                     $.each(changes, function (index, element) {
+//         //                         var change = element;
+//         //                         var rowIndex = change[0];
+//         //                         var columnIndex = change[1];
+//         //                         var cellChange = {
+//         //                             'rowIndex': rowIndex,
+//         //                             'columnIndex': columnIndex
+//         //                         };
+
+//         //                         console.log(element[3]);
+//         //                     });
+
+//         //                     console.log('allelementchanger',cellChanges);
+//         //                  },
+
+//         //     };
+//         //     var hot = new Handsontable( container[0], settings );
+//         //     hot.render();
+//         // }
+
+        
+
+//     };//--end of link function
+//     return directive;
+// });
+
+// app.directive('strategy',function($compile) {
+
+//     var directive = {};
+//     directive.restrict = 'A';
+//     directive.scope = {
+//         data : '=',
+//     };
+//     directive.link = function(scope,element,attrs) {
+//         var container = $(element);
+      
+//         var settings = {
+//             data: scope.data,
+//             colHeaders: true,
+//             rowHeaders:true,
+//             afterChange: function (changes, source) {
+//                         if (!changes) {
+//                             return;
+//                         }
+//                         $.each(changes, function (index, element) {
+//                             var change = element;
+//                             var rowIndex = change[0];
+//                             var columnIndex = change[1];
+//                             var cellChange = {
+//                                 'rowIndex': rowIndex,
+//                                 'columnIndex': columnIndex
+//                             };
+
+//                             console.log(element[3]);
+//                         });
+
+//                         console.log('allelementchanger',cellChanges);
+//                      },
+
+//         };
+//         var hot = new Handsontable( container[0], settings );
+//         hot.render();
+
+//     };//--end of link function
+//     return directive;
+// });
+// app.directive('htable',function($compile) {
+//HELP : https://stackoverflow.com/questions/27908659/handsontable-in-an-angularjs-directive-render-an-anchor-that-has-an-ng-click
+
+//     // return {
+//     //         restrict: 'A',
+//     //         link: function(scope, element, attrs) {
+//     //             var data = scope.other
+//     //             $(element).handsontable({
+//     //                 data: data,
+//     //                 colHeaders: ["Name", "Age"],
+//     //                 rowHeaders: true,
+//     //                 renderAllRows: false,
+//     //                 afterChange: function (changes, source) {
+//     //                     if (!changes) {
+//     //                         return;
+//     //                     }
+//     //                     $.each(changes, function (index, element) {
+//     //                         var change = element;
+//     //                         var rowIndex = change[0];
+//     //                         var columnIndex = change[1];
+//     //                         var cellChange = {
+//     //                             'rowIndex': rowIndex,
+//     //                             'columnIndex': columnIndex
+//     //                         };
+//     //                         // console.log('indexrow',rowIndex);
+//     //                         // console.log('indexrcol',columnIndex);
+//     //                         scope.titi.push(element[3]);
+//     //                         console.log(scope.titi);
+//     //                         console.log(element[3]);
+//     //                         // cellChanges[rowIndex][columnIndex]=element[3]
+//     //                         //cellChange.push(element[3]);
+//     //                         //cellChanges.push(element);
+//     //                         //console.log('element',element);
+//     //                         //console.log('elementchangevalue',element[3]);
+//     //                     });
+
+//     //                     //console.log('elementchange',changes);
+//     //                     //console.log('allelementchanger',cellChanges);
+//     //                  },
+//     //             });
+//     //         }
+//     //     };
+
+//     var directive = {};
+//     directive.restrict = 'A';
+//     directive.scope = {
+//         data : '=',
+//     };
+
+//     //var data = scope.simple
+//     directive.link = function(scope,element,attrs) {
+//         var container = $(element);
+//         // var safeHtmlRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+//         //     var escaped = Handsontable.helper.stringify(value);
+//         //     td.innerHTML = escaped;
+//         //     return td;
+//         // };
+//         // var data = ['scope.data']
+//         // console.log('here');
+//         // console.log(data);       
+//         var settings = {
+//             data: scope.data,
+//             //readOnly: true,
+//             colHeaders: true,
+//             rowHeaders:true,
+//             afterChange: function (changes, source) {
+//                         if (!changes) {
+//                             return;
+//                         }
+//                         $.each(changes, function (index, element) {
+//                             var change = element;
+//                             var rowIndex = change[0];
+//                             var columnIndex = change[1];
+//                             var cellChange = {
+//                                 'rowIndex': rowIndex,
+//                                 'columnIndex': columnIndex
+//                             };
+//                             // console.log('indexrow',rowIndex);
+//                             // console.log('indexrcol',columnIndex);
+//                             if(scope.data=="titi"){
+//                                 console.log("titi");
+//                             }
+//                             console.log(element[3]);
+//                             // cellChanges[rowIndex][columnIndex]=element[3]
+//                             //cellChange.push(element[3]);
+//                             //cellChanges.push(element);
+//                             //console.log('element',element);
+//                             //console.log('elementchangevalue',element[3]);
+//                         });
+
+//                         //console.log('elementchange',changes);
+//                         console.log('allelementchanger',cellChanges);
+//                      },
+//             // columns: [
+//             //     {   
+//             //         data: "test",
+//             //         renderer: "html", 
+//             //         // renderer: safeHtmlRenderer,
+//             //         //readyOnly: true
+//             //     }
+//             // ]
+
+//         };
+//         var hot = new Handsontable( container[0], settings );
+//         hot.render();
+//         // console.log(element.html());
+//         // $compile(element.contents())(scope);
+//     };//--end of link function
+//     return directive;
+// });
+
+//return {
+//             restrict: 'A',
+//             link: function(scope, element, attrs) {
+//                 var data = scope.data
+//                 $(element).handsontable({
+//                     data: data,
+//                     colHeaders: ["Name", "Age"],
+//                     rowHeaders: true,
+//                     renderAllRows: false,
+//                 });
+//             }
+//         };
+
+
+//WORKING
+//         $scope.view=true;
+//         $scope.table=true;
+
+
+//         var cellChanges = [];
+//         var cellChange=[];
+//         function table(name_table){
+//             $scope.$watch('$viewContentLoaded', function() {
+//             $timeout( function(){
+//                 //console.log(data);
+//                 var table = document.getElementById(name_table), option_table;
+//                 var newdata = Handsontable.helper.createSpreadsheetData(9, 100);
+//                 cellChanges = newdata;
+//                 option_table = new Handsontable(table,{
+                    
+//                     data: newdata,//Handsontable.helper.createSpreadsheetData(10, 10),
+//                     width: 1100,
+//                     height: 260,
+//                     maxRows:9,
+//                     maxCols:100,
+//                     rowHeaderWidth: [350],
+//                     //columnHeaderHeight:
+//                     autoColumnSize: true,
+//                     autoColumnSize: {syncLimit: '100%'},
+//                     rowHeaders: [   "Project ID(s)",
+//                                     "Parent project ID(s)",
+//                                     "Contributors (comma or semicolon separated)",
+//                                     "Title",
+//                                     "Description",
+//                                     "Project’s controlled vocabularies ",
+//                                     "Crosslink(s) (comma or semicolon separated)",
+//                                     "Additional Information",
+//                                     "PubMedID(s)  (comma or semicolon separated)"
+//                                 ],//true,
+//                     colHeaders: ["GUP1", "GUP2", "GUP3", "GUP4", "GUP5", "GUP6", "GUP7", "GUP8", "GUP9", "GUP10", "GUP11", "GUP12", "GUP13", "GUP14", "GUP15", "GUP16", "GUP17", "GUP18", "GUP19", "GUP20", "GUP21", "GUP22", "GUP23", "GUP24", "GUP25", "GUP26", "GUP27", "GUP28", "GUP29", "GUP30", "GUP31", "GUP32", "GUP33", "GUP34", "GUP35", "GUP36", "GUP37", "GUP38", "GUP39", "GUP40", "GUP41", "GUP42", "GUP43", "GUP44", "GUP45", "GUP46", "GUP47", "GUP48", "GUP49", "GUP50", "GUP51", "GUP52", "GUP53", "GUP54", "GUP55", "GUP56", "GUP57", "GUP58", "GUP59", "GUP60", "GUP61", "GUP62", "GUP63", "GUP64", "GUP65", "GUP66", "GUP67", "GUP68", "GUP69", "GUP70", "GUP71", "GUP72", "GUP73", "GUP74", "GUP75", "GUP76", "GUP77", "GUP78", "GUP79", "GUP80", "GUP81", "GUP82", "GUP83", "GUP84", "GUP85", "GUP86", "GUP87", "GUP88", "GUP89", "GUP90", "GUP91", "GUP92", "GUP93", "GUP94", "GUP95", "GUP96", "GUP97", "GUP98", "GUP99", "GUP100"],//true,
+//                     manualColumnResize: true,
+//                     autoInsertRow: false,
+//                     allowEmpty: true,
+//                     afterChange: function (changes, source) {
+//                         if (!changes) {
+//                             return;
+//                         }
+//                         $.each(changes, function (index, element) {
+//                             var change = element;
+//                             var rowIndex = change[0];
+//                             var columnIndex = change[1];
+//                             var cellChange = {
+//                                 'rowIndex': rowIndex,
+//                                 'columnIndex': columnIndex
+//                             };
+//                             // console.log('indexrow',rowIndex);
+//                             // console.log('indexrcol',columnIndex);
+//                             cellChanges[rowIndex][columnIndex]=element[3]
+//                             //cellChange.push(element[3]);
+//                             //cellChanges.push(element);
+//                             //console.log('element',element);
+//                             //console.log('elementchangevalue',element[3]);
+//                         });
+
+//                         //console.log('elementchange',changes);
+//                         console.log('allelementchanger',cellChanges);
+//                      },
+
+//                     // afterRender: function () {
+//                     //     //var instance = this.handsontable('getInstance');
+//                     //     $.each(cellChanges, function (index, element) {
+//                     //         var cellChange = element;
+//                     //         var rowIndex = cellChange['rowIndex'];
+//                     //         var columnIndex = cellChange['columnIndex'];
+//                     //         //var cell = instance.getCell(rowIndex, columnIndex);
+//                     //         var foreColor = '#000';
+//                     //         var backgroundColor = '#ff00dd';
+//                     //         //cell.style.color = foreColor;
+//                     //         //cell.style.background = backgroundColor;
+//                     //     });
+//                     // },
+
+//                 });
+//             });
+//         });
+//         };
+//         table("project_table");
+//          function table(name_table){
+//             $scope.$watch('$viewContentLoaded', function() {
+//             $timeout( function(){
+//                 //console.log(data);
+//                 var table = document.getElementById(name_table), option_table;
+//                 var newdata = Handsontable.helper.createSpreadsheetData(9, 100);
+//                 cellChanges = newdata;
+//                 option_table = new Handsontable(table,{
+                    
+//                     data: newdata,//Handsontable.helper.createSpreadsheetData(10, 10),
+//                     width: 1100,
+//                     height: 260,
+//                     maxRows:9,
+//                     maxCols:100,
+//                     rowHeaderWidth: [350],
+//                     //columnHeaderHeight:
+//                     autoColumnSize: true,
+//                     autoColumnSize: {syncLimit: '100%'},
+//                     rowHeaders: [   "Project ID(s)",
+//                                     "Parent project ID(s)",
+//                                     "Contributors (comma or semicolon separated)",
+//                                     "Title",
+//                                     "Description",
+//                                     "Project’s controlled vocabularies ",
+//                                     "Crosslink(s) (comma or semicolon separated)",
+//                                     "Additional Information",
+//                                     "PubMedID(s)  (comma or semicolon separated)"
+//                                 ],//true,
+//                                 colHeaders:true,
+//                     manualColumnResize: true,
+//                     autoInsertRow: false,
+//                     allowEmpty: true,
+//                     afterChange: function (changes, source) {
+//                         if (!changes) {
+//                             return;
+//                         }
+//                         $.each(changes, function (index, element) {
+//                             var change = element;
+//                             var rowIndex = change[0];
+//                             var columnIndex = change[1];
+//                             var cellChange = {
+//                                 'rowIndex': rowIndex,
+//                                 'columnIndex': columnIndex
+//                             };
+//                             // console.log('indexrow',rowIndex);
+//                             // console.log('indexrcol',columnIndex);
+//                             cellChanges[rowIndex][columnIndex]=element[3]
+//                             //cellChange.push(element[3]);
+//                             //cellChanges.push(element);
+//                             //console.log('element',element);
+//                             //console.log('elementchangevalue',element[3]);
+//                         });
+
+//                         //console.log('elementchange',changes);
+//                         console.log('allelementchanger',cellChanges);
+//                      },
+
+//                     // afterRender: function () {
+//                     //     //var instance = this.handsontable('getInstance');
+//                     //     $.each(cellChanges, function (index, element) {
+//                     //         var cellChange = element;
+//                     //         var rowIndex = cellChange['rowIndex'];
+//                     //         var columnIndex = cellChange['columnIndex'];
+//                     //         //var cell = instance.getCell(rowIndex, columnIndex);
+//                     //         var foreColor = '#000';
+//                     //         var backgroundColor = '#ff00dd';
+//                     //         //cell.style.color = foreColor;
+//                     //         //cell.style.background = backgroundColor;
+//                     //     });
+//                     // },
+
+//                 });
+//             });
+//         });
+//         };
+//         table("project_table");
+//         // var pp = table("project_table",false);
+//         // // var strat = table("strategy_table",false);
+
+
+//         // $scope.showStrategies = function(){
+//         //     pp= table("project_table",false);
+//         //     // strat = table("strategy_table",true);
+//         // };
+
+//         // $scope.showStrategies =     $scope.$on('$viewContentLoaded', function() {
+//         //     $timeout(function(){
+//         //         var example = document.getElementById('strategy_table'),
+//         //         hot1;
   
-        //         hot1 = new Handsontable(example,{
-        //             data: Handsontable.helper.createSpreadsheetData(5, 5),
-        //             width: 1100,
-        //             height: 400,
-        //             colWidths: 47,
-        //             rowHeights: 23,
-        //             rowHeaders: true,
-        //             colHeaders: true,
-        //             manualColumnResize: true,
-        //             autoInsertRow: false,
-        //         });
-        //     });
-        // });
-        // };
+//         //         hot1 = new Handsontable(example,{
+//         //             data: Handsontable.helper.createSpreadsheetData(5, 5),
+//         //             width: 1100,
+//         //             height: 400,
+//         //             colWidths: 47,
+//         //             rowHeights: 23,
+//         //             rowHeaders: true,
+//         //             colHeaders: true,
+//         //             manualColumnResize: true,
+//         //             autoInsertRow: false,
+//         //         });
+//         //     });
+//         // });
+//         // };
 
-});
+// });
+
+
+///END
+
+
 
 // $scope.data = [
 //         {name: 'b', age:10, 1 : 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 2 : '', 3 : '', 4 : '', 5 : '', 6 : '', 7 : '', 8 : ''},
