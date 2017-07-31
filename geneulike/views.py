@@ -1069,7 +1069,7 @@ def excel_signature_upload(request):
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
-        #print 'write file into : '+upload_path
+        print 'write file into : '+upload_path
     except:
         logger.warning("Error - Upload path")
         logger.warning(upload_path)
@@ -1089,24 +1089,37 @@ def excel_signature_upload(request):
     strategies=[]
     lists=[] 
     for row_number in range(0, wb.sheet_by_index(0).nrows):
-            projects.append(wb.sheet_by_index(0).row_values(row_number,start_colx=1, end_colx=101))
+            projects.append(wb.sheet_by_index(0).row_values(row_number,start_colx=0, end_colx=101))
 
     for row_number in range(0, wb.sheet_by_index(2).nrows):
-            strategies.append(wb.sheet_by_index(2).row_values(row_number,start_colx=1, end_colx=201))
+            strategies.append(wb.sheet_by_index(2).row_values(row_number,start_colx=0, end_colx=201))
     print wb.sheet_by_index(1).nrows
     for row_number in range(0, wb.sheet_by_index(1).nrows):
-            lists.append(wb.sheet_by_index(1).row_values(row_number,start_colx=1, end_colx=1001))
-    for i in lists:
-        print i[0]         
-    return{'projects':projects[1:], 'strategies':strategies[1:], 'lists':lists[1:]}
+            lists.append(wb.sheet_by_index(1).row_values(row_number,start_colx=0, end_colx=1001))
+
+
+
+    try:
+        print upload_path,tmp_file_name
+        os.remove(os.path.join(upload_path,tmp_file_name))
+    except:
+        logger.warning("Error - Can't delete upload file")
+        logger.warning(str(upload_path)+str(tmp_file_name))
+        logger.warning(sys.exc_info())
+       
+           
+    return{'projects':projects, 'strategies':strategies, 'lists':lists}
 
 
 
 
-    for line in wb.sheet_by_index(0).row_values(row_number, start_colx=0, end_colx=101):
-        for i in line:
-            print i
-    return
+    # for line in wb.sheet_by_index(0).row_values(row_number, start_colx=0, end_colx=101):
+    #     for i in line:
+    #         print i
+
+    #remove file
+
+    # return
 
     # add_project(wb.sheet_by_index(0)) 
         

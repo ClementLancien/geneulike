@@ -1,4 +1,4 @@
-
+<!-- 
 <script>
 $(function() {
     $('.required-icon').tooltip({
@@ -6,7 +6,7 @@ $(function() {
         title: 'Required field'
         });
 });
-</script>
+</script> -->
 <style type="text/css">
 
 
@@ -80,6 +80,7 @@ $(function() {
 
 </style>
 <div class="well">
+
 <legend style="color:#6a90c5">Registration Form</legend>
           <div ng-if="danger" class="alert alert-danger">
             {{danger}}
@@ -413,17 +414,53 @@ $(function() {
                     </div>
                 </div>
 
+
+
                 <div class="form-group">
-                    <label class="control-label col-sm-3" for="password">Password</label>
+                    <label class="control-label col-sm-3" for="first_name">Password</label>
+                    <div class="col-xs-6">
+                        <div class="form-group input-group required-field-block">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="newUser.password" id="password" placeholder="Enter your password" type="password" class="form-control">
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+<!-- 
+                <div class="form-group">
+                    <label class="control-label col-xs-3" for="password">Password</label>
                     <div class="col-sm-6">
                         <div class="form-group input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                           <input ng-model="newUser.password" id="password" placeholder="Enter your password" type="password" class="form-control">
                         </div>
                     </div>
+                </div> -->
+
+
+                 <div class="form-group">
+                    <label class="control-label col-xs-3" for="first_name">Password</label>
+                    <div class="col-xs-6">
+                        <div class="form-group input-group required-field-block">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="newUser.check_password" id="password" placeholder="Confirm your password" type="password" class="form-control">
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
+
+
+
+
+
+ <!--                <div class="form-group">
                     <label class="control-label col-sm-3" for="password">Password</label>
                     <div class="col-sm-6">
                         <div class="form-group input-group">
@@ -431,7 +468,7 @@ $(function() {
                           <input ng-model="newUser.check_password" id="password" placeholder="Confirm your password" type="password" class="form-control">
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <div class="col-md-4"></div>

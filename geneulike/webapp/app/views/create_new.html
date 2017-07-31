@@ -354,7 +354,8 @@ console.log(a);
 
 <link type="text/css" rel="stylesheet" href="bower_components/handsontable/handsontable/dist/handsontable.full.min.css">
 <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+ <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
 <!-- <div data-ng-controller="MainCtrl as ctrl">  
   <hot-table
     settings="ctrl.settings"
@@ -402,7 +403,7 @@ hr {
 
 
 
-<div class="panel panel-default">
+<div ng-if="!hasData" class="panel panel-default">
     <div class="panel-heading">
         Upload your projects here
     </div>
@@ -435,12 +436,32 @@ hr {
 <!-- <button ng-click="showProjects()">Project</button>
 <button ng-click="showStrategies()">Strategy</button> -->
 <div ng-if='hasData'>
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projets ({{projects_number}})</a></li>
-  <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
-  <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
-</ul>
- </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+        <div class="btn btn-success fileinput-button" ngf-select="signature_upload($file)" ngf-multiple="false" ng-click="newData()">
+          <i class="glyphicon glyphicon-plus"></i>
+          <span>Load New File</span>
+        </div>
+    </div>
+  </div>
+
+
+  <br>
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projets ({{projects_number}})</a></li>
+      <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
+      <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
+    </ul>
+</div>
+
 <br>
-<!--   <div project data="data" sheet='sheet'></div>
- --><div id="table"></div>
+
+<div style="width:100%;overflow:auto;">
+
+<div ng-show='showProject' id="project" class="hot handsontable htColumnHeaders" data-originalstyle="overflow: hidden;"> </div>
+<div ng-show='showStrategy' id="strategy" class="hot handsontable htColumnHeaders"  data-originalstyle="overflow: hidden;"> </div>
+<div ng-show='showList' id="list" class="hot handsontable htColumnHeaders"  data-originalstyle="overflow: hidden;"> </div>
+<!-- <div id="table" class="hot" style="overflow: hidden;" data-originalstyle="overflow: hidden;">></div> -->
+  </div>
