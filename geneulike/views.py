@@ -1088,13 +1088,14 @@ def excel_signature_upload(request):
     projects=[]
     strategies=[]
     lists=[] 
-    for row_number in range(0, wb.sheet_by_index(0).nrows):
-            projects.append(wb.sheet_by_index(0).row_values(row_number,start_colx=0, end_colx=101))
+    for row_number in range(wb.sheet_by_index(0).nrows):
+        projects.append(wb.sheet_by_index(0).row_values(row_number,start_colx=0, end_colx=101))
 
-    for row_number in range(0, wb.sheet_by_index(2).nrows):
-            strategies.append(wb.sheet_by_index(2).row_values(row_number,start_colx=0, end_colx=201)
-)    print wb.sheet_by_index(1).nrows
-    for row_number in range(0, wb.sheet_by_index(1).nrows):
+    for row_number in range(wb.sheet_by_index(2).nrows):
+        strategies.append(wb.sheet_by_index(2).row_values(row_number,start_colx=0, end_colx=201))
+   #print wb.sheet_by_index(1).nrows
+    print wb.sheet_by_index(1).ncols
+    for row_number in range(wb.sheet_by_index(1).nrows):
             lists.append(wb.sheet_by_index(1).row_values(row_number,start_colx=0, end_colx=1001))
 
 

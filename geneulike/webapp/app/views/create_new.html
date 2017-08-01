@@ -444,6 +444,10 @@ hr {
           <span>Load New File</span>
         </div>
     </div>
+    
+
+
+      
   </div>
 
 
@@ -460,8 +464,112 @@ hr {
 
 <div style="width:100%;overflow:auto;">
 
-<div ng-show='showProject' id="project" class="hot handsontable htColumnHeaders" data-originalstyle="overflow: hidden;"> </div>
-<div ng-show='showStrategy' id="strategy" class="hot handsontable htColumnHeaders"  data-originalstyle="overflow: hidden;"> </div>
-<div ng-show='showList' id="list" class="hot handsontable htColumnHeaders"  data-originalstyle="overflow: hidden;"> </div>
+  <div ng-show='showProject' id="project" class="hot handsontable htColumnHeaders" data-originalstyle="overflow: hidden;"> </div>
+  <div ng-show='showStrategy' id="strategy" class="hot handsontable htColumnHeaders"  data-originalstyle="overflow: hidden;"> </div>
+  <div ng-show='showList' id="list" class="hot handsontable htColumnHeaders"  data-originalstyle="overflow: hidden;"> </div>
 <!-- <div id="table" class="hot" style="overflow: hidden;" data-originalstyle="overflow: hidden;">></div> -->
   </div>
+<style type="text/css">
+  .handsontable th {
+  text-align: center
+}
+</style>
+
+
+
+
+
+<style type="text/css">
+  article {
+  border:1px solid lightgrey;
+  cursor:pointer;
+}
+
+
+
+
+.green{color:#27ae60;}
+#scrollable-dropdown-menu-typeahead .dropdown-menu {
+  max-height: 150px;
+  overflow-y: auto;
+}
+</style>
+
+  <script type="text/ng-template" id="popupTmpl">
+        <div class="ngdialog-message">
+          
+        <div class="ngdialog-buttons mt pull-left">
+          <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="prev()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+        </div>
+        <div class="ngdialog-buttons mt">
+          <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="next()"><i class="glyphicon glyphicon-chevron-right"></i></button>
+        </div>
+    </script>
+
+<!-- <link href="https://likeastore.github.io/ngDialog/css/ngDialog.css" rel="stylesheet" type="text/css">
+ --><!-- <link href="https://likeastore.github.io/ngDialog/css/ngDialog-theme-default.css" rel="stylesheet" type="text/css">
+ --><link href="styles/ngDialog-theme-flat.css" rel="stylesheet" type="text/css">
+<main class="container-fluid row">
+    
+  <article class="col-md-2 col-sm-3 col-xs-4 text-center" ng-click="clickToOpen()">
+    </article>    
+
+    <script type="text/ng-template" id="popupTmpl">
+        <div class="ngdialog-message">
+        <div ng-if="danger" class="alert alert-danger">
+            {{danger}}
+          </div>
+          <div ng-if="success" class="alert alert-success">
+            {{success}}
+          </div>
+          <div ng-if="warning" class="alert alert-warning">
+            {{warning}}
+          </div>
+          
+        <div class= "row">
+          <div class="form-group">
+          <label class="control-label col-xs-4" for="first_name" >Select Database</label>
+            <div class="col-xs-8">
+
+              <select ng-model="onto_selected" class="form-control" id="ontology">
+                          <option value="" disabled selected>Please select</option>
+                          <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
+                          <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
+                          <option value="FMA">Foundational Model of Anatomy (FMA)</option>
+                          <option value="HP">Human Phenotype Ontology (HP)</option>
+                          <option value="PATO">Phenotypic Quality Ontology (PATO)</option>
+                          <option value="DOID">Human Disease Ontology (DOID)</option>
+                          <option value="GO">Gene Ontology (GO)</option>
+                          <option value="CL">Cell Ontology (CL)</option>
+                          <option value="BTO">BRENDA Tissue and Enzyme Source Ontology (BTO)</option>
+                          <option value="MP">Mammalian Phenotype Ontology (MP)</option>
+                          <option value="OBI">Ontology for Biomedical Investigations (OBI)</option>
+              </select>
+
+            </div>
+          </div>
+        </div>
+        <div class= "row">
+          <div class="form-group">
+              <div ng-if="onto_selected" class="form-group">
+                      <label class="control-label col-xs-4" for="first_name">Search</label>
+                      <div class="col-xs-8">
+                      <div id="scrollable-dropdown-menu-typeahead">
+                        <input  class="form-control" id="organism_vivo" type="text" ng-model="selectOnto" placeholder="Species"
+                              typeahead-min-length="4" ng-change="get_onto()" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading"
+                              class="form-control" >
+                      </div>
+                      </div>
+                  </div>
+                </div>
+        </div>
+        <button ng-click="addOnto()">Add</button>
+
+          
+
+
+          
+    </script>
+  
+  </main>
+
