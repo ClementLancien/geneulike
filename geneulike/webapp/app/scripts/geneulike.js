@@ -2197,7 +2197,7 @@ app.controller('compareCtrl',
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User,Upload,ngDialog, $timeout) {
 
-$scope.$watch('$viewContentLoaded', function() {
+    $scope.$watch('$viewContentLoaded', function() {
         $timeout( function(){
 
             $scope.user = null;
@@ -2524,7 +2524,7 @@ $scope.$watch('$viewContentLoaded', function() {
                     td.style.color = '#333';
                     //td.style.background = '#eecccc';
             };
-            
+
             $scope.onDatabaseChange= function(){
                 $scope.onto=null;
             };
