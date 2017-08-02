@@ -2206,7 +2206,7 @@ $scope.$watch('$viewContentLoaded', function() {
             var data_strategies=[null];
             var data_lists=null;
             var data1 = [],
-                        container = document.getElementById('example1'),
+                        container = document.getElementById('excelTable'),
                         settings = {
                             data: data1,
                             width: 1100,
@@ -2268,7 +2268,7 @@ $scope.$watch('$viewContentLoaded', function() {
             };
             function table_project(){
                 data1 = data_projects,
-                container = document.getElementById('example1'),
+                container = document.getElementById('excelTable'),
                 settings = {
                     data:data1,
                     width: 1100,
@@ -2351,7 +2351,7 @@ $scope.$watch('$viewContentLoaded', function() {
             function table_strategy(){
 
                 data1 = data_strategies,
-                container = document.getElementById('example1'),
+                container = document.getElementById('excelTable'),
                 settings = {
                     data:data1,
                     width: 1100,
@@ -2440,7 +2440,7 @@ $scope.$watch('$viewContentLoaded', function() {
             
             function table_lists(){
                 data1 = data_lists,
-                container = document.getElementById('example1'),
+                container = document.getElementById('excelTable'),
                 settings = {
                     data:data1,
                     width: 1100,
