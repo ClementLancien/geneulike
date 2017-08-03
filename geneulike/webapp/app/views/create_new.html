@@ -93,7 +93,7 @@ hr {
   <div ng-show="hasData" >
     <div class="row">
       <div class="col-xs-6">
-          <div class="btn btn-success fileinput-button" ngf-select="signature_upload($file)" ngf-multiple="false" ng-click="newData()">
+          <div class="btn btn-success fileinput-button" ngf-select="signature_upload($file)" ngf-multiple="false" ng-click="newData()" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
             <i class="glyphicon glyphicon-plus"></i>
             <span>Load New File</span>
           </div>
@@ -107,9 +107,11 @@ hr {
         <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
         <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
       </ul>
+
     <br>
+
     <div style="width:100%;overflow:auto;"">
-      <div id="excelTable" class="hot handsontable" data-originalstyle="overflow: hidden;"></div>
+      <div id="excelTable" class="hot handsontable htColumnHeaders htRowHeaders" data-originalstyle="overflow: hidden;"></div>
     </div>
 
   </div>
@@ -145,7 +147,7 @@ hr {
     <label class="control-label col-xs-4" for="first_name" >Select Database</label>
       <div class="col-xs-8">
 
-        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology">
+        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="projectview">
                     <option value="" disabled selected>Please select</option>
                     <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
                     <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
@@ -160,17 +162,32 @@ hr {
                     <option value="OBI">Ontology for Biomedical Investigations (OBI)</option>
         </select>
 
+        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="strategyview">
+                    <option value="" disabled selected>Please select</option>
+                    <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
+                    <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
+                    <option value="FMA">Foundational Model of Anatomy (FMA)</option>
+                    
+        </select>
+
+        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="listview">
+                    <option value="" disabled selected>Please select</option>
+                    <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
+                    <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
+                    <option value="FMA">Foundational Model of Anatomy (FMA)</option>
+                    
+        </select>
       </div>
     </div>
   </div>
   <div class= "row">
     <div class="form-group">
         <div ng-if="onto_selected" class="form-group">
-                <label class="control-label col-xs-4" for="first_name">Search</label>
+                <label class="control-label col-xs-4" for="first_name">Search Term</label>
                 <div class="col-xs-8">
                 <div id="scrollable-dropdown-menu-typeahead">
                   <input  class="form-control" id="organism_vivo" type="text" ng-model="selectOnto" placeholder="Species"
-                        typeahead-min-length="4" ng-change="get_onto()" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading"
+                        typeahead-min-length="4" ng-change="get_onto()" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading" 
                         class="form-control" >
                 </div>
                 </div>
@@ -183,7 +200,7 @@ hr {
     <div class= "row">
 
       <div class="col-xs-12">
-        <button ng-disabled="!onto" ng-click="addOntologyProject()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button>
+        <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button>
       </div>
 
     </div>
