@@ -56,9 +56,6 @@ hr {
   <h1 style="text-align:center;">Upload your project herae</h1>
   <hr class="hr-primary" > 
 
-
-    
-
 </div>
 <div class='well' >
   <div ng-show="!hasData" class="panel panel-default">
@@ -187,8 +184,8 @@ hr {
                 <div class="col-xs-8">
                 <div id="scrollable-dropdown-menu-typeahead">
                   <input  class="form-control" id="organism_vivo" type="text" ng-model="selectOnto" placeholder="Species"
-                        typeahead-min-length="4" ng-change="get_onto()" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading" 
-                        class="form-control" >
+                         ng-change="get_onto()" typeahead-min-length="4" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading" 
+                        class="form-control">
                 </div>
                 </div>
             </div>
@@ -200,7 +197,11 @@ hr {
     <div class= "row">
 
       <div class="col-xs-12">
-        <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button>
+        <div ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" >
+          <i class="glyphicon glyphicon-plus"></i>
+          <span>Add</span>
+        </div>
+        <!-- <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button> -->
       </div>
 
     </div>

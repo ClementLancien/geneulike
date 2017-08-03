@@ -548,21 +548,61 @@ def ontologies(request):
 
 
     def get_json(url):
-            opener = urllib2.build_opener()
-            opener.addheaders = [('Authorization', 'apikey token=' + API_KEY)]
-            return json.loads(opener.open(url).read())
+        opener = urllib2.build_opener()
+        opener.addheaders = [('Authorization', 'apikey token=' + API_KEY)]
+        return json.loads(opener.open(url).read())
+
+    def stringToDict(string):
+        #dict((k.strip(), v.strip()) for k,v in (item.split(':') for item in string.split(';')))
+        # dico={}
+        # for item in string.split(";"):
+        #     dico[item.split(":")[0].strip()]=item.split(":")[1].strip()
+        # return dico
+        print string
+        if string == "":
+            return {}
+
+        dico={}
+        for item in string.split(";")[:-1]:
+            dico[item.split(":")[0]]=item.split(":")[1]
+        pprint.pprint(dico)
+        return dico
+        return pprint.pprint(dict((k, v) for k,v in (item.split(':') for item in string.split(';')[:-1])))
+        return dict((k, v) for k,v in (item.split(':') for item in string.split(';')))
     
+    def dictToString(dico):
+
+        if not bool(dico): #if dico is empty
+            return ""
+
+        newString="" 
+        for key, value in dico.items():
+            newString += str(key) + ":" + str(value) +";"
+        return newString
+
     REST_URL = "http://data.bioontology.org"
     API_KEY = "27f3a22f-92f8-4587-a884-e81953e113e6"
     form = json.loads(request.body, encoding=request.charset)
     
+    
+
     if 'label' in form:
-        print 'here'
-        print getParent(form['label'])
+        print 'here labellllll'
+        #print getParent(form['label'])
 
+    elif 'stringToDict' in form:
+        print form['string']
+        return [stringToDict(form['string'])]
+        #pprint.pprint(stringToDict(form['string'])) 
+        #return {'dict' : stringToDict(form['string'])}
+
+    elif 'dictToString' in form:
+        return [dictToString(form['dico'])]
+        
     else:
-
-        term = form['search'].replace(' ','%20')
+        print form['search']
+        term = form['search'].replace(' ','+')
+        print term
         database = form['database']
 
         
@@ -571,10 +611,15 @@ def ontologies(request):
         search_results = []
         #print REST_URL + "/search?q=" + term+'&ontology=' + database
         #print get_json(REST_URL + "/search?q=" + term+'&ontology=' + database)
-        search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)["collection"])
+        print REST_URL + "/search?q=" + term+'&ontologies=' + database
+        search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)['collection'])
+        return search_results
+
+        #search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)["collection"])
+        
         #print search_results
 
-        return search_results
+        #return search_results
     
 
     # form = json.loads(request.body, encoding=request.charset)

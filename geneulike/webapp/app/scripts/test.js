@@ -3039,3 +3039,78 @@ function customDropdownRenderer(instance, td, row, col, prop, value, cellPropert
 
 
 // });
+
+
+
+
+
+
+
+
+                //return console.log(row,col);
+                // if($scope.projectview){
+
+                //     if(data_projects[row][col] == ""){
+                //         $scope.success=$scope.onto.prefLabel+" Added to your list";
+                //         data_projects[row][col]=document.getElementById('ontology').value +':'+$scope.onto.prefLabel;
+                //         //ataset.ontologies({},{'label': $scope.onto});
+                //         //console.log($scope.onto)
+                //         document.getElementById('organism_vivo').value="";
+                //         $scope.onto=null;
+                //     }
+                //     else{
+
+
+                //         if(data_projects[row][col].split(' ; ').includes($scope.onto.prefLabel)){
+                //             $scope.warning=$scope.onto.prefLabel+' ontology is already in your list'
+                //         }
+                //         else{
+                //             $scope.success=$scope.onto.prefLabel+" Added to your list";
+                //             data_projects[row][col]=data_projects[row][col] + ' , ' + new String($scope.onto.prefLabel);
+                //             document.getElementById('organism_vivo').value="";
+                //             $scope.onto=null;
+                //         }
+                //     }
+                // }
+                // else if($scope.strategyview){
+                //     if(data_strategies[row][col] == ""){
+                //         $scope.success=$scope.onto.prefLabel+" Added to your list";
+                //         data_strategies[row][col]=document.getElementById('ontology').value +':'+$scope.onto.prefLabel;
+                //         //Dataset.ontologies({},{'label': $scope.onto});
+                //         //console.log($scope.onto)
+                //         document.getElementById('organism_vivo').value="";
+                //         $scope.onto=null;
+                //     }
+                //     else{
+                //         if(data_strategies[row][col].split(' ; ').includes($scope.onto.prefLabel)){
+                //             $scope.warning=$scope.onto.prefLabel+' ontology is already in your list'
+                //         }
+                //         else{
+                //             $scope.success=$scope.onto.prefLabel+" Added to your list";
+                //             data_strategies[row][col]=data_strategies[row][col] + ' , ' + new String($scope.onto.prefLabel)
+                //             document.getElementById('organism_vivo').value="";
+                //             $scope.onto=null;
+                //         }
+                //     }
+                // }
+                // else{
+                //     if(data_lists[row][col] == ""){
+                //         $scope.success=$scope.onto.prefLabel+" Added to your list";
+                //         data_lists[row][col]=document.getElementById('ontology').value +':'+$scope.onto.prefLabel;
+                //         //Dataset.ontologies({},{'label': $scope.onto});
+                //         console.log($scope.onto)
+                //         document.getElementById('organism_vivo').value="";
+                //         $scope.onto=null;
+                //     }
+                //     else{
+                //         if(data_lists[row][col].split(' ; ').includes($scope.onto.prefLabel)){
+                //             $scope.warning=$scope.onto.prefLabel+' ontology is already in your list'
+                //         }
+                //         else{
+                //             $scope.success=$scope.onto.prefLabel+" Added to your list";
+                //             data_lists[row][col]=data_lists[row][col] + ' , ' + new String($scope.onto.prefLabel)
+                //             document.getElementById('organism_vivo').value="";
+                //             $scope.onto=null;
+                //         }
+                //     }
+                // }

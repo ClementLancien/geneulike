@@ -19,7 +19,6 @@ var app = angular.module('geneulike', [
     'uuid',
     'ngTable',
     'angucomplete-alt',
-    
     ]).
 
 config(['$routeProvider','$logProvider',
@@ -2221,8 +2220,10 @@ app.controller('createCtrl',
             $scope.onto_selected="";
             $scope.warning="";
             $scope.success="";
+            $scope.search_result=[];
             var row;
             var col;
+            $scope.value;
             $scope.onto=null;
             //var onto_obj_project
 
@@ -2352,12 +2353,13 @@ app.controller('createCtrl',
                         if(r == 5 && c !=0){
                             $scope.warning="";
                             $scope.success="";
-
-                            openOntology(data_projects[r][c]);
                             row=r;
                             col=c;
                             $scope.onto=null;
-                            //console.log('row : ',row);
+                            Dataset.ontologies({},{'stringToDict': true, 'string':data_projects[row][col]}).$promise.then(function(data){
+                                $scope.value=data[0];
+                            });
+                            openOntology();
                         }
                     },
                 },
@@ -2454,12 +2456,13 @@ app.controller('createCtrl',
                         if(r == 6 && c !=0){
                             $scope.warning="";
                             $scope.success="";
-
-                            openOntology(data_strategies[r][c]);
                             row=r;
                             col=c;
                             $scope.onto=null;
-                            //console.log('row : ',row);
+                            Dataset.ontologies({},{'stringToDict': true, 'string':data_strategies[row][col]}).$promise.then(function(data){
+                                $scope.value=data[0];
+                            });
+                            openOntology();
                         }
                     },
                 },
@@ -2521,12 +2524,13 @@ app.controller('createCtrl',
                         if(r == 4 && c !=0){
                             $scope.warning="";
                             $scope.success="";
-
-                            openOntology(data_lists[r][c]);
                             row=r;
                             col=c;
                             $scope.onto=null;
-                            //console.log('row : ',row);
+                            Dataset.ontologies({},{'stringToDict': true, 'string':data_lists[row][col]}).$promise.then(function(data){
+                                $scope.value=data[0];
+                            });
+                            openOntology();
                         }
                     },
                 },
@@ -2564,31 +2568,31 @@ app.controller('createCtrl',
 
             function rowOntologyRenderer(instance, td, row, col, prop, value, cellProperties) {
                 Handsontable.renderers.TextRenderer.apply(this, arguments);
-                    //td.style.fontWeight = 'bold';
                     td.style.color = '#333';
-                    //td.style.background = '#eecccc';
             };
 
             $scope.onDatabaseChange= function(){
                 $scope.onto=null;
-                console.log(document.getElementById('ontology').value)
+                $scope.selectOnto="";
+                $scope.search_result=[];
             };
 
             $scope.get_onto = function() {
                 $scope.onto=null;
+                $scope.search_result=[];
                 $timeout(function(){
 
                     $scope.warning="";
                     $scope.success="";
-               
-                    //var database = document.getElementById('ontology').value
                     var val = document.getElementById('organism_vivo').value;
                     Dataset.ontologies({},{'database':document.getElementById('ontology').value,'search':document.getElementById('organism_vivo').value}).$promise.then(function(data){
                         data.map(function(item){
-                            $scope.search_result = [];
+                            console.log('item')
+                            //$scope.search_result = [];
                             Object.keys(item).map(function(key, index) {
                                 $scope.search_result.push(item[key]);
-                            }); 
+                            });
+                            console.log($scope.search_result)
                         });
                     });
                 });
@@ -2605,30 +2609,32 @@ app.controller('createCtrl',
                 }
 
                 $scope.dialog.closePromise.then(function(data) {
-                    if($scope.projectview){
-                        hot1.setDataAtCell(row, col, data_projects[row][col]);
-                    }
 
-                    else if($scope.strategyview){
-                        hot1.setDataAtCell(row, col, data_strategies[row][col]);
-                    }
+                    Dataset.ontologies({},{'dictToString': true, 'dico': $scope.value}).$promise.then(function(data){
+                        if($scope.projectview){
+                            data_projects[row][col]=data[0];
+                            hot1.setDataAtCell(row, col, data_projects[row][col]);
+                        }
 
-                    else {
-                        hot1.setDataAtCell(row, col, data_lists[row][col]);
-                    }
+                        else if($scope.strategyview){
+                            data_strategies[row][col]=data[0];
+                            hot1.setDataAtCell(row, col, data_strategies[row][col]);
+                        }
+
+                        else{
+                            data_lists[row][col]=data[0];
+                            hot1.setDataAtCell(row, col, data_lists[row][col]);
+                        }
+                    });
                     $scope.dialog = null;
                     $scope.warning="";
                     $scope.success="";
-                        
-                    //row=null;
-                    //col=null;
-                    //onto=null;
-                    //option_table_project.loadData(data_projects)
+                    $scope.value=null;
+                    $scope.onto=null;
                 });
             };
 
             $scope.selected_tissue = function(item, model,label){
-                //console.log(label);
                 $scope.onto = item;
             };
 
@@ -2639,69 +2645,25 @@ app.controller('createCtrl',
                 if($scope.onto == null){
                     return $scope.warning="Select a result from search before adding";
                 }
-                
-                //return console.log(row,col);
-                if($scope.projectview){
-                    if(data_projects[row][col] == ""){
+
+                if(!(document.getElementById('ontology').value in $scope.value)){ // if our object has already a key (i.e. NCBITaxon) return false
+                        $scope.value[document.getElementById('ontology').value]= new String($scope.onto.prefLabel);
                         $scope.success=$scope.onto.prefLabel+" Added to your list";
-                        data_projects[row][col]=$scope.onto.prefLabel
-                        Dataset.ontologies({},{'label': $scope.onto});
-                        console.log($scope.onto)
                         document.getElementById('organism_vivo').value="";
                         $scope.onto=null;
-                    }
-                    else{
-                        if(data_projects[row][col].split(' ; ').includes($scope.onto.prefLabel)){
-                            $scope.warning=$scope.onto.prefLabel+' ontology is already in your list'
-                        }
-                        else{
-                            $scope.success=$scope.onto.prefLabel+" Added to your list";
-                            data_projects[row][col]=data_projects[row][col] + ' ; ' + new String($scope.onto.prefLabel)
-                            document.getElementById('organism_vivo').value="";
-                            $scope.onto=null;
-                        }
-                    }
-                }
-                else if($scope.strategyview){
-                    if(data_strategies[row][col] == ""){
-                        $scope.success=$scope.onto.prefLabel+" Added to your list";
-                        data_strategies[row][col]=$scope.onto.prefLabel
-                        Dataset.ontologies({},{'label': $scope.onto});
-                        console.log($scope.onto)
-                        document.getElementById('organism_vivo').value="";
-                        $scope.onto=null;
-                    }
-                    else{
-                        if(data_strategies[row][col].split(' ; ').includes($scope.onto.prefLabel)){
-                            $scope.warning=$scope.onto.prefLabel+' ontology is already in your list'
-                        }
-                        else{
-                            $scope.success=$scope.onto.prefLabel+" Added to your list";
-                            data_strategies[row][col]=data_strategies[row][col] + ' ; ' + new String($scope.onto.prefLabel)
-                            document.getElementById('organism_vivo').value="";
-                            $scope.onto=null;
-                        }
-                    }
                 }
                 else{
-                    if(data_lists[row][col] == ""){
-                        $scope.success=$scope.onto.prefLabel+" Added to your list";
-                        data_lists[row][col]=$scope.onto.prefLabel
-                        Dataset.ontologies({},{'label': $scope.onto});
-                        console.log($scope.onto)
-                        document.getElementById('organism_vivo').value="";
+
+                    if($scope.value[document.getElementById('ontology').value].split(',').includes($scope.onto.prefLabel)){
+                        $scope.warning=$scope.onto.prefLabel+' ontology is already in your list';
                         $scope.onto=null;
                     }
                     else{
-                        if(data_lists[row][col].split(' ; ').includes($scope.onto.prefLabel)){
-                            $scope.warning=$scope.onto.prefLabel+' ontology is already in your list'
-                        }
-                        else{
-                            $scope.success=$scope.onto.prefLabel+" Added to your list";
-                            data_lists[row][col]=data_lists[row][col] + ' ; ' + new String($scope.onto.prefLabel)
-                            document.getElementById('organism_vivo').value="";
-                            $scope.onto=null;
-                        }
+                            
+                        $scope.value[document.getElementById('ontology').value] += ',' + new String($scope.onto.prefLabel);
+                        $scope.success=$scope.onto.prefLabel+" Added to your list";
+                        document.getElementById('organism_vivo').value="";
+                        $scope.onto=null;
                     }
                 }
             };
