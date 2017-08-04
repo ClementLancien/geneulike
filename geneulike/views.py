@@ -564,11 +564,13 @@ def ontologies(request):
 
         dico={}
         for item in string.split(";")[:-1]:
-            dico[item.split(":")[0]]=item.split(":")[1]
-        pprint.pprint(dico)
+            dico[item.split(":")[0]]=item.split(":")[1].split(',')
+            #print item.split(":")[1].split(',')
+            #dico[item.split(":")[0]]=item.split(":")[1]
+        #pprint.pprint(dico)
         return dico
-        return pprint.pprint(dict((k, v) for k,v in (item.split(':') for item in string.split(';')[:-1])))
-        return dict((k, v) for k,v in (item.split(':') for item in string.split(';')))
+        #return pprint.pprint(dict((k, v) for k,v in (item.split(':') for item in string.split(';')[:-1])))
+        #return dict((k, v) for k,v in (item.split(':') for item in string.split(';')))
     
     def dictToString(dico):
 
@@ -576,8 +578,11 @@ def ontologies(request):
             return ""
 
         newString="" 
+
         for key, value in dico.items():
-            newString += str(key) + ":" + str(value) +";"
+            #print value
+            newString += str(key) + ":" + ",".join(value) +";"
+            #newString += str(key) + ":" + str(value) +";"
         return newString
 
     REST_URL = "http://data.bioontology.org"
@@ -591,7 +596,7 @@ def ontologies(request):
         #print getParent(form['label'])
 
     elif 'stringToDict' in form:
-        print form['string']
+        #print form['string']
         return [stringToDict(form['string'])]
         #pprint.pprint(stringToDict(form['string'])) 
         #return {'dict' : stringToDict(form['string'])}
@@ -600,9 +605,9 @@ def ontologies(request):
         return [dictToString(form['dico'])]
         
     else:
-        print form['search']
-        term = form['search'].replace(' ','+')
-        print term
+        #print form['search']
+        term = form['search'].replace(' ','+') #%20
+        #print term
         database = form['database']
 
         
@@ -611,7 +616,7 @@ def ontologies(request):
         search_results = []
         #print REST_URL + "/search?q=" + term+'&ontology=' + database
         #print get_json(REST_URL + "/search?q=" + term+'&ontology=' + database)
-        print REST_URL + "/search?q=" + term+'&ontologies=' + database
+        #print REST_URL + "/search?q=" + term+'&ontologies=' + database
         search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)['collection'])
         return search_results
 

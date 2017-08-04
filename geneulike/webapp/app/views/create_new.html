@@ -38,7 +38,7 @@ hr {
 /* For chosen: single and multiple*/
 .chosen-container .chosen-drop {
   max-height: 150px;
-  overflow: auto;
+  overflow-y: auto;
 }
 .chosen-container-single .chosen-search{
     width:75%;
@@ -49,11 +49,61 @@ hr {
   max-height: 150px;
   overflow-y: auto;
 }
+
+
+
+.table-fixed thead {
+  width: 100%;
+  text-align:center;
+  vertical-align: middle;
+}
+.table-fixed  th {
+  text-align:center;
+}
+
+.table-fixed tbody {
+  height: 495px;
+  overflow-y: auto;
+  width: 100%;
+}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+.table-fixed tbody td, .table-fixed thead > tr > tr > th {
+  float: left;
+  border-bottom-width: 0;
+  text-align:center;
+  vertical-align: middle;
+}
+
+
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class='well'>
 
-  <h1 style="text-align:center;">Upload your project herae</h1>
+  <h1 style="text-align:center;">Upload your project here</h1>
   <hr class="hr-primary" > 
 
 </div>
@@ -116,84 +166,85 @@ hr {
 </div>
 <script type="text/ng-template" id="ProjectOntology">
 <!--   <div class="ngdialog-message"> -->
-<!--   <div class="ngdialog-message">
- -->  <div class="row">
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6">
-       <h2> <i class="fa fa-sitemap fa-2x text-center" aria-hidden="true"></i> Ontology Search</h2>
-    </div>
-  </div>
-  <br>
-  <div ng-if="danger" class="alert alert-danger">
-      {{danger}}
-      <br>
-  </div>
-  <div ng-if="success" class="alert alert-success">
-      {{success}}
-      <br>
-  </div>
-  <div ng-if="warning" class="alert alert-warning">
-      {{warning}}
-      <br>
-  </div>
-  <!-- <div style="text-align: top;">
-    <h2> <i class="fa fa-sitemap fa-4x" aria-hidden="true"></i> Ontology Search</h2>
-  </div> -->
-  <div class= "row">
-    <div class="form-group">
-    <label class="control-label col-xs-4" for="first_name" >Select Database</label>
-      <div class="col-xs-8">
-
-        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="projectview">
-                    <option value="" disabled selected>Please select</option>
-                    <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
-                    <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
-                    <option value="FMA">Foundational Model of Anatomy (FMA)</option>
-                    <option value="HP">Human Phenotype Ontology (HP)</option>
-                    <option value="PATO">Phenotypic Quality Ontology (PATO)</option>
-                    <option value="DOID">Human Disease Ontology (DOID)</option>
-                    <option value="GO">Gene Ontology (GO)</option>
-                    <option value="CL">Cell Ontology (CL)</option>
-                    <option value="BTO">BRENDA Tissue and Enzyme Source Ontology (BTO)</option>
-                    <option value="MP">Mammalian Phenotype Ontology (MP)</option>
-                    <option value="OBI">Ontology for Biomedical Investigations (OBI)</option>
-        </select>
-
-        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="strategyview">
-                    <option value="" disabled selected>Please select</option>
-                    <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
-                    <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
-                    <option value="FMA">Foundational Model of Anatomy (FMA)</option>
-                    
-        </select>
-
-        <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="listview">
-                    <option value="" disabled selected>Please select</option>
-                    <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
-                    <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
-                    <option value="FMA">Foundational Model of Anatomy (FMA)</option>
-                    
-        </select>
+  <div ng-show="viewOntology">
+    <div class="row">
+      <div class="col-xs-3"></div>
+      <div class="col-xs-6">
+         <h2> <i class="fa fa-search text-center" aria-hidden="true"></i>Ontology Search</h2>
       </div>
     </div>
-  </div>
-  <div class= "row">
-    <div class="form-group">
-        <div ng-if="onto_selected" class="form-group">
-                <label class="control-label col-xs-4" for="first_name">Search Term</label>
-                <div class="col-xs-8">
-                <div id="scrollable-dropdown-menu-typeahead">
-                  <input  class="form-control" id="organism_vivo" type="text" ng-model="selectOnto" placeholder="Species"
-                         ng-change="get_onto()" typeahead-min-length="4" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading" 
-                        class="form-control">
-                </div>
-                </div>
-            </div>
-          </div>
-  </div>
+    <br>
+    <div ng-if="danger" class="alert alert-danger">
+        {{danger}}
+        <br>
+    </div>
+    <div ng-if="success" class="alert alert-success">
+        {{success}}
+        <br>
+    </div>
+    <div ng-if="warning" class="alert alert-warning">
+        {{warning}}
+        <br>
+    </div>
+    <!-- <div style="text-align: top;">
+      <h2> <i class="fa fa-sitemap fa-4x" aria-hidden="true"></i> Ontology Search</h2>
+    </div> -->
 
-  <br>
-  <!-- <button ng-disabled="!onto" ng-click="addOntologyProject()">Add</button> -->
+    <div class= "row">
+      <div class="form-group">
+      <label class="control-label col-xs-4" for="first_name" >Select Database</label>
+        <div class="col-xs-8">
+
+          <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="projectview">
+                      <option value="" disabled selected>Please select</option>
+                      <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
+                      <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
+                      <option value="FMA">Foundational Model of Anatomy (FMA)</option>
+                      <option value="HP">Human Phenotype Ontology (HP)</option>
+                      <option value="PATO">Phenotypic Quality Ontology (PATO)</option>
+                      <option value="DOID">Human Disease Ontology (DOID)</option>
+                      <option value="GO">Gene Ontology (GO)</option>
+                      <option value="CL">Cell Ontology (CL)</option>
+                      <option value="BTO">BRENDA Tissue and Enzyme Source Ontology (BTO)</option>
+                      <option value="MP">Mammalian Phenotype Ontology (MP)</option>
+                      <option value="OBI">Ontology for Biomedical Investigations (OBI)</option>
+          </select>
+
+          <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="strategyview">
+                      <option value="" disabled selected>Please select</option>
+                      <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
+                      <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
+                      <option value="FMA">Foundational Model of Anatomy (FMA)</option>
+                      
+          </select>
+
+          <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="listview">
+                      <option value="" disabled selected>Please select</option>
+                      <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
+                      <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
+                      <option value="FMA">Foundational Model of Anatomy (FMA)</option>
+                      
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class= "row">
+      <div class="form-group">
+          <div ng-if="onto_selected" class="form-group">
+                  <label class="control-label col-xs-4" for="first_name">Search Term</label>
+                  <div class="col-xs-8">
+                  <div id="scrollable-dropdown-menu-typeahead">
+                    <input  class="form-control" id="organism_vivo" type="text" ng-model="selectOnto" placeholder="Species"
+                           ng-change="get_onto()" typeahead-min-length="4" typeahead-on-select="selected_tissue($item, $model,label)" typeahead=" item.prefLabel for item in search_result | filter:$viewValue" typeahead-loading="loading" 
+                          class="form-control">
+                  </div>
+                  </div>
+              </div>
+            </div>
+    </div>
+
+    <br>
+    <!-- <button ng-disabled="!onto" ng-click="addOntologyProject()">Add</button> -->
     <div class= "row">
 
       <div class="col-xs-12">
@@ -203,7 +254,65 @@ hr {
         </div>
         <!-- <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button> -->
       </div>
+    </div>
+  </div>
+
+  <div ng-show="!viewOntology">
+
+    <div class="row">
+      <div class="col-xs-3"></div>
+      <div class="col-xs-7">
+         <h2> <i class="fa fa-eye text-center" aria-hidden="true"></i>Ontology Overview</h2> 
+      </div>
 
     </div>
-  <br>
+    <br>
+
+    <div class ="row" ng-show="isValueEmpty()">
+      <div class="col-xs-12">
+        <p> No result. Please Add Some Ontology Term(s).
+      </div>
+    </div>
+    <div class ="row" ng-if="!isValueEmpty()">
+      <div class="col-xs-12">
+
+         
+
+        <table id="overViewTable" class= "table table-fixed">
+
+          <thead>
+            
+            <th class="col-xs-3" style="padding: 10px 1px 10px;">Database</th>
+            <th class="col-xs-8" style="padding: 10px 1px 10px;">Ontology Term</th>
+            <th class="col-xs-1" style="padding: 10px 1px 10px;">Delete</th>
+
+          </thead>
+
+          <tbody>  
+            <tr ng-repeat-start="(database,listTerm) in value"> 
+              <tr ng-repeat-end ng-repeat="term in listTerm">
+                <td class="col-xs-3" style="padding: 10px 1px 10px;"> {{ database }}</td>
+                <td class="col-xs-8" style="padding: 10px 1px 10px;"> {{ term }}</td>
+                <td class="col-xs-1" style="padding: 10px 1px 10px;">
+                  <p data-placement="left" data-toggle="tooltip" title="Delete">
+                    <button class="btn btn-danger btn-xs" data-title="Delete" ng-click="removeOntology(database,term)">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                  </p>
+                </td>
+              </tr>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+  <div class="ngdialog-buttons mt pull-left" ng-show="viewOntology">
+    <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="onViewOntologyChange()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+  </div>
+  <div class="ngdialog-buttons mt" ng-show="!viewOntology">
+    <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="onViewOntologyChange()"><i class="glyphicon glyphicon-chevron-right"></i></button>
+  </div>
 </script>
