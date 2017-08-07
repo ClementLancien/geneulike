@@ -67,7 +67,13 @@
                 method: 'POST',
                 isArray: false,
                 cache: false
-            }
+            },
+            checkData : {
+                url:'/checkData',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
         });
     }
 

@@ -30,8 +30,9 @@ from collections import OrderedDict
 import simplejson as json
 import subprocess
 from csv import DictWriter
-
+import string
 import logging
+import xlsxwriter 
 
 import smtplib
 import email.utils
@@ -1116,6 +1117,8 @@ def get_str(string):
         return str("").encode('utf-8')
     else:
         return string.encode('utf-8')
+
+
 ################HERE###########
 @view_config(route_name='excel_upload', renderer='json', request_method='POST')
 def excel_signature_upload(request):
@@ -1155,7 +1158,7 @@ def excel_signature_upload(request):
         logger.warning("Error - Upload path")
         logger.warning(upload_path)
         logger.warning(sys.exc_info())
-        return {'msg':'An error occurred while uploading your file. If the error persists please contact TOXsIgN support ','status':'1'}
+        return {'msg':'An error occurred while uploading your file. If the error persists please contact GeneULike support ','status':'1'}
 
 
 
@@ -1197,548 +1200,887 @@ def excel_signature_upload(request):
 
 
 
-    # for line in wb.sheet_by_index(0).row_values(row_number, start_colx=0, end_colx=101):
-    #     for i in line:
-    #         print i
+#     # for line in wb.sheet_by_index(0).row_values(row_number, start_colx=0, end_colx=101):
+#     #     for i in line:
+#     #         print i
 
-    #remove file
+#     #remove file
 
-    # return
+#     # return
 
-    # add_project(wb.sheet_by_index(0)) 
+#     # add_project(wb.sheet_by_index(0)) 
         
-    # add_study(wb.sheet_by_index(1))
+#     # add_study(wb.sheet_by_index(1))
         
-    # add_strategy(wb.sheet_by_index(2))
+#     # add_strategy(wb.sheet_by_index(2))
         
-    # add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
-###End#Test####
+#     # add_list(wb.sheet_by_index(3),wb.sheet_by_index(4))
+# ###End#Test####
 
 
 
-    #Create error list
+#     #Create error list
+#     projects_errors = {'Critical':[],'Warning':[],'Info':[]}
+#     studies_errors = {'Critical':[],'Warning':[],'Info':[]}
+#     strategies_errors = {'Critical':[],'Warning':[],'Info':[]}
+#     lists_errors = {'Critical':[],'Warning':[],'Info':[]}
+#     idLists_errors = {'Critical':[],'Warning':[],'Info':[]}
+
+#     projects_identifiers = []
+#     studies_identifiers = []
+#     strategies_identifiers = []
+#     lists_identifiers = []
+#     idLists_identifiers = []
+#     has_identifier =[]
+#     global critical
+#     critical=0
+
+
+
+#     zorro = 1
+#     def is_empty(row_value):
+#         boolean=False
+#        # print row_value
+#         for i in row_value:
+#             #print str(i)
+#             if row_value != "":
+#                 return True
+#         return boolean
+
+# #Project sheet
+#     # def is_project_identifier(row_value_identifier):
+#     #     return row_value_identifier == ""
+    
+#     # def is_project_title(row_value_title):
+#     #     return row_value_title == ""
+        
+#     # def is_project_description(row_value_description):
+#     #     return row_value_description == ""        
+        
+#     # def is_project_pubmed(row_value_pubmed):
+#     #     return row_value_pubmed == ""
+    
+#     # def is_project_contributor(row_value_contributor):
+#     #     return row_value_contributor == ""
+
+#     def is_project_error(identifier, title, description, pubmed, contributor, row_number):
+#         """Si il existe des erreurs, c'est erreurs sont consignés dans le dico projects_errors"""
+#         global critical
+#         if not identifier:
+#             #print True
+#             projects_errors['Critical'].append("Line " + str(row_number+1) + " - no ProjectID")
+#             critical += 1
+#         if not title:
+#             projects_errors['Critical'].append("Line " + str(row_number+1) + " -  no Title")
+#             critical += 1
+#         if not description:
+#             projects_errors['Warning'].append("Line " + str(row_number+1) + " -  no Description")
+#         if not pubmed:
+#             projects_errors['Warning'].append("Line " + str(row_number+1) + " - no PubMed DOI")
+#         if not contributor:
+#             projects_errors['Info'].append("Line " + str(row_number+1) + " - no Contributor(s)")
+#         if identifier in projects_identifiers:
+#             projects_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical ProjectID")
+#             critical += 1
+#     def is_project_row(row_value, row_number):
+#         if is_empty(row_value): 
+#             is_project_error(   (row_value[0]),\
+#                                 (row_value[1]),\
+#                                 (row_value[2]),\
+#                                 (row_value[3]),\
+#                                 (row_value[4]),\
+#                                 row_number)
+
+#             if str(row_value[0]):
+#                 projects_identifiers.append(str(row_value[0]))
+#                 has_identifier.append([str(row_value[0]), "", "", ""])
+               
+#     def projects_sheet(projects):
+        
+#         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
+#         #projects = 
+#         for row_number in range(5, projects.nrows):
+#             is_project_row( projects.row_values(row_number, start_colx=0, end_colx=None), row_number)
+
+#     # def get_plain_text(_list):
+#     #     newList=[]
+#     #     print _list
+#     #     for elt in _list:
+#     #         if elt == '':
+#     #             newList.append(str(""))
+#     #         elif isinstance(elt, float ):
+#     #             newList.append(str(int(elt)))
+#     #         else:
+#     #             newList.append(str(elt.encode("utf-8")))
+#     #     print newList
+#     #     return newList
+# # title = u"Klüft ć skräms inför på fédéral électoral große"
+
+# # print str(unicodedata.normalize('NFKD', title).encode('ascii','ignore'))
+
+# #Studies sheet
+
+#     # def is_study_identifier(row_value_identifier):
+#     #     return row_value_identifier == ""
+    
+#     def is_study_associated_project_identifier(row_value_associated_project_identifier):
+#         return str(row_value_associated_project_identifier) not in projects_identifiers
+
+#     # def is_study_title(row_value_title):
+#     #     return row_value_title == ""
+    
+#     # def is_study_description(row_value_description):
+#     #     return row_value_description == ""
+    
+#     # def is_study_phenotype_desease(row_value_phenotype_desease):
+#     #     return row_value_phenotype_desease == ""
+
+#     # def is_study_go_terms(row_value_go_terms):
+#     #     return row_value_go_terms == ""
+    
+#     # def is_study_organism(row_value_organism):
+#     #     return row_value_organism == ""
+    
+#     # def is_study_development_stage(row_value_development_stage):
+#     #     return row_value_development_stage == ""
+
+#     # def is_study_pubmed(row_value_pubmed):
+#     #     return row_value_pubmed == ""
+
+#     def get_unicode_to_str(_lists):
+
+#         newList = []
+#         #print _lists
+#         for x in _lists:
+#             if x == '':
+#                 newList.append(str(""))
+
+#             elif isinstance(x, float):
+#                 newList.append(str(int(x)))
+#             else:
+#                 newList.append(x.decode("utf-8"))
+
+#             #print x.encode('utf-8')
+#             #if isinstance(x, unicode):
+#                 #newList.append(x.encode('utf-8'))
+#                 #ucd.name(x)
+#                 #newList.append(unicodedata.normalize('NFKD', x).encode('ascii','ignore'))
+#             #if 
+#             #else:
+#             #    newList.append(x)
+#             #x.replace('\u2018','\'')
+#             #x.replace('\u2019','\'')
+#             #print x      
+#             #strList.append(str(x))
+#         #for x in newList:
+#             #print get_str(x) 
+#         #print strList
+#         return newList
+
+#     def get_str(element):
+#         return element.encode('utf-8')
+
+#     def is_study_error(identifier, associated_project_identifier, title, description, \
+#                         phenotype_desease, go_terms, organism, development_stage, pubmed, row_number):
+        
+#         global critical
+
+#         if not identifier:
+#             studies_errors['Critical'].append("Line " + str(row_number+1) + " - no StudyID")
+#             critical += 1
+#         if(associated_project_identifier):
+#             studies_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated ProjectID")
+#             critical += 1
+#         if not title:
+#             studies_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
+#             critical += 1
+#         if not description:
+#             studies_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
+#         if not phenotype_desease:
+#             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Phenotype/Desease")
+#         if not go_terms:
+#             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Go terms")
+#         if not organism:
+#             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Organism")
+#         if not development_stage:
+#             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Development Stage")
+#         if not pubmed:
+#             studies_errors['Info'].append("Line " + str(row_number+1) + " - no Pubmed")
+#         if identifier in studies_identifiers:
+#             studies_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical StudiesID")
+#             critical += 1
+
+#     def is_study_row(row_value, row_number):
+#         if is_empty(row_value):    
+#             is_study_error( (row_value[0]),\
+#                             is_study_associated_project_identifier((row_value[1])),\
+#                             (row_value[2]),\
+#                             (row_value[3]),\
+#                             (row_value[4]),\
+#                             (row_value[5]),\
+#                             (row_value[6]),\
+#                             (row_value[7]),\
+#                             (row_value[8]),\
+#                             row_number)
+                                
+#             if(str(row_value[0])):
+#                 studies_identifiers.append((row_value[0]))
+#                 for i in range(len(has_identifier)):
+#                     if has_identifier[i][0] == (row_value[1]):
+#                         has_identifier[i][1] += (row_value[0])
+
+#     def studies_sheet(studies):
+#         #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
+#         #studies = wb.sheet_by_index(1)
+#         #print studies
+#         for row_number in range(5, studies.nrows):
+#             #print studies.row_values(row_number, start_colx=0, end_colx=None)
+#             #is_study_row(studies.row_values(row_number, start_colx=0, end_colx=None), row_number)
+#             #is_study_row([str(unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore')) for x in studies.row_values(row_number, start_colx=0, end_colx=None)], row_number)
+#             is_study_row((studies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
+
+
+
+
+# #Strategies sheet
+
+#     # def is_strategy_identifier(row_value_identifier):
+#     #     return row_value_identifier == ""
+    
+#     def is_strategy_associated_study_identifier(row_value_associated_study_identifier):
+#         return row_value_associated_study_identifier not in studies_identifiers
+    
+#     # def is_strategy_title(row_value_title):
+#     #     return row_value_title == ""
+    
+#     # def is_strategy_description(row_value_description):
+#     #     return row_value_description == ""
+    
+#     # def is_strategy_type_of_experiment(row_value_type_of_experiment):
+#     #     return row_value_type_of_experiment == ""
+    
+#     # def is_strategy_technology(row_value_technology):
+#     #     return row_value_technology == ""
+    
+#     # def is_strategy_process(row_value_process):
+#     #     return row_value_process == ""
+    
+    
+#     def is_strategy_error(identifier, associated_study_identifier, title, description,\
+#                             type_of_experiment, technology, process, row_number):
+#         global critical
+#         if not identifier:
+#             strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no StrategyID")
+#             critical += 1
+#         if(associated_study_identifier):
+#             strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated StudyID")
+#             critical += 1
+#         if not title:
+#             strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
+#             critical += 1
+#         if not description:
+#             strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
+#         if not type_of_experiment:
+#             strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Type of Experiment")
+#         if not technology:
+#             strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Technology")
+#         if not process:
+#             strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Process")
+#         if identifier in strategies_identifiers:
+#             strategies_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical StrategyID")
+#             critical += 1
+
+#     def is_strategy_row(row_value, row_number):
+#         if is_empty(row_value): 
+#             is_strategy_error(  (row_value[0]),\
+#                                 is_strategy_associated_study_identifier((row_value[1])),\
+#                                 (row_value[2]),\
+#                                 (row_value[3]),\
+#                                 (row_value[4]),\
+#                                 (row_value[5]),\
+#                                 (row_value[6]),\
+#                                 row_number)
+                                    
+#             if(str(row_value[0])):
+#                 strategies_identifiers.append((row_value[0]))
+#                 for i in range(len(has_identifier)):
+#                     if has_identifier[i][1] == (row_value[1]):
+#                         has_identifier[i][2] += (row_value[0])
+
+
+#     def strategies_sheet(strategies):
+#         for row_number in range(5, strategies.nrows):
+#             is_strategy_row((strategies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
+
+
+
+# #lists sheet
+#     # def is_list_identifier(row_value_identifier):
+#     #     return row_value_identifier == ""
+    
+#     def is_list_associated_strategy_identifier(row_value_associated_strategy_identifier):
+#         return row_value_associated_strategy_identifier not in strategies_identifiers
+    
+#     # def is_list_title(row_value_title):
+#     #     return row_value_title == ""
+    
+#     # def is_list_description(row_value_description):
+#     #     return row_value_description == ""
+    
+#     # def is_list_type_of_identifier(row_value_type_of_identifier):
+#     #     return row_value_type_of_identifier == ""
+    
+#     def is_list_extended_type_of_identifier(row_value_extended_type_of_identifier, row_value_type_of_identifier):
+#         return (row_value_extended_type_of_identifier == "" and row_value_type_of_identifier[:3] == "GPL")
+    
+#     # def is_list_parent_list_identifier(row_value_parent_list_identifier):
+#     #     return row_value_parent_list_identifier == ""
+    
+#     # def is_list_child_list_identifier(row_value_child_list_identifier):
+#     #     return row_value_child_list_identifier == ""
+    
+#     def is_list_error(identifier, associated_study_identifier, title, description,\
+#                         type_of_identifier,extended_type_of_identifier,\
+#                         parent_list_identifier, child_list_identifier, row_number):
+        
+#         global critical
+
+#         if not identifier:
+#             lists_errors['Critical'].append("Line " + str(row_number+1) + " - no ListID")
+#             critical += 1
+#         if(associated_study_identifier):
+#             lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated StrategyID")
+#             critical += 1
+#         if not title:
+#             lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
+#             critical += 1
+#         if not description:
+#             lists_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
+#         if not type_of_identifier:
+#             lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Type of identifier")
+#             critical += 1
+#         if(extended_type_of_identifier):
+#             lists_errors['Critical'].append("Line " + str(row_number+1) + "- no Extended Type of Identifier. ",\
+#             + "This field is required since you have selected a GPL identifier in the previoyus column")
+#             critical += 1
+#         if not parent_list_identifier:
+#             lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListParentID")
+#         if not child_list_identifier:
+#             lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListChildID")
+    
+#     def is_list_row(row_value, row_number):
+#         if is_empty(row_value):
+#             print"True"
+#         else:
+#             print "Flase"
+#         if is_empty(row_value): 
+#             is_list_error(  (row_value[0]),\
+#                             is_list_associated_strategy_identifier((row_value[1])),\
+#                             (row_value[2]),\
+#                             (row_value[3]),\
+#                             (row_value[4]),\
+#                             is_list_extended_type_of_identifier((row_value[5]), (row_value[4])),\
+#                             (row_value[6]),\
+#                             (row_value[7]),\
+#                             row_number)
+            
+#             if(str(row_value[0]) and str(row_value[8]) == "Yes"):
+#                 lists_identifiers.append(str(row_value[0]))
+#                 for i in range(len(has_identifier)):
+#                     if has_identifier[i][2] == (row_value[1]):
+#                         has_identifier[i][3] += (row_value[0])
+      
+#     def lists_sheet(lists):
+#         for row_number in range(5, lists.nrows):
+#             is_list_row(get_unicode_to_str(lists.row_values(row_number, start_colx=0, end_colx=None)) , row_number)
+
+# #idlist sheet
+
+#     def is_idList_identifier(col_value_identifier):
+#         return col_value_identifier not in lists_identifiers
+    
+#     def is_idList_list(col_value_list):
+#         return len(col_value_list) == 0
+        
+#     def is_idList_error(identifier, idList, col_number):
+#         global critical
+#         if(identifier):
+#             idLists_errors['Critical'].append("Column " + str(col_number+1) + " in your idLists Sheet has no known Identifier")
+#             critical += 1
+#         if(idList):
+#             idLists_errors['Critical'].append("Column " + str(col_number+1) + " in your idLists Sheet has no List associated with")
+    
+#     def is_idList_row(col_value, col_number):
+#         #print col_value[1:]
+#         if is_empty(col_value): 
+#             is_idList_error(is_idList_identifier((col_value[0])),\
+#                                  is_idList_list(col_value[1:]), 
+#                                  col_number)
+#             if(is_idList_identifier(col_value[0]) == False):
+#                 idLists_identifiers.append(str(col_value[0]))
+    
+#     def get_absent_identifier_in_idLists():
+#         absent_identifier_in_idList_sheet = []
+#         for identifier in idLists_identifiers:
+#             if identifier not in lists_identifiers:
+#                 absent_identifier_in_idList_sheet.append(identifier)
+                
+#         return absent_identifier_in_idList_sheet
+        
+#     def get_absent_identifier_in_Lists(): 
+#         absent_identifier_in_lists_sheet = []
+#         for identifier in lists_identifiers:
+#             if identifier not in idLists_identifiers:
+#                 absent_identifier_in_lists_sheet.append(identifier)
+                
+#         return absent_identifier_in_lists_sheet
+    
+#     def is_absent_identifier_in_idLists(absent_identifier_in_idList_sheet):
+#         return len(absent_identifier_in_idList_sheet) != 0
+    
+#     def is_absent_identifier_in_lists(absent_identifier_in_lists_sheet):
+#         return len(absent_identifier_in_lists_sheet) != 0
+    
+#     def is_absent_error(bool_absent_identifier_in_idList_sheet,  absent_identifier_in_idList_sheet, bool_absent_identifier_in_lists_sheet, absent_identifier_in_lists_sheet):
+#         global critical
+#         if(bool_absent_identifier_in_idList_sheet):
+#             for identifier in absent_identifier_in_idList_sheet:
+#                 idLists_errors['Critical'].append("IdList \"" + str(identifier) + "\" is present in your idList Sheet but is absent in your Lists Sheet ")
+#                 critical += 1
+#         if(bool_absent_identifier_in_lists_sheet):
+#             for identifier in absent_identifier_in_lists_sheet:
+#                 idLists_errors['Critical'].append("ListID \"" + str(identifier) + "\" is present in your Lists Sheet but is absent in your idList Sheet" )
+
+#     def idLists_sheet(idLists):
+
+#         for col_number in range(0, idLists.ncols):
+#             _list = [str(element).split(".")[0] for element in idLists.col_values(col_number, start_rowx=0, end_rowx=None)]
+#             is_idList_row(_list, col_number)
+
+#         absent_list = get_absent_identifier_in_Lists()
+#         absent_idList = get_absent_identifier_in_idLists()
+        
+#         is_absent_error(is_absent_identifier_in_idLists(absent_idList), absent_idList, is_absent_identifier_in_lists(absent_list), absent_list)
+
+#     #Read excel file
+
+
+#     def is_absent():
+#         global critical
+#         for i in range(len(has_identifier)):
+#             #print has_identifier[i]
+#             if not has_identifier[i][1]:
+#                 projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no study associated with")
+#                 critical += 1
+#             elif not has_identifier[i][2]:
+#                 projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no Strategy associated with")
+#                 critical += 1
+#             elif not has_identifier[i][3]:
+#                 projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no Lists associated with")
+#                 critical += 1
+
+#     try :
+#         input_file.seek(0)
+#         wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1251")
+        
+#         # book = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name))
+#         # sheet = book.sheet_by_index(0)
+#         # print "start"
+#         # print sheet.cell(5, 2)  # prints text:u'Andrea Bargnani'
+#         # print sheet.cell(5, 2).value
+#         # print isinstance(sheet.cell(5, 2).value, basestring) #str(sheet.cell(5, 2).value).encode("utf-8")
+#         # print str()
+#         # print "end"
+
+
+
+#         # print "here"
+#         # print wb.cell(5, 2).value
+#         # print [x.value for x in wb.sheet_by_index(0).row_values(5)]
+#         # with open("/home/clancien/test.txt", 'w') as output:
+#         #     for x in wb.sheet_by_index(0).row_values(5):
+#         #         output.write(x + "\n")
+#         #print wb.biff_version, wb.codepage, wb.encoding
+
+#         #Read project
+
+
+#         projects = wb.sheet_by_index(0)
+#         studies = wb.sheet_by_index(1)
+#         strategies = wb.sheet_by_index(2)
+#         lists = wb.sheet_by_index(3)
+#         idLists=wb.sheet_by_index(4)
+#         #print lists
+
+#         projects_sheet(projects)
+#         studies_sheet(studies)
+#         strategies_sheet(strategies)
+#         lists_sheet(lists)
+#         idLists_sheet(idLists)
+#         is_absent()
+#         #print idLists_errors
+#         #print has_identifier
+#         #print len(has_identifier)
+#         #add if
+#         #print "critical : " + str(critical)
+#         if critical != 0:
+#             print "create path"
+#             os.remove(os.path.join(upload_path, tmp_file_name))
+#         return {'msg':"File checked and uploded !",
+#                 'error_project': projects_errors,
+#                 'error_study':studies_errors,
+#                 'error_strategy':strategies_errors,
+#                 'error_list': lists_errors,
+#                 'error_idList':idLists_errors,
+#                 'critical':str(critical),
+#                 'file': os.path.join(upload_path, tmp_file_name),
+#                 'status':'0' }
+        
+#     except:
+#         logger.warning("Error - Read excel file")
+#         logger.warning(sys.exc_info())
+#         return {'msg':'An error occurred while saving your file. If the error persists please contact TOXsIgN support ','status':'1'}
+
+
+
+@view_config(route_name='checkData', renderer='json', request_method='POST')
+def checkData(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    input_file = None
+    form = json.loads(request.body, encoding=request.charset)
+    data = form['data']
+
+
     projects_errors = {'Critical':[],'Warning':[],'Info':[]}
-    studies_errors = {'Critical':[],'Warning':[],'Info':[]}
     strategies_errors = {'Critical':[],'Warning':[],'Info':[]}
     lists_errors = {'Critical':[],'Warning':[],'Info':[]}
-    idLists_errors = {'Critical':[],'Warning':[],'Info':[]}
 
-    projects_identifiers = []
-    studies_identifiers = []
-    strategies_identifiers = []
-    lists_identifiers = []
-    idLists_identifiers = []
-    has_identifier =[]
+
+    listprojectID =["Root","GUP0","GUP1","GUP2","GUP3","GUP4","GUP5","GUP6","GUP7","GUP8","GUP9","GUP10","GUP11","GUP12","GUP13","GUP14","GUP15","GUP16","GUP17","GUP18","GUP19","GUP20","GUP21","GUP22","GUP23","GUP24","GUP25","GUP26","GUP27","GUP28","GUP29","GUP30","GUP31","GUP32","GUP33","GUP34","GUP35","GUP36","GUP37","GUP38","GUP39","GUP40","GUP41","GUP42","GUP43","GUP44","GUP45","GUP46","GUP47","GUP48","GUP49","GUP50","GUP51","GUP52","GUP53","GUP54","GUP55","GUP56","GUP57","GUP58","GUP59","GUP60","GUP61","GUP62","GUP63","GUP64","GUP65","GUP66","GUP67","GUP68","GUP69","GUP70","GUP71","GUP72","GUP73","GUP74","GUP75","GUP76","GUP77","GUP78","GUP79","GUP80","GUP81","GUP82","GUP83","GUP84","GUP85","GUP86","GUP87","GUP88","GUP89","GUP90","GUP91","GUP92","GUP93","GUP94","GUP95","GUP96","GUP97","GUP98","GUP99","GUP100"]
+
+    parentProjectID=[]
+    projectID=[]
+
+    listID=[]
+
+
+    associatedProjectID=[]
+    _input={}
+    _output={}
+    global isEmpty
+    isEmpty=True
+
     global critical
     critical=0
 
+    
 
 
-    zorro = 1
-    def is_empty(row_value):
-        boolean=False
-       # print row_value
-        for i in row_value:
-            #print str(i)
-            if row_value != "":
+    def project_sheet(projects):#list[0]
+        for index in range(1, len(projects[0])):
+            """
+                0 : Project ID(s)
+                1 : Parent project ID
+                2 : Contributors (comma or semicolon separated)
+                3 : Title
+                4 : Description
+                5 : Project’s controlled vocabularies (please paste the text from the ontology blabla)
+                6 : Crosslink(s) (comma or semicolon separated)
+                7 : Additional Information
+                8 : PubMedID(s)  (comma or semicolon separated)
+
+            """
+            is_project( [projects[0][index],\
+                        projects[1][index],\
+                        projects[2][index],\
+                        projects[3][index],\
+                        projects[4][index],\
+                        projects[5][index],\
+                        projects[6][index],\
+                        projects[7][index],\
+                        projects[8][index]],
+                        index)
+
+
+    def is_not_empty(_list):
+
+        for element in _list[1:]:
+            if element != "":
                 return True
-        return boolean
+        return False
 
-#Project sheet
-    # def is_project_identifier(row_value_identifier):
-    #     return row_value_identifier == ""
-    
-    # def is_project_title(row_value_title):
-    #     return row_value_title == ""
-        
-    # def is_project_description(row_value_description):
-    #     return row_value_description == ""        
-        
-    # def is_project_pubmed(row_value_pubmed):
-    #     return row_value_pubmed == ""
-    
-    # def is_project_contributor(row_value_contributor):
-    #     return row_value_contributor == ""
+    def is_project(project, index):
+        global isEmpty
+        if is_not_empty(project):
+            has_project_error(project, str(xlsxwriter.utility.xl_col_to_name(index)))
 
-    def is_project_error(identifier, title, description, pubmed, contributor, row_number):
-        """Si il existe des erreurs, c'est erreurs sont consignés dans le dico projects_errors"""
-        global critical
-        if not identifier:
-            #print True
-            projects_errors['Critical'].append("Line " + str(row_number+1) + " - no ProjectID")
-            critical += 1
-        if not title:
-            projects_errors['Critical'].append("Line " + str(row_number+1) + " -  no Title")
-            critical += 1
-        if not description:
-            projects_errors['Warning'].append("Line " + str(row_number+1) + " -  no Description")
-        if not pubmed:
-            projects_errors['Warning'].append("Line " + str(row_number+1) + " - no PubMed DOI")
-        if not contributor:
-            projects_errors['Info'].append("Line " + str(row_number+1) + " - no Contributor(s)")
-        if identifier in projects_identifiers:
-            projects_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical ProjectID")
-            critical += 1
-    def is_project_row(row_value, row_number):
-        if is_empty(row_value): 
-            is_project_error(   (row_value[0]),\
-                                (row_value[1]),\
-                                (row_value[2]),\
-                                (row_value[3]),\
-                                (row_value[4]),\
-                                row_number)
+            projectID.append(project[0])
+            if project[1] != "":
+                parentProjectID.append(project[1])
 
-            if str(row_value[0]):
-                projects_identifiers.append(str(row_value[0]))
-                has_identifier.append([str(row_value[0]), "", "", ""])
-               
-    def projects_sheet(projects):
-        
-        #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
-        #projects = 
-        for row_number in range(5, projects.nrows):
-            is_project_row( projects.row_values(row_number, start_colx=0, end_colx=None), row_number)
+            if isEmpty:
+                isEmpty=False
 
-    # def get_plain_text(_list):
-    #     newList=[]
-    #     print _list
-    #     for elt in _list:
-    #         if elt == '':
-    #             newList.append(str(""))
-    #         elif isinstance(elt, float ):
-    #             newList.append(str(int(elt)))
-    #         else:
-    #             newList.append(str(elt.encode("utf-8")))
-    #     print newList
-    #     return newList
-# title = u"Klüft ć skräms inför på fédéral électoral große"
+    def is_not_ProjectID(identifiant):
+        if identifiant not in listprojectID:
+            return True
+        return False
 
-# print str(unicodedata.normalize('NFKD', title).encode('ascii','ignore'))
+    def has_project_error(project, index):
+            """Si il existe des erreurs, c'est erreurs sont consignés dans le dico projects_errors"""
+            global critical
+            if not project[0]: # projectID
+                projects_errors['Critical'].append("Column " + index + " - no ProjectID")
+                critical += 1
 
-#Studies sheet
+            if not project[1]: # Parent project ID
+                projects_errors['Critical'].append("Column " + index + " -  no Parent ProjectID")
+                critical += 1
 
-    # def is_study_identifier(row_value_identifier):
-    #     return row_value_identifier == ""
-    
-    def is_study_associated_project_identifier(row_value_associated_project_identifier):
-        return str(row_value_associated_project_identifier) not in projects_identifiers
+            if is_not_ProjectID(project[1]):
+                projects_errors['Critical'].append("Column " + index + " -  no Parent ProjectID Found")
+                critical += 1
 
-    # def is_study_title(row_value_title):
-    #     return row_value_title == ""
-    
-    # def is_study_description(row_value_description):
-    #     return row_value_description == ""
-    
-    # def is_study_phenotype_desease(row_value_phenotype_desease):
-    #     return row_value_phenotype_desease == ""
+            if not project[2]: #Contributors (comma or semicolon separated)
+                projects_errors['Info'].append("Column " + index + " - no Contributor(s)")
 
-    # def is_study_go_terms(row_value_go_terms):
-    #     return row_value_go_terms == ""
-    
-    # def is_study_organism(row_value_organism):
-    #     return row_value_organism == ""
-    
-    # def is_study_development_stage(row_value_development_stage):
-    #     return row_value_development_stage == ""
-
-    # def is_study_pubmed(row_value_pubmed):
-    #     return row_value_pubmed == ""
-
-    def get_unicode_to_str(_lists):
-
-        newList = []
-        #print _lists
-        for x in _lists:
-            if x == '':
-                newList.append(str(""))
-
-            elif isinstance(x, float):
-                newList.append(str(int(x)))
-            else:
-                newList.append(x.decode("utf-8"))
-
-            #print x.encode('utf-8')
-            #if isinstance(x, unicode):
-                #newList.append(x.encode('utf-8'))
-                #ucd.name(x)
-                #newList.append(unicodedata.normalize('NFKD', x).encode('ascii','ignore'))
-            #if 
-            #else:
-            #    newList.append(x)
-            #x.replace('\u2018','\'')
-            #x.replace('\u2019','\'')
-            #print x      
-            #strList.append(str(x))
-        #for x in newList:
-            #print get_str(x) 
-        #print strList
-        return newList
-
-    def get_str(element):
-        return element.encode('utf-8')
-
-    def is_study_error(identifier, associated_project_identifier, title, description, \
-                        phenotype_desease, go_terms, organism, development_stage, pubmed, row_number):
-        
-        global critical
-
-        if not identifier:
-            studies_errors['Critical'].append("Line " + str(row_number+1) + " - no StudyID")
-            critical += 1
-        if(associated_project_identifier):
-            studies_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated ProjectID")
-            critical += 1
-        if not title:
-            studies_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
-            critical += 1
-        if not description:
-            studies_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
-        if not phenotype_desease:
-            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Phenotype/Desease")
-        if not go_terms:
-            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Go terms")
-        if not organism:
-            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Organism")
-        if not development_stage:
-            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Development Stage")
-        if not pubmed:
-            studies_errors['Info'].append("Line " + str(row_number+1) + " - no Pubmed")
-        if identifier in studies_identifiers:
-            studies_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical StudiesID")
-            critical += 1
-
-    def is_study_row(row_value, row_number):
-        if is_empty(row_value):    
-            is_study_error( (row_value[0]),\
-                            is_study_associated_project_identifier((row_value[1])),\
-                            (row_value[2]),\
-                            (row_value[3]),\
-                            (row_value[4]),\
-                            (row_value[5]),\
-                            (row_value[6]),\
-                            (row_value[7]),\
-                            (row_value[8]),\
-                            row_number)
-                                
-            if(str(row_value[0])):
-                studies_identifiers.append((row_value[0]))
-                for i in range(len(has_identifier)):
-                    if has_identifier[i][0] == (row_value[1]):
-                        has_identifier[i][1] += (row_value[0])
-
-    def studies_sheet(studies):
-        #wb = open_workbook(os.path.join(self.upload_path, self.file_name),encoding_override="cp1251")
-        #studies = wb.sheet_by_index(1)
-        #print studies
-        for row_number in range(5, studies.nrows):
-            #print studies.row_values(row_number, start_colx=0, end_colx=None)
-            #is_study_row(studies.row_values(row_number, start_colx=0, end_colx=None), row_number)
-            #is_study_row([str(unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore')) for x in studies.row_values(row_number, start_colx=0, end_colx=None)], row_number)
-            is_study_row((studies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
-
-
-
-
-#Strategies sheet
-
-    # def is_strategy_identifier(row_value_identifier):
-    #     return row_value_identifier == ""
-    
-    def is_strategy_associated_study_identifier(row_value_associated_study_identifier):
-        return row_value_associated_study_identifier not in studies_identifiers
-    
-    # def is_strategy_title(row_value_title):
-    #     return row_value_title == ""
-    
-    # def is_strategy_description(row_value_description):
-    #     return row_value_description == ""
-    
-    # def is_strategy_type_of_experiment(row_value_type_of_experiment):
-    #     return row_value_type_of_experiment == ""
-    
-    # def is_strategy_technology(row_value_technology):
-    #     return row_value_technology == ""
-    
-    # def is_strategy_process(row_value_process):
-    #     return row_value_process == ""
-    
-    
-    def is_strategy_error(identifier, associated_study_identifier, title, description,\
-                            type_of_experiment, technology, process, row_number):
-        global critical
-        if not identifier:
-            strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no StrategyID")
-            critical += 1
-        if(associated_study_identifier):
-            strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated StudyID")
-            critical += 1
-        if not title:
-            strategies_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
-            critical += 1
-        if not description:
-            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
-        if not type_of_experiment:
-            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Type of Experiment")
-        if not technology:
-            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Technology")
-        if not process:
-            strategies_errors['Warning'].append("Line " + str(row_number+1) + " - no Process")
-        if identifier in strategies_identifiers:
-            strategies_errors['Critical'].append("Line " + str(row_number+1) + " -  2 identical StrategyID")
-            critical += 1
-
-    def is_strategy_row(row_value, row_number):
-        if is_empty(row_value): 
-            is_strategy_error(  (row_value[0]),\
-                                is_strategy_associated_study_identifier((row_value[1])),\
-                                (row_value[2]),\
-                                (row_value[3]),\
-                                (row_value[4]),\
-                                (row_value[5]),\
-                                (row_value[6]),\
-                                row_number)
-                                    
-            if(str(row_value[0])):
-                strategies_identifiers.append((row_value[0]))
-                for i in range(len(has_identifier)):
-                    if has_identifier[i][1] == (row_value[1]):
-                        has_identifier[i][2] += (row_value[0])
-
-
-    def strategies_sheet(strategies):
-        for row_number in range(5, strategies.nrows):
-            is_strategy_row((strategies.row_values(row_number, start_colx=0, end_colx=None)), row_number)
-
-
-
-#lists sheet
-    # def is_list_identifier(row_value_identifier):
-    #     return row_value_identifier == ""
-    
-    def is_list_associated_strategy_identifier(row_value_associated_strategy_identifier):
-        return row_value_associated_strategy_identifier not in strategies_identifiers
-    
-    # def is_list_title(row_value_title):
-    #     return row_value_title == ""
-    
-    # def is_list_description(row_value_description):
-    #     return row_value_description == ""
-    
-    # def is_list_type_of_identifier(row_value_type_of_identifier):
-    #     return row_value_type_of_identifier == ""
-    
-    def is_list_extended_type_of_identifier(row_value_extended_type_of_identifier, row_value_type_of_identifier):
-        return (row_value_extended_type_of_identifier == "" and row_value_type_of_identifier[:3] == "GPL")
-    
-    # def is_list_parent_list_identifier(row_value_parent_list_identifier):
-    #     return row_value_parent_list_identifier == ""
-    
-    # def is_list_child_list_identifier(row_value_child_list_identifier):
-    #     return row_value_child_list_identifier == ""
-    
-    def is_list_error(identifier, associated_study_identifier, title, description,\
-                        type_of_identifier,extended_type_of_identifier,\
-                        parent_list_identifier, child_list_identifier, row_number):
-        
-        global critical
-
-        if not identifier:
-            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no ListID")
-            critical += 1
-        if(associated_study_identifier):
-            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Associated StrategyID")
-            critical += 1
-        if not title:
-            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Title")
-            critical += 1
-        if not description:
-            lists_errors['Warning'].append("Line " + str(row_number+1) + " - no Description")
-        if not type_of_identifier:
-            lists_errors['Critical'].append("Line " + str(row_number+1) + " - no Type of identifier")
-            critical += 1
-        if(extended_type_of_identifier):
-            lists_errors['Critical'].append("Line " + str(row_number+1) + "- no Extended Type of Identifier. ",\
-            + "This field is required since you have selected a GPL identifier in the previoyus column")
-            critical += 1
-        if not parent_list_identifier:
-            lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListParentID")
-        if not child_list_identifier:
-            lists_errors['Info'].append("Line " + str(row_number+1) + " - no ListChildID")
-    
-    def is_list_row(row_value, row_number):
-        if is_empty(row_value):
-            print"True"
-        else:
-            print "Flase"
-        if is_empty(row_value): 
-            is_list_error(  (row_value[0]),\
-                            is_list_associated_strategy_identifier((row_value[1])),\
-                            (row_value[2]),\
-                            (row_value[3]),\
-                            (row_value[4]),\
-                            is_list_extended_type_of_identifier((row_value[5]), (row_value[4])),\
-                            (row_value[6]),\
-                            (row_value[7]),\
-                            row_number)
+            if not project[3]: # Title
+                projects_errors['Critical'].append("Column " + index + " -  no Title")
+                critical += 1
             
-            if(str(row_value[0]) and str(row_value[8]) == "Yes"):
-                lists_identifiers.append(str(row_value[0]))
-                for i in range(len(has_identifier)):
-                    if has_identifier[i][2] == (row_value[1]):
-                        has_identifier[i][3] += (row_value[0])
-      
-    def lists_sheet(lists):
-        for row_number in range(5, lists.nrows):
-            is_list_row(get_unicode_to_str(lists.row_values(row_number, start_colx=0, end_colx=None)) , row_number)
+            if not project[4]: #Description
+                projects_errors['Warning'].append("Column " + index + " -  no Description")
 
-#idlist sheet
+            if not project[5]: #Project’s controlled vocabularies (please paste the text from the ontology blabla)
+                projects_errors['Warning'].append("Column " + index + " -  no Ontologies")
 
-    def is_idList_identifier(col_value_identifier):
-        return col_value_identifier not in lists_identifiers
-    
-    def is_idList_list(col_value_list):
-        return len(col_value_list) == 0
-        
-    def is_idList_error(identifier, idList, col_number):
+            if not project[6]: #Crosslink(s) (comma or semicolon separated)
+                projects_errors['Info'].append("Column " + index + " - no Crosslink(s)")
+
+            if not project[7]: #Additional Information
+                projects_errors['Info'].append("Column " + index + " - no Additional Information")
+
+            if not project[8]:  #PubMedID(s)  (comma or semicolon separated)
+                projects_errors['Warning'].append("Column " + index + " -  no PubMed ID")
+
+    def projectHasStrategy():
         global critical
-        if(identifier):
-            idLists_errors['Critical'].append("Column " + str(col_number+1) + " in your idLists Sheet has no known Identifier")
+        for project in projectID:
+            if project not in associatedProjectID:
+                projects_errors['Critical'].append("Column " + str(xlsxwriter.utility.xl_col_to_name(int(project[3:]))) +" - no Strategy Associated with this ProjectID")
+                critical += 1
+
+    def list_sheet(_list): # list[2]
+        """ 
+            0 : List ID(s)
+            1 : Title
+            2 : Description
+            3 : Results and interpretation
+            4 : List’s controlled vocabularies (please paste the text from the ontology blabla) gene meiotique
+            5 : Database(onglet)
+            6 : Additional Information
+            7 : Make it available for comparison!
+            8 : FileName"""
+        for index in range(1,len(_list[2])):
+            is_list([_list[0][index],\
+                    _list[1][index],\
+                    _list[2][index],\
+                    _list[3][index],\
+                    _list[4][index],\
+                    _list[5][index],\
+                    _list[6][index],\
+                    _list[7][index],\
+                    _list[8][index]],
+                    index)
+
+    def is_list(_list, index):
+        global isEmpty
+        if is_not_empty(_list):
+            has_list_error(_list , str(xlsxwriter.utility.xl_col_to_name(index)))
+            listID.append(_list[0])
+
+            if isEmpty:
+                isEmpty=False
+
+    def has_list_error(_list , index):
+        global critical
+
+        if not _list[0]: #List ID(s)
+            lists_errors['Critical'].append("Column " + index + " - no ListID")
             critical += 1
-        if(idList):
-            idLists_errors['Critical'].append("Column " + str(col_number+1) + " in your idLists Sheet has no List associated with")
-    
-    def is_idList_row(col_value, col_number):
-        #print col_value[1:]
-        if is_empty(col_value): 
-            is_idList_error(is_idList_identifier((col_value[0])),\
-                                 is_idList_list(col_value[1:]), 
-                                 col_number)
-            if(is_idList_identifier(col_value[0]) == False):
-                idLists_identifiers.append(str(col_value[0]))
-    
-    def get_absent_identifier_in_idLists():
-        absent_identifier_in_idList_sheet = []
-        for identifier in idLists_identifiers:
-            if identifier not in lists_identifiers:
-                absent_identifier_in_idList_sheet.append(identifier)
-                
-        return absent_identifier_in_idList_sheet
-        
-    def get_absent_identifier_in_Lists(): 
-        absent_identifier_in_lists_sheet = []
-        for identifier in lists_identifiers:
-            if identifier not in idLists_identifiers:
-                absent_identifier_in_lists_sheet.append(identifier)
-                
-        return absent_identifier_in_lists_sheet
-    
-    def is_absent_identifier_in_idLists(absent_identifier_in_idList_sheet):
-        return len(absent_identifier_in_idList_sheet) != 0
-    
-    def is_absent_identifier_in_lists(absent_identifier_in_lists_sheet):
-        return len(absent_identifier_in_lists_sheet) != 0
-    
-    def is_absent_error(bool_absent_identifier_in_idList_sheet,  absent_identifier_in_idList_sheet, bool_absent_identifier_in_lists_sheet, absent_identifier_in_lists_sheet):
+        if not _list[1]: # Title
+            lists_errors['Critical'].append("Column " + index + " - no Title")
+            critical += 1
+
+        if not _list[2]: #Description
+            lists_errors['Warning'].append("Column " + index + " - no Description")
+
+        if not _list[3]: # Results and interpretation
+            lists_errors['Warning'].append("Column " + index + " - no Results and interpretation")
+
+        if not _list[4]: #List’s controlled vocabularies (please paste the text from the ontology blabla) gene meiotique
+            lists_errors['Warning'].append("Column " + index + " - no Ontologies")
+
+        if not _list[5]: #Database(onglet)
+            lists_errors['Critical'].append("Column " + index + " - no Database")
+            critical += 1
+
+        if not _list[6]: #Additional Information
+            lists_errors['Info'].append("Column " + index + " - no Additional Informations")
+
+        if not _list[7] and _list[7] != "Yes" and _list[7] != "No": #Make it available for comparison!
+            lists_errors['Critical'].append("Column " + index + " - no Comparaison available. ('Yes' or 'No')")
+            critical += 1
+
+        if _list[7] == "Yes" and not _list[8]:
+            lists_errors['Critical'].append("Column " + index + " - no Filename")
+            critical += 1
+
+
+    def allListAssociatedWithStrategy():
         global critical
-        if(bool_absent_identifier_in_idList_sheet):
-            for identifier in absent_identifier_in_idList_sheet:
-                idLists_errors['Critical'].append("IdList \"" + str(identifier) + "\" is present in your idList Sheet but is absent in your Lists Sheet ")
+        comparaison = set(list(_input.values())).union( set(list(_output.values())))
+
+        for onelist in listID:
+            if onelist not in comparaison:
+                lists_errors['Critical'].append("Column " + str(xlsxwriter.utility.xl_col_to_name(int(onelist[3:]))) + " - no Strategy are associated with this ListID")
                 critical += 1
-        if(bool_absent_identifier_in_lists_sheet):
-            for identifier in absent_identifier_in_lists_sheet:
-                idLists_errors['Critical'].append("ListID \"" + str(identifier) + "\" is present in your Lists Sheet but is absent in your idList Sheet" )
 
-    def idLists_sheet(idLists):
+    def strategy_sheet(strategy): # list[1]
+        """ 
+            0 : Strategy ID(s)
+            1 : Associated project ID(s)
+            2 : Input list ID(s) (comma or semicolon separated)
+            3 : Output list ID(s) (comma or semicolon separated)
+            4 : Title
+            5 : Material and methods
+            6 : Strategy’s controlled vocabularies (please paste the text from the ontology blabla)
+            7 : Additional Information"""
 
-        for col_number in range(0, idLists.ncols):
-            _list = [str(element).split(".")[0] for element in idLists.col_values(col_number, start_rowx=0, end_rowx=None)]
-            is_idList_row(_list, col_number)
+        for index in range (1, len(strategy[0])):
+            is_strategy( [strategy[0][index],\
+                                strategy[1][index],\
+                                strategy[2][index],\
+                                strategy[3][index],\
+                                strategy[4][index],\
+                                strategy[5][index],\
+                                strategy[6][index],\
+                                strategy[7][index]],
+                                index)
 
-        absent_list = get_absent_identifier_in_Lists()
-        absent_idList = get_absent_identifier_in_idLists()
-        
-        is_absent_error(is_absent_identifier_in_idLists(absent_idList), absent_idList, is_absent_identifier_in_lists(absent_list), absent_list)
+    def is_strategy(strategy, index):
+        global isEmpty
+        if is_not_empty(strategy):
+            has_strategy_error(strategy, str(xlsxwriter.utility.xl_col_to_name(index)))
+            associatedProjectID.append(strategy[1])
+            if len(strategy[2]) == 0:
+                _input[str(xlsxwriter.utility.xl_col_to_name(index))] = ""
+            else:
+                _input[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[2]
+            if len(strategy[3]) == 0:
+                _output[str(xlsxwriter.utility.xl_col_to_name(index))] = ""
+            else:
+                _output[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[3]
 
-    #Read excel file
-
-
-    def is_absent():
+            if isEmpty:
+                isEmpty=False
+    def error_inputOrOutput(_list):
+        if _list == "":
+            return []
+        else:
+            newList=_list.split(",")
+            elementNotFound=[]
+            for element in newList:
+                if element not in listID:
+                    elementNotFound.append(element)
+            return elementNotFound
+    def twoListInAndOut(_input,_output):
+        elements=[]
+        for element in _input.split(','):
+            if element in _output.split(','):
+                elements.append(element)
+        return elements
+    def has_strategy_error(strategy, index):
         global critical
-        for i in range(len(has_identifier)):
-            #print has_identifier[i]
-            if not has_identifier[i][1]:
-                projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no study associated with")
+        if not strategy[0]: # Strategy ID(s)
+            strategies_errors['Critical'].append("Column " + index + " - no StrategyID")
+            critical += 1
+
+        if not strategy[1]: # Associated project ID(s)
+            strategies_errors['Critical'].append("Column " + index + " - no Associated Project ID")
+            critical += 1
+
+        if is_not_ProjectID(strategy[1]):
+            strategies_errors['Critical'].append("Column " + index + " - no Associated Project ID Found in Porject Sheet")
+            critical += 1
+
+        if not strategy[2]: #Input list ID(s) (comma or semicolon separated)
+            strategies_errors['Critical'].append("Column " + index + " - no Input list ID(s)")
+            critical += 1
+
+
+        elementNotFoundInInput =  error_inputOrOutput(strategy[2])
+
+        if len(elementNotFoundInInput) != 0:
+            for element in elementNotFoundInInput:
+                strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " - not found in your lists sheet")
                 critical += 1
-            elif not has_identifier[i][2]:
-                projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no Strategy associated with")
+
+        if not strategy[3]: # Output list ID(s) (comma or semicolon separated)
+            strategies_errors['Critical'].append("Column " + index + " - no Output list ID(s)")
+            critical += 1
+
+        elementNotFoundInInput =  error_inputOrOutput(strategy[3])
+
+        if len(elementNotFoundInInput) != 0:
+            for element in elementNotFoundInInput:
+                strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " Input Lists ID(s) - not found in your lists sheet")
                 critical += 1
-            elif not has_identifier[i][3]:
-                projects_errors['Critical'].append("Project " + str(has_identifier[i][0]) + " has no Lists associated with")
+
+        elements = twoListInAndOut(strategy[2],strategy[3])
+
+        if len(elements) != 0:
+            for element in elements:
+                strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " Output Lists ID(s) - found in your input and output lists ID")
                 critical += 1
 
-    try :
-        input_file.seek(0)
-        wb = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name),encoding_override="cp1251")
-        
-        # book = xlrd.open_workbook(os.path.join(upload_path, tmp_file_name))
-        # sheet = book.sheet_by_index(0)
-        # print "start"
-        # print sheet.cell(5, 2)  # prints text:u'Andrea Bargnani'
-        # print sheet.cell(5, 2).value
-        # print isinstance(sheet.cell(5, 2).value, basestring) #str(sheet.cell(5, 2).value).encode("utf-8")
-        # print str()
-        # print "end"
+        if not strategy[4]: #Title
+            strategies_errors['Critical'].append("Column " + index + " - no Title")
+            critical += 1
+
+        if not strategy[5]: #Material and methods
+            strategies_errors['Warning'].append("Column " + index + " - no Material and methods")
+
+        if not strategy[6]: # Strategy’s controlled vocabularies (please paste the text from the ontology blabla)
+            strategies_errors['Warning'].append("Column " + index + " - no Ontologies")
+
+        if not strategy[7]: # Additional Information
+            strategies_errors['Info'].append("Column " + index + " - no Additional Information")
 
 
+    try:
+        project_sheet(data[0])
+        list_sheet(data[1])
+        strategy_sheet(data[2])
+        projectHasStrategy()
+        allListAssociatedWithStrategy()
+        if isEmpty:
+            return{'empty' : "You have no Data!"}
+        else:
+            return {'project' : projects_errors, 'strategy' : strategies_errors , 'list' : lists_errors , 'critical' : critical}
 
-        # print "here"
-        # print wb.cell(5, 2).value
-        # print [x.value for x in wb.sheet_by_index(0).row_values(5)]
-        # with open("/home/clancien/test.txt", 'w') as output:
-        #     for x in wb.sheet_by_index(0).row_values(5):
-        #         output.write(x + "\n")
-        #print wb.biff_version, wb.codepage, wb.encoding
-
-        #Read project
-
-
-        projects = wb.sheet_by_index(0)
-        studies = wb.sheet_by_index(1)
-        strategies = wb.sheet_by_index(2)
-        lists = wb.sheet_by_index(3)
-        idLists=wb.sheet_by_index(4)
-        #print lists
-
-        projects_sheet(projects)
-        studies_sheet(studies)
-        strategies_sheet(strategies)
-        lists_sheet(lists)
-        idLists_sheet(idLists)
-        is_absent()
-        #print idLists_errors
-        #print has_identifier
-        #print len(has_identifier)
-        #add if
-        #print "critical : " + str(critical)
-        if critical != 0:
-            print "create path"
-            os.remove(os.path.join(upload_path, tmp_file_name))
-        return {'msg':"File checked and uploded !",
-                'error_project': projects_errors,
-                'error_study':studies_errors,
-                'error_strategy':strategies_errors,
-                'error_list': lists_errors,
-                'error_idList':idLists_errors,
-                'critical':str(critical),
-                'file': os.path.join(upload_path, tmp_file_name),
-                'status':'0' }
-        
     except:
-        logger.warning("Error - Read excel file")
+        logger.warning("Error - Check Data (Create new)")
         logger.warning(sys.exc_info())
-        return {'msg':'An error occurred while saving your file. If the error persists please contact TOXsIgN support ','status':'1'}
+        return {'msg' : 'An error has occured. Please contact the administrator of GeneUlike'}
 
+
+        
 import pprint
+
 class Project:
 
     compteur_project= 0

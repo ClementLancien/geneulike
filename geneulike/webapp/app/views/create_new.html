@@ -111,11 +111,11 @@ hr {
 <div class="wellDimension" id="stepProgressBar">
   <div class="row" ng-show='true'>
     <ul class="progressbar">
-      <li>Upload Data</li>
+      <li ng-class="stepProgressBar_UploadData">Upload Data</li>
       <!-- <li class="active">Upload Data</li> -->
-      <li>Check Data</li>
-      <li>Upload Lists Files</li>
-      <li>Check Lists Files</li>
+      <li ng-class="stepProgressBar_CheckData">Check Data</li>
+      <li ng-class="stepProgressBar_UploadLists">Upload Lists Files</li>
+      <li ng-class="stepProgressBar_CheckLists">Check Lists Files</li>
     </ul>
   </div>
 </div>
@@ -150,34 +150,132 @@ hr {
       </div>
   </div>
 
-  <div ng-show="hasData" >
+  <div ng-show="uploadList">
+    <div ng-show="hasData" >
 
-    <div class="row">
-      <div class="col-xs-6">
-          <div class="btn btn-success fileinput-button" ngf-select="signature_upload($file)" ngf-multiple="false" ng-click="newData()" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-            <i class="glyphicon glyphicon-plus"></i>
-            <span>Load New File</span>
+      <div class="row">
+
+        <div class="col-xs-6">
+            <div class="btn btn-success fileinput-button" ngf-select="signature_upload($file)" ngf-multiple="false" ng-click="newData()" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+              <i class="glyphicon glyphicon-plus"></i>
+              <span>Load New File</span>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+          <div class="btn btn-primary btn pull-right" ng-click="checkData()" >
+            <i class="glyphicon glyphicon-refresh"></i>
+            <span>Check Data</span>
           </div>
-      </div>  
-    </div>
+        </div>
 
-    <br>
+      </div>
 
-      <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projets ({{projects_number}})</a></li>
-        <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
-        <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
-      </ul>
+      <br>
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projects ({{projects_number}})</a></li>
+          <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
+          <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
+          <li><a data-toggle="tab" href="#strategy" ng-show="report" target="_self" ng-click="showReport()">Error Report ({{critical}})</a></li>
+        </ul>
 
-    <br>
+      <br>
 
-    <div style="width:100%;overflow:auto;"">
-      <div id="excelTable" class="hot handsontable htColumnHeaders htRowHeaders" data-originalstyle="overflow: hidden;"></div>
-    </div>
+      <div style="width:100%;overflow:auto;"">
+        <div id="excelTable" ng-show ="showExcelTable" class="hot handsontable htColumnHeaders htRowHeaders" data-originalstyle="overflow: hidden;"></div>
+      </div>
 
+      <div ng_show ="!showExcelTable">
+
+        <div class="row" ng-show='message'>
+          <div class="col-xs-12">
+            <p>{{message}}</p>
+          </div>
+        </div>
+
+        <div class="row" ng-show='!message'>
+          <div class="col-xs-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Sheet</th>
+                  <th>Avertissement</th>
+                  <th>Error Report</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="danger" ng-repeat="danger in data_project_error.Critical track by $index">
+                  <td>Project</td>
+                  <td>Critical</td>
+                  <td>{{danger}}</td>
+                </tr>      
+                <tr class="danger" ng-repeat="danger in data_strategy_error.Critical track by $index">
+                  <td>Strategy</td>
+                  <td>Critical</td>
+                  <td>{{danger}}</td>
+                </tr>    
+                <tr class="danger" ng-repeat="danger in data_list_error.Critical track by $index">
+                  <td>List</td>
+                  <td>Critical</td>
+                  <td>{{danger}}</td>
+                </tr>
+
+                <tr class="warning" ng-repeat="danger in data_project_error.Warning track by $index">
+                  <td>Project</td>
+                  <td>Warning</td>
+                  <td>{{danger}}</td>
+                </tr>      
+                <tr class="warning" ng-repeat="danger in data_strategy_error.Warning track by $index">
+                  <td>Strategy</td>
+                  <td>Warning</td>
+                  <td>{{danger}}</td>
+                </tr>    
+                <tr class="warning" ng-repeat="danger in data_list_error.Warning track by $index">
+                  <td>List</td>
+                  <td>Warning</td>
+                  <td>{{danger}}</td>
+                </tr>
+
+                <tr class="info" ng-repeat="danger in data_project_error.Info track by $index">
+                  <td>Project</td>
+                  <td>Info</td>
+                  <td>{{danger}}</td>
+                </tr>      
+                <tr class="info" ng-repeat="danger in data_strategy_error.Info track by $index">
+                  <td>Strategy</td>
+                  <td>Info</td>
+                  <td>{{danger}}</td>
+                </tr>    
+                <tr class="info" ng-repeat="danger in data_list_error.Info track by $index">
+                  <td>List</td>
+                  <td>Info</td>
+                  <td>{{danger}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div> 
+    </div> 
   </div>
-
 </div>
+<div>
+<div ng-show="hasData" >
+  <div class="well">
+    <div class="row">
+<!--       <button type="button" class="btn btn-primary btn pull-right" ng-click="checkData()">Next</button>
+      <button type="button" class="btn btn-primary btn pull-right" ng-click="checkData()">Check Data</button>
+      <button type="button" class="btn btn-primary btn pull-left" ng-click="checkData()">Previous</button> -->
+      <div class = col-xs-3><button type="button" class="btn btn-primary btn pull-left" ng-show="!uploadList" ng-click="previous()">Previous</button></div>
+      <div class = col-xs-3></div>
+      <div class = col-xs-3></div>
+      <div class = col-xs-3><button type="button" class="btn btn-primary btn pull-right" ng-disabled ="!(canNext === true)" ng-show="uploadList" ng-click="next()">Next</button></div>
+
+    </div>
+  </div>   
+</div>
+
 <script type="text/ng-template" id="ProjectOntology">
 <!--   <div class="ngdialog-message"> -->
   <div ng-show="viewOntology">
@@ -284,7 +382,7 @@ hr {
 
     <div class ="row" ng-show="isValueEmpty()">
       <div class="col-xs-12">
-        <p> No result. Please Add Some Ontology Term(s).
+        <p> No result. Please Add Some Ontology Terms.
       </div>
     </div>
     <div class ="row" ng-if="!isValueEmpty()">

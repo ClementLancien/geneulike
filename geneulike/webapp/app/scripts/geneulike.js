@@ -2201,8 +2201,8 @@ app.controller('createCtrl',
 
             $scope.user = null;
             $scope.hasData=false;
-            var data_projects=[];
-            var data_strategies=[null];
+            var data_projects=null;
+            var data_strategies=null;
             var data_lists=null;
             var data1 = [],
                         container = document.getElementById('excelTable'),
@@ -2226,6 +2226,15 @@ app.controller('createCtrl',
             $scope.value;
             $scope.onto=null;
             $scope.viewOntology = true;
+            $scope.stepProgressBar_UploadData = ""; // -1 : none, 0 : first step , 1 : second step, 2: third step , 3: fourth step
+            $scope.stepProgressBar_CheckData = "";
+            $scope.stepProgressBar_UploadLists = "";
+            $scope.stepProgressBar_CheckLists = "";
+            $scope.showExcelTable=true;
+            $scope.report=false;
+            $scope.message="";
+            $scope.uploadList=true;
+            $scope.canNext=false;
             //var onto_obj_project
 
 
@@ -2253,6 +2262,7 @@ app.controller('createCtrl',
                     data_strategies = data['strategies'];
                     data_lists = data['lists'];
                     $scope.hasData=true;
+                     $scope.stepProgressBar_UploadData = "active";
                     if($scope.projectview){
                         table_project();
                     }         
@@ -2269,19 +2279,25 @@ app.controller('createCtrl',
             };
        
             $scope.showProjects = function(){
+                $scope.showExcelTable=true;
                 $scope.projectview=true;
                 $scope.strategyview=false;
+                $scope.listview=false;
                 table_project();
             };
             $scope.showStrategies = function(){
+                $scope.showExcelTable=true;
                 $scope.projectview=false;
                 $scope.strategyview=true;
+                $scope.listview=false;
                 table_strategy();
             };
 
             $scope.showLists = function(){
+                $scope.showExcelTable=true;
                 $scope.projectview=false;
                 $scope.strategyview=false;
+                $scope.listview=true;
                 table_list();
             };
 
@@ -2343,6 +2359,7 @@ app.controller('createCtrl',
                             return;
                         }
                         $.each(changes, function (index, element) {
+
                             data_projects[element[0]][element[1]] = element[3];
                             //element[4] value before changement
                         });
@@ -2502,6 +2519,16 @@ app.controller('createCtrl',
                             cellProperties.className = "htCenter htMiddle";
                         }
 
+                        if (row === 7){
+                            cellProperties.renderer = customDropdownRenderer;
+                            cellProperties.editor = "chosen";
+                            cellProperties.width = 150;
+                            cellProperties.chosenOptions ={
+                                multiple: false,
+                                data:  [{'id':'Yes', 'label':'Yes'},{'id':'No', 'label':'No'}]
+                            };
+                        }
+
                         if (col === 0) {
                             cellProperties.readOnly = true;
                             cellProperties.className = "htCenter htMiddle";
@@ -2513,6 +2540,7 @@ app.controller('createCtrl',
                         if (!changes) {
                             return;
                         }
+
                         $.each(changes, function (index, element) {
                             data_lists[element[0]][element[1]] = element[3];
                             //element[4] value before changement
@@ -2527,8 +2555,6 @@ app.controller('createCtrl',
                             $scope.onto=null;
                             Dataset.ontologies({},{'stringToDict': true, 'string':data_lists[row][col]}).$promise.then(function(data){
                                 $scope.value=data[0];
-                                console.log("here")
-                                console.log($scope.value.length == 0)
                             });
                             openOntology();
                         }
@@ -2700,10 +2726,44 @@ app.controller('createCtrl',
                 }
 
             };
+
+            $scope.showReport = function(){
+                $scope.showExcelTable=false;
+            };
+
+            $scope.checkData = function(){
+                $scope.report=true;
+                Dataset.checkData({},{'data': [data_projects, data_lists, data_strategies]}).$promise.then(function(data){
+                    if ('empty' in data){
+                        $scope.message = data['empty']
+                        $scope.critical= "Empty"
+                    }
+                    else{
+                        $scope.data_project_error = data['project'];
+                        $scope.data_strategy_error = data['strategy'];
+                        $scope.data_list_error = data['list'];
+                        $scope.critical = data ['critical'];
+                        $scope.message="";
+                        if ($scope.critical == 0){
+                            $scope.message = "No Error";
+                            $scope.canNext=true;
+                        };
+                    }
+                });
+            };
+
+            $scope.next = function() {
+                $scope.uploadList=!$scope.uploadList;
+                $scope.stepProgressBar_CheckData="active";
+            };
+
+            $scope.previous = function(){ 
+                $scope.uploadList=!$scope.uploadList;
+                $scope.stepProgressBar_CheckData="";
+            }
         });
     });
 });
-
 
 app.controller('userCtrl',
   function($scope, $rootScope, $routeParams, $log, $location, $window, User, Auth, Search, SearchHits) {

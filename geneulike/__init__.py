@@ -83,8 +83,9 @@ def main(global_config, **settings):
     config.add_route('readresult','/readresult')
     config.add_route('download', '/dataset/{dataset}/download')
     config.add_route('excel_upload', '/upload/{id}/excelupload')
-    config.add_route('createExcel', '/user/create_Excel')
     
+    config.add_route('createExcel', '/user/create_Excel')
+    config.add_route('checkData', '/checkData')
 
     config.add_route('file_upload','/upload/{uid}/{sid}/file_upload')
     config.add_route('file_signature', '/signature/{project}/{signature}/{file}/download')
