@@ -2194,7 +2194,7 @@ app.controller('compareCtrl',
 //https://github.com/handsontable/handsontable/issues/2675
 //http://techqa.info/programming/tag/handsontable?after=41589506
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User,Upload,ngDialog, $timeout) {
+    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User, Upload, ngDialog, $timeout) {
 
     $scope.$watch('$viewContentLoaded', function() {
         $timeout( function(){
@@ -2235,19 +2235,17 @@ app.controller('createCtrl',
             $scope.message="";
             $scope.uploadList=true;
             $scope.canNext=false;
-            //var onto_obj_project
-
+            $scope.objectFiles;
+            $scope.database_selected="";
+            $scope.database=null;
+            $scope.showGPL=false;
+            $scope.gpl_version="";
 
             User.get({'uid': $routeParams['id']}).$promise.then(function(data){
                 $scope.user = data;
             });
 
             $scope.auth_user = Auth.getUser();
-
-            $scope.upExcel = function (obj){
-                User.project_save({'uid': $routeParams['id'], 'file': obj}).$promise.then(function(data){
-                });
-            }
 
             $scope.signature_upload = function(excel_file) {
                 var resultInfo={'error':"",'critical':""};
@@ -2262,7 +2260,7 @@ app.controller('createCtrl',
                     data_strategies = data['strategies'];
                     data_lists = data['lists'];
                     $scope.hasData=true;
-                     $scope.stepProgressBar_UploadData = "active";
+                    $scope.stepProgressBar_UploadData = "active";
                     if($scope.projectview){
                         table_project();
                     }         
@@ -2359,8 +2357,11 @@ app.controller('createCtrl',
                             return;
                         }
                         $.each(changes, function (index, element) {
-
+                            //console.log($scope.canNext)
                             data_projects[element[0]][element[1]] = element[3];
+                            $scope.canNext=false;
+                            //console.log($scope.canNext);
+                            //console.log('canNext : ',$scope.canNext);
                             //element[4] value before changement
                         });
                     },
@@ -2518,6 +2519,16 @@ app.controller('createCtrl',
                             cellProperties.readOnly = true; 
                             cellProperties.className = "htCenter htMiddle";
                         }
+                        if (row == 5){
+
+                            cellProperties.renderer = customDropdownRenderer;
+                            cellProperties.editor = "chosen";
+                            cellProperties.width = 150;
+                            cellProperties.chosenOptions ={
+                                multiple: false,
+                                data:  [{'id':'Yes', 'label':'Yes'},{'id':'No', 'label':'No'}]
+                            };
+                        }
 
                         if (row === 7){
                             cellProperties.renderer = customDropdownRenderer;
@@ -2557,6 +2568,13 @@ app.controller('createCtrl',
                                 $scope.value=data[0];
                             });
                             openOntology();
+                        }
+
+                        if(r == 5 && c !=0){
+                            $scope.warning="";
+                            $scope.success="";
+                            $scope.database=data_lists[r][c]
+                            openDatabase(r,c);
                         }
                     },
                 },
@@ -2633,10 +2651,65 @@ app.controller('createCtrl',
                 });
             };
 
+            $scope.onDBChange = function(){
+                // console.log(document.getElementById('database').value);
+                if(document.getElementById('database').value == "GPL"){
+                    $scope.showGPL=true;
+                }
+                else{
+                    $scope.showGPL=false;
+                }
+            };
+
+
+            $scope.onGPLVersionChange = function(){
+                Dataset.getGPLnumber({},{'GPL': document.getElementById('gpl_version').value }).$promise.then(function(data){
+                    console.log(data)
+                    $scope.listItems=data;
+                    $scope.selectedItem=data[0].value;
+
+                    //$scope.objectFiles=data['ObjectFiles'];
+                });
+            }
+
+            function openDatabase(row,col){
+                if(!$scope.dialog) {
+                    $scope.dialog = ngDialog.open({
+                        template: 'Database',
+                        className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                        scope: $scope
+                    });
+                }
+
+                $scope.dialog.closePromise.then(function(data) {
+
+                    Dataset.ontologies({},{'dictToString': true, 'dico': $scope.value}).$promise.then(function(data){
+                        if($scope.projectview){
+                            data_projects[row][col]=data[0];
+                            hot1.setDataAtCell(row, col, data_projects[row][col]);
+                        }
+
+                        else if($scope.strategyview){
+                            data_strategies[row][col]=data[0];
+                            hot1.setDataAtCell(row, col, data_strategies[row][col]);
+                        }
+
+                        else{
+                            data_lists[row][col]=data[0];
+                            hot1.setDataAtCell(row, col, data_lists[row][col]);
+                        }
+                    });
+                    $scope.dialog = null;
+                    $scope.warning="";
+                    $scope.success="";
+                    $scope.database=null;
+                });
+            };
+
             function openOntology(){
                 if(!$scope.dialog) {
                     $scope.dialog = ngDialog.open({
-                        template: 'ProjectOntology',
+                        template: 'Ontology',
                         className: 'ngdialog-theme-flat ngdialog-theme-custom',
                         scope: $scope
                     });
@@ -2732,6 +2805,7 @@ app.controller('createCtrl',
             };
 
             $scope.checkData = function(){
+                //console.log($scope.canNext)
                 $scope.report=true;
                 Dataset.checkData({},{'data': [data_projects, data_lists, data_strategies]}).$promise.then(function(data){
                     if ('empty' in data){
@@ -2751,16 +2825,64 @@ app.controller('createCtrl',
                     }
                 });
             };
-
+            
             $scope.next = function() {
                 $scope.uploadList=!$scope.uploadList;
                 $scope.stepProgressBar_CheckData="active";
+                Dataset.addFileNameToObjectFiles({},{'data':data_lists[8]}).$promise.then(function(data){
+                    $scope.objectFiles=data['ObjectFiles'];
+                });
             };
 
             $scope.previous = function(){ 
                 $scope.uploadList=!$scope.uploadList;
                 $scope.stepProgressBar_CheckData="";
-            }
+            };
+
+            $scope.submit = function (){
+                for(var i = 0; i < $scope.arrayFiles.length; i++){
+                    var resultInfo={'error':"",'critical':""};
+                    Upload.upload({
+                        url: '/upload/'+$scope.user.id+'/fileListUpload',
+                        fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+                        file: $scope.arrayFiles[i]
+                    }).progress(function (evt) {
+
+                    }).success(function (data, status, headers, config) {
+
+                    }).error(function (data, status, headers, config) {
+                    })
+                }
+            };
+
+            $scope.dropFiles = function(files){
+                console.log(files);
+            };
+
+            $scope.addFiles = function(files){
+                if(files == null){
+                    return
+                }
+                for(var i = 0; i < files.length; i++){
+                    addFileToObjectFiles(files[i])
+                
+                }
+
+            };
+
+            function addFileToObjectFiles(object){
+                if(object.name.split('.')[0] in $scope.objectFiles){
+                    $scope.objectFiles[object.name.split('.')[0]].name = object.name.split('.')[0];
+                    $scope.objectFiles[object.name.split('.')[0]].file = object.file;
+                }
+                else{
+                    console.log( object.name.split('.')[0] +' file is not in your Filename List');
+                }
+            };
+
+            $scope.remove = function(filename){
+                $scope.objectFiles[filename] = {'name' : "", 'file': null}
+            };
         });
     });
 });

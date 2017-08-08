@@ -1119,6 +1119,66 @@ def get_str(string):
         return string.encode('utf-8')
 
 
+
+
+
+
+
+@view_config(route_name="addFileNameToObjectFiles", renderer='json', request_method='POST')
+def addFileNameToObjectFiles(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    form = json.loads(request.body, encoding=request.charset)
+
+    ObjectFiles={}
+
+    for index in range(1,len(form['data'])):
+        if form['data'][index] != "":
+            string=form['data'][index].split('.')[0]
+            ObjectFiles[string] = {'name':"",'file' : None}
+            #ObjectFiles[]
+            #ObjectFiles.append({'nameRequired': str(form['data'][index]), 'name':"",'file' : None})
+
+    return {'ObjectFiles' : ObjectFiles}
+
+
+
+
+@view_config(route_name="getGPLnumber", renderer='json', request_method='POST')
+def getGPLnumber(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    form = json.loads(request.body, encoding=request.charset)
+    gpl = form['GPL']
+    path = 'Template/GPL'
+    listGPL=[]
+    with open(os.path.join(path,gpl), 'r') as output:
+
+        listGPL.append({'value':'', 'label': 'Please select', 'disabled': True})
+        listItems=next(output).split(', ')
+        for item in listItems:
+            print item
+            listGPL.append({'value':str(item), 'label': str(item), 'disabled': False})
+
+    return listGPL
+
+@view_config(route_name="fileListUpload", renderer='json', request_method='POST')
+def fileListUpload(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    input_file = None
+    try:
+        input_file = request.POST['file'].file
+        pprint.pprint(input_file)
+    except Exception:
+        return HTTPForbidden('no input file')
+
 ################HERE###########
 @view_config(route_name='excel_upload', renderer='json', request_method='POST')
 def excel_signature_upload(request):
@@ -1187,7 +1247,7 @@ def excel_signature_upload(request):
 
 
     try:
-        print os.path.join(upload_path,tmp_file_name)
+        #print os.path.join(upload_path,tmp_file_name)
         os.remove(os.path.join(upload_path,tmp_file_name))
     except:
         logger.warning("Error - Can't delete upload file")

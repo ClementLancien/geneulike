@@ -50,6 +50,18 @@
                 isArray: true,
                 cache: false
             },
+            addFileNameToObjectFiles : {
+                url: '/addFileNameToObjectFiles',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
+            getGPLnumber : {
+                url: '/getGPLnumber',
+                method: 'POST',
+                isArray: true,
+                cache: false
+            },
             pending: {
                 url: '/pending',
                 method: 'POST',
