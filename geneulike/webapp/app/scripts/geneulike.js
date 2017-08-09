@@ -19,6 +19,7 @@ var app = angular.module('geneulike', [
     'uuid',
     'ngTable',
     'angucomplete-alt',
+    'ui.select'
     ]).
 
 config(['$routeProvider','$logProvider',
@@ -2196,8 +2197,85 @@ app.controller('compareCtrl',
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User, Upload, ngDialog, $timeout) {
 
+
+
+
+    // $scope.itemArray = [
+    //     {id: 1, name: 'first'},
+    //     {id: 2, name: 'second'},
+    //     {id: 3, name: 'third'},
+    //     {id: 4, name: 'fourth'},
+    //     {id: 5, name: 'fifth'},
+    // ];
+
+    //$scope.selected = { value: $scope.itemArray[0] };
+
+    $scope.databaseArray = [
+        {id : "NCBITAXON", name : "National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)"},
+        {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
+        {id : "FMA"      , name : "Foundational Model of Anatomy (FMA)"},
+        {id : "HP"       , name : "Human Phenotype Ontology (HP)"},
+        {id : "PATO"     , name : "Phenotypic Quality Ontology (PATO)"},
+        {id : "DOID"     , name : "Human Disease Ontology (DOID)"},
+        {id : "GO"       , name : "Gene Ontology (GO)"},
+        {id : "CL"       , name : "Cell Ontology (CL)"},
+        {id : "BTO"      , name : "BRENDA Tissue and Enzyme Source Ontology (BTO)"},
+        {id : "MP"       , name : "Mammalian Phenotype Ontology (MP)"},
+        {id : "OBI"      , name : "Ontology for Biomedical Investigations (OBI)"},
+
+    ];
+    $scope.selected = { value : $scope.databaseArray[0] };
+    $scope.onChangeSelect = function(){
+        console.log($scope.selected.value)
+    }
+    
+    $scope.ontologyDatabaseArray = [
+        {id : "NCBITAXON", name : "National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)"},
+        {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
+        {id : "FMA"      , name : "Foundational Model of Anatomy (FMA)"},
+        {id : "HP"       , name : "Human Phenotype Ontology (HP)"},
+        {id : "PATO"     , name : "Phenotypic Quality Ontology (PATO)"},
+        {id : "DOID"     , name : "Human Disease Ontology (DOID)"},
+        {id : "GO"       , name : "Gene Ontology (GO)"},
+        {id : "CL"       , name : "Cell Ontology (CL)"},
+        {id : "BTO"      , name : "BRENDA Tissue and Enzyme Source Ontology (BTO)"},
+        {id : "MP"       , name : "Mammalian Phenotype Ontology (MP)"},
+        {id : "OBI"      , name : "Ontology for Biomedical Investigations (OBI)"},
+    ];
+
+    $scope.ontoDatabaseSelected= { value : "" };
+
+    $scope.onChangeOntologyDatabaseArray = function(){
+        console.log($scope.ontoDatabaseSelected.value)
+    };
+
+    $scope.removeOntoDatabaseSelected = function(){
+        $scope.ontoDatabaseSelected.value=""
+    };
+
+
+
+
+
     $scope.$watch('$viewContentLoaded', function() {
         $timeout( function(){
+
+
+
+
+
+
+            
+            
+
+
+
+
+
+
+
+
+
 
             $scope.user = null;
             $scope.hasData=false;
@@ -2234,12 +2312,16 @@ app.controller('createCtrl',
             $scope.report=false;
             $scope.message="";
             $scope.uploadList=true;
-            $scope.canNext=false;
             $scope.objectFiles;
             $scope.database_selected="";
             $scope.database=null;
             $scope.showGPL=false;
             $scope.gpl_version="";
+            $scope.showNumber=false;
+            $scope.selected={};
+            $scope.hasError={boolean : true};
+            $scope.hasValue=false;
+
 
             User.get({'uid': $routeParams['id']}).$promise.then(function(data){
                 $scope.user = data;
@@ -2353,15 +2435,18 @@ app.controller('createCtrl',
                         return cellProperties;
                     },
                     afterChange: function (changes, source) {
+
                         if (!changes) {
                             return;
                         }
+                        
+                        $timeout(function(){
+                          $scope.hasError.boolean= true;
+                        });
+
                         $.each(changes, function (index, element) {
-                            //console.log($scope.canNext)
+                            
                             data_projects[element[0]][element[1]] = element[3];
-                            $scope.canNext=false;
-                            //console.log($scope.canNext);
-                            //console.log('canNext : ',$scope.canNext);
                             //element[4] value before changement
                         });
                     },
@@ -2385,6 +2470,8 @@ app.controller('createCtrl',
                 hot1.render();
 
             };
+
+                
 
             function table_strategy(){
 
@@ -2463,6 +2550,11 @@ app.controller('createCtrl',
                         if (!changes) {
                             return;
                         }
+
+                        $timeout(function(){
+                          $scope.hasError.boolean= true;
+                        });
+
                         $.each(changes, function (index, element) {
                             data_strategies[element[0]][element[1]] = element[3];
                             //element[4] value before changement
@@ -2552,6 +2644,10 @@ app.controller('createCtrl',
                             return;
                         }
 
+                        $timeout(function(){
+                          $scope.hasError.boolean= true;
+                        });
+
                         $.each(changes, function (index, element) {
                             data_lists[element[0]][element[1]] = element[3];
                             //element[4] value before changement
@@ -2573,7 +2669,9 @@ app.controller('createCtrl',
                         if(r == 5 && c !=0){
                             $scope.warning="";
                             $scope.success="";
-                            $scope.database=data_lists[r][c]
+                            row=r
+                            col=c
+                            $scope.database=data_lists[row][col]
                             openDatabase(r,c);
                         }
                     },
@@ -2650,62 +2748,7 @@ app.controller('createCtrl',
                     });
                 });
             };
-
-            $scope.onDBChange = function(){
-                // console.log(document.getElementById('database').value);
-                if(document.getElementById('database').value == "GPL"){
-                    $scope.showGPL=true;
-                }
-                else{
-                    $scope.showGPL=false;
-                }
-            };
-
-
-            $scope.onGPLVersionChange = function(){
-                Dataset.getGPLnumber({},{'GPL': document.getElementById('gpl_version').value }).$promise.then(function(data){
-                    console.log(data)
-                    $scope.listItems=data;
-                    $scope.selectedItem=data[0].value;
-
-                    //$scope.objectFiles=data['ObjectFiles'];
-                });
-            }
-
-            function openDatabase(row,col){
-                if(!$scope.dialog) {
-                    $scope.dialog = ngDialog.open({
-                        template: 'Database',
-                        className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                        scope: $scope
-                    });
-                }
-
-                $scope.dialog.closePromise.then(function(data) {
-
-                    Dataset.ontologies({},{'dictToString': true, 'dico': $scope.value}).$promise.then(function(data){
-                        if($scope.projectview){
-                            data_projects[row][col]=data[0];
-                            hot1.setDataAtCell(row, col, data_projects[row][col]);
-                        }
-
-                        else if($scope.strategyview){
-                            data_strategies[row][col]=data[0];
-                            hot1.setDataAtCell(row, col, data_strategies[row][col]);
-                        }
-
-                        else{
-                            data_lists[row][col]=data[0];
-                            hot1.setDataAtCell(row, col, data_lists[row][col]);
-                        }
-                    });
-                    $scope.dialog = null;
-                    $scope.warning="";
-                    $scope.success="";
-                    $scope.database=null;
-                });
-            };
-
+            
             function openOntology(){
                 if(!$scope.dialog) {
                     $scope.dialog = ngDialog.open({
@@ -2805,12 +2848,17 @@ app.controller('createCtrl',
             };
 
             $scope.checkData = function(){
-                //console.log($scope.canNext)
                 $scope.report=true;
                 Dataset.checkData({},{'data': [data_projects, data_lists, data_strategies]}).$promise.then(function(data){
+                    console.log('here')
+                    console.log(data['project'])
                     if ('empty' in data){
                         $scope.message = data['empty']
                         $scope.critical= "Empty"
+                        $timeout(function(){
+                          $scope.hasError.boolean= true;
+                        });
+                        // $scope.hasError={boolean : true};
                     }
                     else{
                         $scope.data_project_error = data['project'];
@@ -2818,11 +2866,76 @@ app.controller('createCtrl',
                         $scope.data_list_error = data['list'];
                         $scope.critical = data ['critical'];
                         $scope.message="";
+
+                        console.log($scope.critical == 0)
                         if ($scope.critical == 0){
-                            $scope.message = "No Error";
-                            $scope.canNext=true;
+                            //$scope.message = "No Error";
+                            $timeout(function(){
+                              $scope.hasError.boolean= false;
+                            });
                         };
                     }
+                });
+            };
+
+            $scope.onDBChange = function(){
+                if(document.getElementById('database').value == "GPL"){
+                    $scope.showGPL=true;
+                    $scope.hasValue = false;
+                }
+                else{
+                    $scope.showGPL=false;
+                    $scope.showNumber=false;
+                    $scope.hasValue = true;
+                    
+                    document.getElementById('gpl_version').value="";
+                }
+            };
+
+            $scope.onGPLVersionChange = function(){
+                $scope.showNumber=true;
+
+                Dataset.getGPLnumber({},{'GPL': document.getElementById('gpl_version').value }).$promise.then(function(data){
+                    $scope.listItems=data;
+                });
+            };
+
+            $scope.onGPLNumberChange = function(){
+                $scope.hasValue=true;
+            };
+            
+            $scope.addDatabase = function(){
+                if(document.getElementById('database').value != "GPL"){
+                    $scope.database=document.getElementById('database').value;
+                    $scope.success=document.getElementById('database').value + " has been selected"
+                }
+                else{
+                     $scope.database = $scope.selected.item.label
+                     $scope.success = $scope.selected.item.label + " has been selected"
+                }
+
+            };
+
+            function openDatabase(row,col){
+                if(!$scope.dialog) {
+                    $scope.dialog = ngDialog.open({
+                        template: 'Database',
+                        className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                        scope: $scope
+                    });
+                }
+
+                $scope.dialog.closePromise.then(function(data) {
+
+                    hot1.setDataAtCell(row, col, $scope.database);
+                    
+                    $scope.dialog = null;
+                    $scope.warning="";
+                    $scope.success="";
+                    $scope.database=null;
+                    $scope.showGPL=false;
+                    $scope.showNumber=false;
+                    $scope.hasValue=false;
                 });
             };
             

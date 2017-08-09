@@ -1156,13 +1156,9 @@ def getGPLnumber(request):
     gpl = form['GPL']
     path = 'Template/GPL'
     listGPL=[]
-    with open(os.path.join(path,gpl), 'r') as output:
-
-        listGPL.append({'value':'', 'label': 'Please select', 'disabled': True})
-        listItems=next(output).split(', ')
-        for item in listItems:
-            print item
-            listGPL.append({'value':str(item), 'label': str(item), 'disabled': False})
+    with open(os.path.join(path,gpl), 'r') as output:   
+        for item in output:
+            listGPL.append({'value':str(item.split('\n')[0]), 'label': str(item.split('\n')[0]), 'disabled': False})
 
     return listGPL
 
