@@ -33,7 +33,7 @@ from csv import DictWriter
 import string
 import logging
 import xlsxwriter 
-
+import itertools
 import smtplib
 import email.utils
 import sys
@@ -1765,6 +1765,7 @@ def checkData(request):
 
     parentProjectID=[]
     projectID=[]
+    root=[]
 
     listID=[]
 
@@ -1772,6 +1773,7 @@ def checkData(request):
     associatedProjectID=[]
     _input={}
     _output={}
+
     global isEmpty
     isEmpty=True
 
@@ -1841,6 +1843,9 @@ def checkData(request):
             if not project[1]: # Parent project ID
                 projects_errors['Critical'].append("Column " + index + " -  no Parent ProjectID")
                 critical += 1
+
+            if project[1] == "Root":
+                root.append(project[0])
 
             if is_not_ProjectID(project[1]):
                 projects_errors['Critical'].append("Column " + index + " -  no Parent ProjectID Found")
@@ -1944,11 +1949,10 @@ def checkData(request):
 
     def allListAssociatedWithStrategy():
         global critical
-        comparaison = set(list(_input.values())).union( set(list(_output.values())))
-
+        comparaison = set(itertools.chain.from_iterable(_input.values())).union(set(itertools.chain.from_iterable(_output.values())))
         for onelist in listID:
             if onelist not in comparaison:
-                lists_errors['Critical'].append("Column " + str(xlsxwriter.utility.xl_col_to_name(int(onelist[3:]))) + " - no Strategy are associated with this ListID")
+                lists_errors['Critical'].append("Column " + str(xlsxwriter.utility.xl_col_to_name(int(onelist[3:]))) + " - no Strategy are associated with this ListID : " + str(onelist))
                 critical += 1
 
     def strategy_sheet(strategy): # list[1]
@@ -1978,17 +1982,23 @@ def checkData(request):
         if is_not_empty(strategy):
             has_strategy_error(strategy, str(xlsxwriter.utility.xl_col_to_name(index)))
             associatedProjectID.append(strategy[1])
-            if len(strategy[2]) == 0:
+            
+            if len(strategy[2].split(',')) == 0:
                 _input[str(xlsxwriter.utility.xl_col_to_name(index))] = ""
             else:
-                _input[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[2]
-            if len(strategy[3]) == 0:
+                if strategy[2] == 'Root':
+                    _input[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[2]
+                else:
+                    _input[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[2].split(',')
+
+            if len(strategy[3].split(',')) == 0:
                 _output[str(xlsxwriter.utility.xl_col_to_name(index))] = ""
             else:
-                _output[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[3]
+                _output[str(xlsxwriter.utility.xl_col_to_name(index))] = strategy[3].split(',')
 
             if isEmpty:
                 isEmpty=False
+
     def error_inputOrOutput(_list):
         if _list == "":
             return []
@@ -2005,6 +2015,13 @@ def checkData(request):
             if element in _output.split(','):
                 elements.append(element)
         return elements
+
+    def is_root(associatedProjectID):
+        if associatedProjectID in root:
+            return True
+        else:
+            return False
+
     def has_strategy_error(strategy, index):
         global critical
         if not strategy[0]: # Strategy ID(s)
@@ -2016,38 +2033,53 @@ def checkData(request):
             critical += 1
 
         if is_not_ProjectID(strategy[1]):
-            strategies_errors['Critical'].append("Column " + index + " - no Associated Project ID Found in Porject Sheet")
+            strategies_errors['Critical'].append("Column " + index + " - no Associated Project ID Found in Project Sheet")
             critical += 1
 
         if not strategy[2]: #Input list ID(s) (comma or semicolon separated)
             strategies_errors['Critical'].append("Column " + index + " - no Input list ID(s)")
             critical += 1
 
-
-        elementNotFoundInInput =  error_inputOrOutput(strategy[2])
-
-        if len(elementNotFoundInInput) != 0:
-            for element in elementNotFoundInInput:
-                strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " - not found in your lists sheet")
-                critical += 1
-
         if not strategy[3]: # Output list ID(s) (comma or semicolon separated)
             strategies_errors['Critical'].append("Column " + index + " - no Output list ID(s)")
             critical += 1
 
-        elementNotFoundInInput =  error_inputOrOutput(strategy[3])
-
-        if len(elementNotFoundInInput) != 0:
-            for element in elementNotFoundInInput:
-                strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " Input Lists ID(s) - not found in your lists sheet")
+        if is_root(strategy[1]):
+            if strategy[2] != "Root":
+                strategies_errors['Critical'].append("Column " + index + " Associated Project ID is root. So your Input list ID(s) have to be equal to Root")
                 critical += 1
 
-        elements = twoListInAndOut(strategy[2],strategy[3])
+            elementNotFoundInInput =  error_inputOrOutput(strategy[3])
 
-        if len(elements) != 0:
-            for element in elements:
-                strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " Output Lists ID(s) - found in your input and output lists ID")
-                critical += 1
+            if len(elementNotFoundInInput) != 0:
+                for element in elementNotFoundInInput:
+                    strategies_errors['Critical'].append("Column " + index + " - Output Lists ID(s) : " + str(element) + " - not defined in your lists sheet")
+                    critical += 1
+
+        else: # Regarder si chaque list dans Input est bien present dans le feuille Lists (idem pour output)
+              # Regarder si liste presente a la fois dans input et ouput si cest le cas error
+
+            elementNotFoundInInput =  error_inputOrOutput(strategy[2])
+
+            if len(elementNotFoundInInput) != 0:
+                for element in elementNotFoundInInput:
+                    print 'here',element
+                    strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " Input Lists ID(s) - not defined in your lists sheet")
+                    critical += 1
+
+            elementNotFoundInInput =  error_inputOrOutput(strategy[3])
+
+            if len(elementNotFoundInInput) != 0:
+                for element in elementNotFoundInInput:
+                    strategies_errors['Critical'].append("Column " + index + " - Output Lists ID(s) : " + str(element) + " - not defined in your lists sheet")
+                    critical += 1
+
+            elements = twoListInAndOut(strategy[2],strategy[3])
+
+            if len(elements) != 0:
+                for element in elements:
+                    strategies_errors['Critical'].append("Column " + index + " - " + str(element) + " - found in your input and output lists ID")
+                    critical += 1
 
         if not strategy[4]: #Title
             strategies_errors['Critical'].append("Column " + index + " - no Title")

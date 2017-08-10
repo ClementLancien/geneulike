@@ -40,7 +40,7 @@ hr {
   background-image: -webkit-linear-gradient(left, rgba(244,67,54,.8), rgba(244,67,54,.6), rgba(0,0,0,0));
 }
 
-/* For chosen: single and multiple*/
+/* Handsontable : For chosen: single and multiple*/
 .chosen-container .chosen-drop {
   max-height: 150px;
   overflow-y: auto;
@@ -49,14 +49,14 @@ hr {
     width:75%;
 }
 
-/* vertical scroll typeahead*/
+/* Ontology : vertical scroll typeahead*/
 #scrollable-dropdown-menu-typeahead .dropdown-menu {
   max-height: 150px;
   overflow-y: auto;
 }
 
 
-
+/* Table Error Report*/
 .table-fixed thead {
   width: 100%;
   text-align:center;
@@ -246,6 +246,8 @@ hr {
     </div> 
   </div>
 
+
+<!-- Filename Upload after No Critical Error Detected in project, Lists and Strategies -->
   <div ng-show="!uploadList">
     <div class="row" >
   <!-- https://github.com/danialfarid/ng-file-upload -->
@@ -411,7 +413,7 @@ hr {
             
             <th class="col-xs-3" style="padding: 10px 0px 10px;">Database</th>
             <th class="col-xs-8" style="padding: 10px 0px 10px;">Ontology Term</th>
-            <th class="col-xs-1" style="padding: 10px 0px 10px;">Delete</th>
+            <th class="col-xs-1" style="padding: 10px 0px 10px;">Remove</th>
 
           </thead>
 
@@ -421,8 +423,8 @@ hr {
                 <td class="col-xs-3" style="padding: 20px 0px 10px;"> {{ database }}</td>
                 <td class="col-xs-8" style="padding: 20px 0px 10px;"> {{ term }}</td>
                 <td class="col-xs-1" style="padding: 20px 0px 10px;">
-                  <p data-placement="left" data-toggle="tooltip" title="Delete">
-                    <button class="btn btn-danger btn-xs" data-title="Delete" ng-click="removeOntology(database,term)">
+                  <p data-placement="left" data-toggle="tooltip" title="Remove">
+                    <button class="btn btn-danger btn-xs" data-title="Remove" ng-click="removeOntology(database,term)">
                       <span class="glyphicon glyphicon-trash"></span>
                     </button>
                   </p>
@@ -555,6 +557,7 @@ hr {
     </div>
   </div>
 
+  <br>
   <br>
 
   <div class= "row" >
