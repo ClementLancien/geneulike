@@ -19,7 +19,7 @@ var app = angular.module('geneulike', [
     'uuid',
     'ngTable',
     'angucomplete-alt',
-    'ui.select'
+    'ui.select',
     ]).
 
 config(['$routeProvider','$logProvider',
@@ -1623,7 +1623,7 @@ app.controller('jobsCtrl',
             $scope.token = $window.sessionStorage.token;
         }
 
-        console.log($scope.user);
+        //console.log($scope.user);
 
         $scope.jobRunning = [];
         $scope.selected = ""
@@ -2191,91 +2191,13 @@ app.controller('compareCtrl',
         }
 });
 
-
 //https://github.com/handsontable/handsontable/issues/2675
 //http://techqa.info/programming/tag/handsontable?after=41589506
 app.controller('createCtrl',
     function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User, Upload, ngDialog, $timeout) {
 
-
-
-
-    // $scope.itemArray = [
-    //     {id: 1, name: 'first'},
-    //     {id: 2, name: 'second'},
-    //     {id: 3, name: 'third'},
-    //     {id: 4, name: 'fourth'},
-    //     {id: 5, name: 'fifth'},
-    // ];
-
-    //$scope.selected = { value: $scope.itemArray[0] };
-
-    $scope.databaseArray = [
-        {id : "NCBITAXON", name : "National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)"},
-        {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
-        {id : "FMA"      , name : "Foundational Model of Anatomy (FMA)"},
-        {id : "HP"       , name : "Human Phenotype Ontology (HP)"},
-        {id : "PATO"     , name : "Phenotypic Quality Ontology (PATO)"},
-        {id : "DOID"     , name : "Human Disease Ontology (DOID)"},
-        {id : "GO"       , name : "Gene Ontology (GO)"},
-        {id : "CL"       , name : "Cell Ontology (CL)"},
-        {id : "BTO"      , name : "BRENDA Tissue and Enzyme Source Ontology (BTO)"},
-        {id : "MP"       , name : "Mammalian Phenotype Ontology (MP)"},
-        {id : "OBI"      , name : "Ontology for Biomedical Investigations (OBI)"},
-
-    ];
-    $scope.selected = { value : $scope.databaseArray[0] };
-    $scope.onChangeSelect = function(){
-        console.log($scope.selected.value)
-    }
-    
-    $scope.ontologyDatabaseArray = [
-        {id : "NCBITAXON", name : "National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)"},
-        {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
-        {id : "FMA"      , name : "Foundational Model of Anatomy (FMA)"},
-        {id : "HP"       , name : "Human Phenotype Ontology (HP)"},
-        {id : "PATO"     , name : "Phenotypic Quality Ontology (PATO)"},
-        {id : "DOID"     , name : "Human Disease Ontology (DOID)"},
-        {id : "GO"       , name : "Gene Ontology (GO)"},
-        {id : "CL"       , name : "Cell Ontology (CL)"},
-        {id : "BTO"      , name : "BRENDA Tissue and Enzyme Source Ontology (BTO)"},
-        {id : "MP"       , name : "Mammalian Phenotype Ontology (MP)"},
-        {id : "OBI"      , name : "Ontology for Biomedical Investigations (OBI)"},
-    ];
-
-    $scope.ontoDatabaseSelected= { value : "" };
-
-    $scope.onChangeOntologyDatabaseArray = function(){
-        console.log($scope.ontoDatabaseSelected.value)
-    };
-
-    $scope.removeOntoDatabaseSelected = function(){
-        $scope.ontoDatabaseSelected.value=""
-    };
-
-
-
-
-
     $scope.$watch('$viewContentLoaded', function() {
         $timeout( function(){
-
-
-
-
-
-
-            
-            
-
-
-
-
-
-
-
-
-
 
             $scope.user = null;
             $scope.hasData=false;
@@ -2292,10 +2214,9 @@ app.controller('createCtrl',
                         hot1;
             hot1 = new Handsontable(container, settings);
             hot1.render();
-            $scope.projectview=true;
-            $scope.strategyview=false;
-            $scope.listview=false;
-            $scope.onto_selected="";
+            var whichTableView="project";
+            $scope.ontologyDatabaseArray=[];
+            $scope.ontoDatabaseSelected={};;
             $scope.warning="";
             $scope.success="";
             $scope.search_result=[];
@@ -2313,15 +2234,67 @@ app.controller('createCtrl',
             $scope.message="";
             $scope.uploadList=true;
             $scope.objectFiles;
-            $scope.database_selected="";
-            $scope.database=null;
-            $scope.showGPL=false;
-            $scope.gpl_version="";
-            $scope.showNumber=false;
-            $scope.selected={};
-            $scope.hasError={boolean : true};
-            $scope.hasValue=false;
 
+            $scope.DBDatabaseArray = [
+                {id : "Entrez"              , name : "Entrez Gene"},
+                {id : "Ensembl_Gene"        , name : "Ensembl Gene"},
+                {id : "Ensembl_protein"     , name : "Ensembl protein"},
+                {id : "Ensembl_transcript"  , name : "Ensembl transcript"},
+                {id : "GI_protein"          , name : "GI protein"},
+                {id : "GI_transcript"       , name : "GI transcript"},
+                {id : "GPL"                 , name : "GPL"},
+                {id : "GenBank_protein"     , name : "GenBank protein"},
+                {id : "GenBank_transcript"  , name : "GenBank transcript"},
+                {id : "RefSeq_protein"      , name : "RefSeq protein"},
+                {id : "RefSeq_transcript"   , name : "RefSeq transcript"},
+                {id : "UniGene"             , name : "UniGene"},
+                {id : "UniProt"             , name : "UniProt"},
+                {id : "Vega_gene"           , name : "Vega gene"},
+                {id : "Vega_protein"        , name : "Vega protein"},
+                {id : "Vega_transcript"     , name : "Vegatranscript"},
+            ];
+            $scope.DBDatabaseSelected = { value : "" };
+
+            $scope.removeDBDatabaseSelected = function() {
+                $scope.DBDatabaseSelected.value = "";
+            };
+
+            $scope.GPLVersionArray = [
+                {id : "GPLnnn"      , name : "GPLnnn"},
+                {id : "GPL1nnn"     , name : "GPL1nnn"},
+                {id : "GPL2nnn"     , name : "GPL2nnn"},
+                {id : "GPL3nnn"     , name : "GPL3nnn"},
+                {id : "GPL4nnn"     , name : "GPL4nnn"},
+                {id : "GPL5nnn"     , name : "GPL5nnn"},
+                {id : "GPL6nnn"     , name : "GPL6nnn"},
+                {id : "GPL7nnn"     , name : "GPL7nnn"},
+                {id : "GPL8nnn"     , name : "GPL8nnn"},
+                {id : "GPL9nnn"     , name : "GPL9nnn"},
+                {id : "GPL10nnn"    , name : "GPL10nnn"},
+                {id : "GPL11nnn"    , name : "GPL11nnn"},
+                {id : "GPL12nnn"    , name : "GPL12nnn"},
+                {id : "GPL13nnn"    , name : "GPL13nnn"},
+                {id : "GPL14nnn"    , name : "GPL14nnn"},
+                {id : "GPL15nnn"    , name : "GPL15nnn"},
+                {id : "GPL16nnn"    , name : "GPL16nnn"},
+                {id : "GPL17nnn"    , name : "GPL17nnn"},
+                {id : "GPL18nnn"    , name : "GPL18nnn"},
+                {id : "GPL19nnn"    , name : "GPL19nnn"},
+                {id : "GPL20nnn"    , name : "GPL20nnn"},
+                {id : "GPL21nnn"    , name : "GPL21nnn"},
+                {id : "GPL22nnn"    , name : "GPL22nnn"},
+                {id : "GPL23nnn"    , name : "GPL23nnn"},
+ 
+            ];
+            $scope.GPLVersionSelected = { value : "" };
+
+            $scope.removeGPLVersionSelected = function() {
+                $scope.GPLVersionSelected.value = "";
+            };
+
+            $scope.GPLNumberSelected = {value : ""};
+            $scope.database=null;
+            $scope.hasError={boolean : true};
 
             User.get({'uid': $routeParams['id']}).$promise.then(function(data){
                 $scope.user = data;
@@ -2343,42 +2316,77 @@ app.controller('createCtrl',
                     data_lists = data['lists'];
                     $scope.hasData=true;
                     $scope.stepProgressBar_UploadData = "active";
-                    if($scope.projectview){
+                    if(whichTableView=="project"){//$scope.projectview){
                         table_project();
+                        setOntologyProject ()
                     }         
-                    else if($scope.strategyview){
+                    else if(whichTableView=="strategy"){//$scope.strategyview){
                         table_strategy();
+                        setOntologyStrategy();
                     }
                     else{
                         table_list();
+                        setOntologyList();
                     }
 
                 }).error(function (data, status, headers, config) {
                 })
             
             };
-       
+
             $scope.showProjects = function(){
                 $scope.showExcelTable=true;
-                $scope.projectview=true;
-                $scope.strategyview=false;
-                $scope.listview=false;
+                whichTableView="project";
                 table_project();
+                setOntologyProject();
             };
+
             $scope.showStrategies = function(){
                 $scope.showExcelTable=true;
-                $scope.projectview=false;
-                $scope.strategyview=true;
-                $scope.listview=false;
+                whichTableView="strategy";
                 table_strategy();
+                setOntologyStrategy();      
             };
 
             $scope.showLists = function(){
                 $scope.showExcelTable=true;
-                $scope.projectview=false;
-                $scope.strategyview=false;
-                $scope.listview=true;
+                whichTableView="list";
                 table_list();
+                setOntologyList();     
+            };
+
+            function setOntologyProject (){
+                $scope.ontologyDatabaseArray = [
+                    {id : "NCBITAXON", name : "NCBI Organismal Classification (NCBITAXON)"},
+                    {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
+                    {id : "FMA"      , name : "Foundational Model of Anatomy (FMA)"},
+                    {id : "HP"       , name : "Human Phenotype Ontology (HP)"},
+                    {id : "PATO"     , name : "Phenotypic Quality Ontology (PATO)"},
+                    {id : "DOID"     , name : "Human Disease Ontology (DOID)"},
+                    {id : "GO"       , name : "Gene Ontology (GO)"},
+                    {id : "CL"       , name : "Cell Ontology (CL)"},
+                    {id : "BTO"      , name : "BRENDA Tissue and Enzyme Source Ontology (BTO)"},
+                    {id : "MP"       , name : "Mammalian Phenotype Ontology (MP)"},
+                    {id : "OBI"      , name : "Ontology for Biomedical Investigations (OBI)"},
+                ];
+                $scope.ontoDatabaseSelected = { value : "" };
+            };
+            
+            function setOntologyStrategy (){
+                $scope.ontologyDatabaseArray = [
+                    {id : "NCBITAXON", name : "NCBI Organismal Classification (NCBITAXON)"},
+                    {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
+                    {id : "FMA"      , name : "Foundational Model of Anatomy (FMA)"},
+                ];
+                $scope.ontoDatabaseSelected = { value : "" };
+            };
+
+            function setOntologyList(){
+                $scope.ontologyDatabaseArray = [
+                    {id : "NCBITAXON", name : "NCBI Organismal Classification (NCBITAXON)"},
+                    {id : "CHEBI"    , name : "Chemical Entities of Biological Interest (CHEBI)"},
+                ];
+                $scope.ontoDatabaseSelected = { value : "" };
             };
 
             function table_project(){
@@ -2469,9 +2477,7 @@ app.controller('createCtrl',
                 hot1 = new Handsontable(container, settings);
                 hot1.render();
 
-            };
-
-                
+            };  
 
             function table_strategy(){
 
@@ -2725,6 +2731,10 @@ app.controller('createCtrl',
                return Object.keys($scope.value).length === 0;
             };
 
+            $scope.removeOntoDatabaseSelected = function(){
+                $scope.ontoDatabaseSelected.value=""
+            };
+
             $scope.onDatabaseChange= function(){
                 $scope.onto=null;
                 $scope.selectOnto="";
@@ -2738,7 +2748,7 @@ app.controller('createCtrl',
                     $scope.warning="";
                     $scope.success="";
                     var val = document.getElementById('organism_vivo').value;
-                    Dataset.ontologies({},{'database':document.getElementById('ontology').value,'search':document.getElementById('organism_vivo').value}).$promise.then(function(data){
+                    Dataset.ontologies({},{'database':$scope.ontoDatabaseSelected.value.id,'search':document.getElementById('organism_vivo').value}).$promise.then(function(data){
                         data.map(function(item){
                             $scope.search_result = [];
                             Object.keys(item).map(function(key, index) {
@@ -2761,12 +2771,12 @@ app.controller('createCtrl',
                 $scope.dialog.closePromise.then(function(data) {
 
                     Dataset.ontologies({},{'dictToString': true, 'dico': $scope.value}).$promise.then(function(data){
-                        if($scope.projectview){
+                        if(whichTableView=="project"){
                             data_projects[row][col]=data[0];
                             hot1.setDataAtCell(row, col, data_projects[row][col]);
                         }
 
-                        else if($scope.strategyview){
+                        else if(whichTableView=="strategy"){
                             data_strategies[row][col]=data[0];
                             hot1.setDataAtCell(row, col, data_strategies[row][col]);
                         }
@@ -2781,6 +2791,7 @@ app.controller('createCtrl',
                     $scope.success="";
                     $scope.value=null;
                     $scope.onto=null;
+                    $scope.ontoDatabaseSelected.value="";
                     $scope.viewOntology = true;
                 });
             };
@@ -2796,31 +2807,28 @@ app.controller('createCtrl',
                 if($scope.onto == null){
                     return $scope.warning="Select a result from search before adding";
                 }
-                if(!(document.getElementById('ontology').value in $scope.value)){ // if our object has already a key (i.e. NCBITaxon) return false
-                        $scope.value[document.getElementById('ontology').value] = [];
-                        $scope.value[document.getElementById('ontology').value].push($scope.onto.prefLabel);
-                        //$scope.value[document.getElementById('ontology').value]= new String($scope.onto.prefLabel) + ',';
+                if(!($scope.ontoDatabaseSelected.value.id in $scope.value)){ // if our object has already a key (i.e. NCBITaxon) return false
+                        $scope.value[$scope.ontoDatabaseSelected.value.id] = [];
+                        $scope.value[$scope.ontoDatabaseSelected.value.id].push($scope.onto.prefLabel);
                         $scope.success=$scope.onto.prefLabel+" Added to your list";
                         document.getElementById('organism_vivo').value="";
                         $scope.onto=null;
                 }
                 else{
                     
-                    if($scope.value[document.getElementById('ontology').value].includes($scope.onto.prefLabel)){
-                    //if($scope.value[document.getElementById('ontology').value].split(',').includes($scope.onto.prefLabel)){
-                        console.log("herer")
+                    if($scope.value[$scope.ontoDatabaseSelected.value.id].includes($scope.onto.prefLabel)){
                         $scope.warning=$scope.onto.prefLabel+' ontology is already in your list';
                         $scope.onto=null;
                     }
                     else{
-                        $scope.value[document.getElementById('ontology').value].push($scope.onto.prefLabel);
-                        //$scope.value[document.getElementById('ontology').value] += new String($scope.onto.prefLabel) + ',';
+                        $scope.value[$scope.ontoDatabaseSelected.value.id].push($scope.onto.prefLabel);
                         $scope.success=$scope.onto.prefLabel+" Added to your list";
                         document.getElementById('organism_vivo').value="";
                         $scope.onto=null;
                     }
                 }
             }
+
             Array.prototype.remove= function(){
                 var what, a= arguments, L= a.length, ax;
                 while(L && this.length){
@@ -2840,7 +2848,6 @@ app.controller('createCtrl',
                     var newterm = $scope.value[database].remove(term);
                     $scope.value[database] = newterm; 
                 }
-
             };
 
             $scope.showReport = function(){
@@ -2858,7 +2865,6 @@ app.controller('createCtrl',
                         $timeout(function(){
                           $scope.hasError.boolean= true;
                         });
-                        // $scope.hasError={boolean : true};
                     }
                     else{
                         $scope.data_project_error = data['project'];
@@ -2878,42 +2884,46 @@ app.controller('createCtrl',
                 });
             };
 
-            $scope.onDBChange = function(){
-                if(document.getElementById('database').value == "GPL"){
-                    $scope.showGPL=true;
-                    $scope.hasValue = false;
-                }
-                else{
-                    $scope.showGPL=false;
-                    $scope.showNumber=false;
-                    $scope.hasValue = true;
-                    
-                    document.getElementById('gpl_version').value="";
-                }
-            };
+            $scope.onGPLVersionSelected = function(){
 
-            $scope.onGPLVersionChange = function(){
-                $scope.showNumber=true;
-
-                Dataset.getGPLnumber({},{'GPL': document.getElementById('gpl_version').value }).$promise.then(function(data){
-                    $scope.listItems=data;
+                Dataset.getGPLnumber({},{'GPL': $scope.GPLVersionSelected.value.id}).$promise.then(function(data){
+                    $scope.GPLNumberArray=data;
+                    $scope.GPLNumberSelected = {value : ""};
                 });
             };
 
-            $scope.onGPLNumberChange = function(){
-                $scope.hasValue=true;
+            $scope.removeGPLNumberSelected = function(){
+                $scope.GPLNumberSelected.value = "";
             };
-            
-            $scope.addDatabase = function(){
-                if(document.getElementById('database').value != "GPL"){
-                    $scope.database=document.getElementById('database').value;
-                    $scope.success=document.getElementById('database').value + " has been selected"
+
+            $scope.canSelect = function(){
+                if ($scope.DBDatabaseSelected.value != ''){
+                    if($scope.DBDatabaseSelected.value.name !='GPL'){
+                        return true;
+                    }
+                    else{
+                        if($scope.GPLNumberSelected.value != ''){
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
+                    }
                 }
                 else{
-                     $scope.database = $scope.selected.item.label
-                     $scope.success = $scope.selected.item.label + " has been selected"
+                    return false;
                 }
+            };
 
+            $scope.addDatabase = function(){
+                if($scope.DBDatabaseSelected.value.name != "GPL"){
+                    $scope.database=$scope.DBDatabaseSelected.value.name;
+                    $scope.success=$scope.DBDatabaseSelected.value.name + " has been selected";
+                }
+                else{
+                     $scope.database = $scope.GPLNumberSelected.value.name;
+                     $scope.success = $scope.GPLNumberSelected.value.name + " has been selected";
+                }
             };
 
             function openDatabase(row,col){
@@ -2928,14 +2938,12 @@ app.controller('createCtrl',
                 $scope.dialog.closePromise.then(function(data) {
 
                     hot1.setDataAtCell(row, col, $scope.database);
-                    
+                    $scope.DBDatabaseSelected.value = "";
+                    $scope.GPLVersionSelected.value = "";
                     $scope.dialog = null;
                     $scope.warning="";
                     $scope.success="";
                     $scope.database=null;
-                    $scope.showGPL=false;
-                    $scope.showNumber=false;
-                    $scope.hasValue=false;
                 });
             };
             
@@ -2980,7 +2988,6 @@ app.controller('createCtrl',
                     addFileToObjectFiles(files[i])
                 
                 }
-
             };
 
             function addFileToObjectFiles(object){
@@ -2996,6 +3003,7 @@ app.controller('createCtrl',
             $scope.remove = function(filename){
                 $scope.objectFiles[filename] = {'name' : "", 'file': null}
             };
+
         });
     });
 });

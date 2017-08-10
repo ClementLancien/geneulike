@@ -3,47 +3,7 @@
 
 
 
-
-
 <link rel="stylesheet" type="text/css" href="bower_components/angular-ui-select/dist/select.css">
-
-
-
-
-
-
-<!-- <div class="form-group">
-        <label class="col-sm-3 control-label">With a clear button</label>
-        <div class="col-sm-6">
-          <div class="input-group">
-
-            <ui-select allow-clear ng-model="selected.value" theme="bootstrap">
-              <ui-select-match placeholder="Select or search a person in the list...">{{$select.selected.name}}</ui-select-match>
-              <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
-                <span ng-bind-html="item.name | highlight: $select.search"></span>
-              </ui-select-choices>
-            </ui-select>
-
-            <span class="input-group-btn">
-              <button type="button" ng-click="selected.value = undefined" class="btn btn-default">
-                <span class="glyphicon glyphicon-trash"></span>
-              </button>
-            </span>
-
-          </div>
-        </div>
-      </div>
-
-
-<ui-select ng-model="selected.value">
-    <ui-select-match>
-        <span ng-bind="$select.selected.name"></span>
-    </ui-select-match>
-    <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
-        <span ng-bind="item.name"></span>
-    </ui-select-choices>
-</ui-select>
-{{selected.value}} -->
 
 
 <!-- <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
@@ -123,25 +83,6 @@ hr {
 
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -307,74 +248,54 @@ hr {
 
   <div ng-show="!uploadList">
     <div class="row" >
+  <!-- https://github.com/danialfarid/ng-file-upload -->
 
+      <div class="btn btn-success fileinput-button" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ngf-select="addFiles($files)" ngf-multiple="true"  >
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Add Files</span>
+      </div>
 
+      <div class="table-responsive">
+           
+        <table class="table table-hover table-striped table-condensed tasks-table">
+            
+          <thead class="thead-inverse">
+            <tr>
+                <th>#</th>
+                <th>Filename</th>
+                <th>Filename Required</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
 
-    <!-- https://github.com/danialfarid/ng-file-upload -->
-
-
-        <div class="btn btn-success fileinput-button" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ngf-select="addFiles($files)" ngf-multiple="true"  >
-              <i class="glyphicon glyphicon-plus"></i>
-              <span>Add Files</span>
-        </div>
-
-
-
-       
-
-        <!-- <div ngf-drop accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ng-model="file">
-          <button  ngf-select="addFiles($files)" ngf-multiple="true" >Select</button>
-        </div> -->
-
-          <div class="table-responsive">
-             
-            <table class="table table-hover table-striped table-condensed tasks-table">
-                
-                <thead class="thead-inverse">
-                    <tr>
-                        <th>#</th>
-                        <th>Filename</th>
-                        <th>Filename Required</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr ng-repeat="(nameRequired,information) in objectFiles">
-                        <td>{{ $index+1 }}</td>
-                        <td>{{ information.name }}</td>
-                        <td>{{ nameRequired }}</td>
-                        <td class="text-center">
-                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                        </td>
-                        <td nowrap>
-                          <button type="button" class="btn btn-danger btn-xs" ng-click="remove(nameRequired)">
-                              <span class="glyphicon glyphicon-trash"></span> Remove
-                          </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-          </div>
+            <tr ng-repeat="(nameRequired,information) in objectFiles">
+              <td>{{ $index+1 }}</td>
+              <td>{{ information.name }}</td>
+              <td>{{ nameRequired }}</td>
+              <td class="text-center">
+                  <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                  <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                  <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+              </td>
+              <td nowrap>
+                <button type="button" class="btn btn-danger btn-xs" ng-click="remove(nameRequired)">
+                    <span class="glyphicon glyphicon-trash"></span> Remove
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    </div>
-
+  </div>
 </div>
-
-
-
-
-
 
 <div ng-show="hasData" >
   <div class="well">
     <div class="row">
-<!--       <button type="button" class="btn btn-primary btn pull-right" ng-click="checkData()">Next</button>
-      <button type="button" class="btn btn-primary btn pull-right" ng-click="checkData()">Check Data</button>
-      <button type="button" class="btn btn-primary btn pull-left" ng-click="checkData()">Previous</button> -->
+
       <div class = col-xs-3><button type="button" class="btn btn-primary btn pull-left" ng-show="!uploadList" ng-click="previous()">Previous</button></div>
       <div class = col-xs-3></div>
       <div class = col-xs-3></div>
@@ -382,10 +303,15 @@ hr {
         <button type="button" class="btn btn-primary btn pull-right" ng-if="hasError.boolean" disabled="true" ng-show="uploadList" ng-click="next()">Next</button>
         <button type="button" class="btn btn-primary btn pull-right" ng-if="!hasError.boolean" ng-show="uploadList" ng-click="next()">Next</button>
       </div>
-
     </div>
   </div>   
 </div>
+
+
+
+<!-- !!!!!!!!!!!!!!!!!!!!! Template To Add Ontology For Project, Lists, Strategies !!!!!!!!!!!!!!!!!!!!!-->
+
+
 
 <script type="text/ng-template" id="Ontology">
 <!--   <div class="ngdialog-message"> -->
@@ -409,92 +335,31 @@ hr {
         {{warning}}
         <br>
     </div>
-    <!-- <div style="text-align: top;">
-      <h2> <i class="fa fa-sitemap fa-4x" aria-hidden="true"></i> Ontology Search</h2>
-    </div> -->
-<style>
-.ui-select-search {
-width: 100% !important;
-}
-.ui-select-match{
-  width: 100% !important;
-
-}
-</style>
-
-
-
 
     <div class= "row">
       <div class="form-group">
-        <label class="control-label col-xs-4" for="first_name" >Select Database</label>
+        <label class="control-label col-xs-4" for="select_database_for_ontology_search_(bioportal)" >Select Database</label>
         <div class="col-xs-8">
-
-          <div class="input-group" style="width:100%">
-
-            <ui-select  ng-model="ontoDatabaseSelected.value"  theme="bootstrap" ng-change="onChangeOntologyDatabaseArray()">
+          <div class="input-group">
+            <ui-select  ng-model="ontoDatabaseSelected.value"  theme="bootstrap" ng-change="onDatabaseChange()" >
               <ui-select-match placeholder="Select or search a database in the list">{{ontoDatabaseSelected.value.name}}</ui-select-match>
               <ui-select-choices  repeat="item in (ontologyDatabaseArray | filter: $select.search) track by item.id">
                 <span   ng-bind-html="item.name | highlight: $select.search"></span>
               </ui-select-choices>
             </ui-select>
-
             <span class="input-group-btn">
               <button type="button" ng-click="removeOntoDatabaseSelected()" class="btn btn-default">
                 <span class="glyphicon glyphicon-trash"></span>
               </button>
             </span>
-
           </div>
         </div>
       </div>
     </div>
- 
-
-
-
-
-
-
-
-
-         <!--  <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="projectview">
-                      <option value="" disabled selected>Please select</option>
-                      <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
-                      <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
-                      <option value="FMA">Foundational Model of Anatomy (FMA)</option>
-                      <option value="HP">Human Phenotype Ontology (HP)</option>
-                      <option value="PATO">Phenotypic Quality Ontology (PATO)</option>
-                      <option value="DOID">Human Disease Ontology (DOID)</option>
-                      <option value="GO">Gene Ontology (GO)</option>
-                      <option value="CL">Cell Ontology (CL)</option>
-                      <option value="BTO">BRENDA Tissue and Enzyme Source Ontology (BTO)</option>
-                      <option value="MP">Mammalian Phenotype Ontology (MP)</option>
-                      <option value="OBI">Ontology for Biomedical Investigations (OBI)</option>
-          </select>
-
-          <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="strategyview">
-                      <option value="" disabled selected>Please select</option>
-                      <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
-                      <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
-                      <option value="FMA">Foundational Model of Anatomy (FMA)</option>
-                      
-          </select>
-
-          <select ng-model="onto_selected" class="form-control" ng-change="onDatabaseChange()" id="ontology" ng-show="listview">
-                      <option value="" disabled selected>Please select</option>
-                      <option value="NCBITAXON">National Center for Biotechnology Information (NCBI) Organismal Classification (NCBITAXON)</option>
-                      <option value="CHEBI">Chemical Entities of Biological Interest (CHEBI)</option>
-                      <option value="FMA">Foundational Model of Anatomy (FMA)</option>
-                      
-          </select>
-        </div>
-      </div>
-    </div> -->
 
     <div class= "row">
       <div class="form-group">
-        <div ng-if="onto_selected" class="form-group">
+        <div ng-if="ontoDatabaseSelected.value.name" class="form-group">
           <label class="control-label col-xs-4" for="first_name">Search Term</label>
           <div class="col-xs-8">
             <div id="scrollable-dropdown-menu-typeahead">
@@ -508,17 +373,16 @@ width: 100% !important;
     </div>
 
     <br>
-    <!-- <button ng-disabled="!onto" ng-click="addOntologyProject()">Add</button> -->
-    <div class= "row">
 
+    <div class= "row">
       <div class="col-xs-12">
         <div ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" >
           <i class="glyphicon glyphicon-plus"></i>
           <span>Add</span>
         </div>
-        <!-- <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button> -->
       </div>
     </div>
+
   </div>
 
   <div ng-show="!viewOntology">
@@ -526,10 +390,10 @@ width: 100% !important;
     <div class="row">
       <div class="col-xs-3"></div>
       <div class="col-xs-7">
-         <h2> <i class="fa fa-eye text-center" aria-hidden="true"></i>Ontology Overview</h2> 
+         <h2><i class="fa fa-eye text-center" aria-hidden="true"></i>Ontology Overview</h2> 
       </div>
-
     </div>
+
     <br>
 
     <div class ="row" ng-show="isValueEmpty()">
@@ -537,10 +401,9 @@ width: 100% !important;
         <p> No result. Please Add Some Ontology Terms.
       </div>
     </div>
+
     <div class ="row" ng-if="!isValueEmpty()">
       <div class="col-xs-12">
-
-         
 
         <table id="overViewTable" class= "table table-fixed">
 
@@ -572,173 +435,136 @@ width: 100% !important;
 
       </div>
     </div>
+
   </div>
+
   <div class="ngdialog-buttons mt pull-left" ng-show="viewOntology">
     <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="onViewOntologyChange()"><i class="glyphicon glyphicon-chevron-left"></i></button>
   </div>
+
   <div class="ngdialog-buttons mt" ng-show="!viewOntology">
     <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="onViewOntologyChange()"><i class="glyphicon glyphicon-chevron-right"></i></button>
   </div>
+
 </script>
+
+
+
+<!-- !!!!!!!!!!!!!!!!!!!!! Template To Add Database For List Only !!!!!!!!!!!!!!!!!!!!!-->
+
+
 
 <script type="text/ng-template" id="Database">
 
 
-<style>
-.ngdialog.ngdialog-theme-flat .ngdialog-content {
-  border: 5px solid #0088cc;
+  <style>
+  .ngdialog.ngdialog-theme-flat .ngdialog-content {
+    border: 5px solid #0088cc;
 
-}
-.ngdialog.ngdialog-theme-flat .ngdialog-close:before {
-  background: #0088cc;
-}
-/*.btn-variant1,
-.btn-variant1:hover,
-.btn-variant1:active,
-.btn-variant1:visited,
-.btn-variant1:focus {
-    background-color: #0066cc !important;
-    border-color: #0066cc;
-}
+  }
+  .ngdialog.ngdialog-theme-flat .ngdialog-close:before {
+    background: #0088cc;
+  }
+  </style>
 
-.btn-variant, .btn-variant:hover, .btn-variant:active, .btn-variant:visited {
-    background-color: #0066cc !important;
-    text-color
-}*/
-</style>
   <div class="row">
     <div class="col-xs-3"></div>
     <div class="col-xs-6">
        <h2> <i class="fa fa-search text-center" aria-hidden="true"></i>Database Search</h2>
     </div>
   </div>
+
   <br>
 
-    <div ng-if="danger" class="alert alert-danger">
-        {{danger}}
-        <br>
-    </div>
-    <div ng-if="success" class="alert alert-success">
-        {{success}}
-        <br>
-    </div>
-    <div ng-if="warning" class="alert alert-warning">
-        {{warning}}
-        <br>
-    </div>
+  <div ng-if="danger" class="alert alert-danger">
+    {{danger}}
+    <br>
+  </div>
 
-    <div class= "row">
-      <div class="form-group">
-      <label class="control-label col-xs-5" for="first_name" >Select Database</label>
-        <div class="col-xs-7">
+  <div ng-if="success" class="alert alert-success">
+    {{success}}
+    <br>
+  </div>
 
-          <select  id="database" ng-model="database_selected" class="form-control" ng-change="onDBChange()">
-            <option value="" disabled selected>Please select</option>
-            <option value="Entrez">EntrezID</option>
-            <option value="Ensembl_Gene">Ensembl_Gene</option>
-            <option value="Ensembl_protein">Ensembl_protein</option>
-            <option value="Ensembl_transcript">Ensembl_transcript</option>
-            <option value="GI_protein" >GI_protein</option>
-            <option value="GI_transcript">GI_transcript</option>
-            <option value="GPL" >GPL</option>
-            <option value="GenBank_protein">GenBank_protein</option>
-            <option value="GenBank_transcript">GenBank_transcript</option>
-            <option value="RefSeq_protein">RefSeq_protein</option>
-            <option value="RefSeq_transcript">RefSeq_transcript</option>
-            <option value="Unigene">Unigene</option>
-            <option value="UniProt">UniProt</option>
-            <option value="Vega_gene">Vega_gene</option>
-            <option value="Vega_protein">Vega_protein</option>
-            <option value="Vega_transcript">Vega_transcript</option>
-          </select>
+  <div ng-if="warning" class="alert alert-warning">
+    {{warning}}
+    <br>
+  </div>
+
+  <div class= "row">
+    <div class="form-group">
+      <label class="control-label col-xs-5" for="select_DB_for_list" >Select Database</label>
+      <div class="col-xs-7">
+        <div class="input-group">
+          <ui-select  ng-model="DBDatabaseSelected.value"  theme="bootstrap" ng-change="removeGPLVersionSelected()">
+            <ui-select-match placeholder="Select or search a database in the list">{{DBDatabaseSelected.value.name}}</ui-select-match>
+            <ui-select-choices  repeat="item in (DBDatabaseArray | filter: $select.search) track by item.id">
+              <span   ng-bind-html="item.name | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <span class="input-group-btn">
+            <button type="button" ng-click="removeDBDatabaseSelected()" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </span>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class= "row" ng-show="showGPL">
-      <div class="form-group">
-      <label class="control-label col-xs-5" for="first_name" >Select GPL Version</label>
-        <div class="col-xs-7">
-
-          <select id="gpl_version" class="form-control" ng-model="gpl_version_selected"  ng-change="onGPLVersionChange()"  >
-            <option value="" disabled selected>Please select</option>
-            <option value="GPLnnn">GPLnnn</option>
-            <option value="GPL1nnn">GPL1nnn</option>
-            <option value="GPL2nnn">GPL2nnn</option>
-            <option value="GPL3nnn">GPL3nnn</option>
-            <option value="GPL4nnn">GPL4nnn</option>
-            <option value="GPL5nnn">GPL5nnn</option>
-            <option value="GPL6nnn">GPL6nnn</option>
-            <option value="GPL7nnn">GPL7nnn</option>
-            <option value="GPL8nnn">GPL8nnn</option>
-            <option value="GPL9nnn">GPL9nnn</option>
-            <option value="GPL10nnn">GPL10nnn</option>
-            <option value="GPL11nnn">GPL11nnn</option>
-            <option value="GPL12nnn">GPL12nnn</option>
-            <option value="GPL13nnn">GPL13nnn</option>
-            <option value="GPL14nnn">GPL14nnn</option>
-            <option value="GPL15nnn">GPL15nnn</option>
-            <option value="GPL16nnn">GPL16nnn</option>
-            <option value="GPL17nnn">GPL17nnn</option>
-            <option value="GPL18nnn">GPL18nnn</option>
-            <option value="GPL19nnn">GPL19nnn</option>
-            <option value="GPL20nnn">GPL20nnn</option>
-            <option value="GPL21nnn">GPL21nnn</option>
-            <option value="GPL22nnn">GPL22nnn</option>
-            <option value="GPL23nnn">GPL23nnn</option>
-          </select>
+  <div class= "row" ng-if="DBDatabaseSelected.value.name=='GPL'"> 
+    <div class="form-group">
+      <label class="control-label col-xs-5" for="select_GPL_version" >Select GPL Version</label>
+      <div class="col-xs-7">
+        <div class="input-group">
+          <ui-select  ng-model="GPLVersionSelected.value"  theme="bootstrap" ng-change="onGPLVersionSelected()">
+            <ui-select-match placeholder="Select or search a GPL version in the list">{{GPLVersionSelected.value.name}}</ui-select-match>
+            <ui-select-choices  repeat="item in (GPLVersionArray | filter: $select.search) track by item.id">
+              <span   ng-bind-html="item.name | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <span class="input-group-btn">
+            <button type="button" ng-click="removeGPLVersionSelected()" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </span>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class= "row" ng-if="DBDatabaseSelected.value.name=='GPL' && GPLVersionSelected.value!=''"> 
+    <div class="form-group">
+      <label class="control-label col-xs-5" for="select_GPL_version" >Select GPL Number</label>
+      <div class="col-xs-7">
+        <div class="input-group">
+          <ui-select  ng-model="GPLNumberSelected.value"  theme="bootstrap" >
+            <ui-select-match placeholder="Select or search a GPL number in the list">{{GPLNumberSelected.value.name}}</ui-select-match>
 
-    <div class= "row" ng-show="showNumber">
-      <div class="form-group">
-      <label class="control-label col-xs-5" for="first_name" >Select GPL Number</label>
-        <div class="col-xs-7">
-          <select id="gplNumber" ng-model="selected.item" ng-change="onGPLNumberChange()" class="form-control" ng-options="item.label for item in listItems">
-<!--           ng-options="item as item.label disable when item.disabled for item in listItems">
- -->          <option value="" disabled>Please Select</option>
-            <!-- <option ng-repeat=" item in listItems">{{item.label}}</option> -->
-          <!-- ng-options="item as item.label disable when item.disabled for item in listItems">> -->
-          <!-- <option ng-repeat=" item in listItems">{{item.label}}</option> -->
-<!--           ng-options="item as item.label disable when item.disabled for item in listItems">
- -->            <!-- <option ng-repeat="item as item.label for item in listItems" ng-disabled="item.disabled">
-            </option> -->
-
-          <!-- <select id="gpl_version" class="form-control" ng-model="gpl_version_selected"  ng-change="onGPLVersionChange()"  > -->
-          </select>
-          {{selected_item}}
- 
+            <ui-select-choices  repeat="item in (GPLNumberArray | filter: $select.search) track by item.id | limitTo: 50">
+              <span   ng-bind-html="item.name | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+          <span class="input-group-btn">
+            <button type="button" ng-click="removeGPLNumberSelected()" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </span>
         </div>
       </div>
     </div>
+  </div>
 
-     <br>
-    <!-- <button ng-disabled="!onto" ng-click="addOntologyProject()">Add</button> -->
-    <div class= "row" ng-show="!hasValue">
+  <br>
 
-      <div class="col-xs-12">
-        <div ng-disabled="true" class ="btn btn-primary btn-block" >
-          <i class="glyphicon glyphicon-plus"></i>
-          <span>Select</span>
-        </div>
-        <!-- <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button> -->
+  <div class= "row" >
+    <div class="col-xs-12">
+      <div ng-disabled="!canSelect()" class ="btn btn-primary btn-block" ng-click="addDatabase()">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Select</span>
       </div>
     </div>
-
-    <div class= "row" ng-show='hasValue'>
-
-      <div class="col-xs-12" >
-        <div ng-disabled="false" ng-click="addDatabase()" class ="btn btn-primary btn-block" >
-          <i class="glyphicon glyphicon-plus"></i>
-          <span>Select</span>
-        </div>
-        <!-- <button ng-disabled="!onto" ng-click="addOntology()" class ="btn btn-success btn-block" ><i class="glyphicon glyphicon-plus">Add</i></button> -->
-      </div>
-    </div>
-
-
+  </div>
 
 </script>
 

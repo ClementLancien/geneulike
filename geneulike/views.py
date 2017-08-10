@@ -554,25 +554,15 @@ def ontologies(request):
         return json.loads(opener.open(url).read())
 
     def stringToDict(string):
-        #dict((k.strip(), v.strip()) for k,v in (item.split(':') for item in string.split(';')))
-        # dico={}
-        # for item in string.split(";"):
-        #     dico[item.split(":")[0].strip()]=item.split(":")[1].strip()
-        # return dico
-        print string
         if string == "":
             return {}
 
         dico={}
         for item in string.split(";")[:-1]:
             dico[item.split(":")[0]]=item.split(":")[1].split(',')
-            #print item.split(":")[1].split(',')
-            #dico[item.split(":")[0]]=item.split(":")[1]
-        #pprint.pprint(dico)
+
         return dico
-        #return pprint.pprint(dict((k, v) for k,v in (item.split(':') for item in string.split(';')[:-1])))
-        #return dict((k, v) for k,v in (item.split(':') for item in string.split(';')))
-    
+
     def dictToString(dico):
 
         if not bool(dico): #if dico is empty
@@ -581,9 +571,7 @@ def ontologies(request):
         newString="" 
 
         for key, value in dico.items():
-            #print value
             newString += str(key) + ":" + ",".join(value) +";"
-            #newString += str(key) + ":" + str(value) +";"
         return newString
 
     REST_URL = "http://data.bioontology.org"
@@ -597,46 +585,18 @@ def ontologies(request):
         #print getParent(form['label'])
 
     elif 'stringToDict' in form:
-        #print form['string']
         return [stringToDict(form['string'])]
-        #pprint.pprint(stringToDict(form['string'])) 
-        #return {'dict' : stringToDict(form['string'])}
 
     elif 'dictToString' in form:
         return [dictToString(form['dico'])]
         
     else:
-        #print form['search']
         term = form['search'].replace(' ','+') #%20
-        #print term
         database = form['database']
-
-        
-
-        # Get list of search terms
         search_results = []
-        #print REST_URL + "/search?q=" + term+'&ontology=' + database
-        #print get_json(REST_URL + "/search?q=" + term+'&ontology=' + database)
-        #print REST_URL + "/search?q=" + term+'&ontologies=' + database
         search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)['collection'])
+
         return search_results
-
-        #search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)["collection"])
-        
-        #print search_results
-
-        #return search_results
-    
-
-    # form = json.loads(request.body, encoding=request.charset)
-    # search = form['search']
-    # database = form['database']
-    # regx = re.compile(search, re.IGNORECASE)
-    # repos = request.registry.db_mongo[database].find({"$or":[{'name':regx},{'synonyms':regx}]})
-    # result = []
-    # for dataset in repos:
-    #     result.append(dataset)
-    # return result
 
 @view_config(route_name='getjob', renderer='json', request_method='POST')
 def getjob(request):
@@ -1158,7 +1118,7 @@ def getGPLnumber(request):
     listGPL=[]
     with open(os.path.join(path,gpl), 'r') as output:   
         for item in output:
-            listGPL.append({'value':str(item.split('\n')[0]), 'label': str(item.split('\n')[0]), 'disabled': False})
+            listGPL.append({'id':str(item.split('\n')[0]), 'name': str(item.split('\n')[0])})
 
     return listGPL
 
@@ -1201,24 +1161,16 @@ def excel_signature_upload(request):
         # Now that we know the file has been fully saved to disk move it into place.
 
         upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
-        #print "upload_path" , upload_path
-        #print request.registry.upload_path
-        #print request.params['uid']
-        #print request.params['dataset']
 
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
-        #print 'write file into : '+upload_path
+
     except:
         logger.warning("Error - Upload path")
         logger.warning(upload_path)
         logger.warning(sys.exc_info())
         return {'msg':'An error occurred while uploading your file. If the error persists please contact GeneULike support ','status':'1'}
-
-
-
-    
 
 ###Test###
 
@@ -1230,20 +1182,14 @@ def excel_signature_upload(request):
     lists=[] 
     for row_number in range(wb.sheet_by_index(0).nrows):
         projects.append(wb.sheet_by_index(0).row_values(row_number,start_colx=0, end_colx=101))
-    print wb.sheet_by_index(2).ncols
     for row_number in range(wb.sheet_by_index(2).nrows):
         strategies.append(wb.sheet_by_index(2).row_values(row_number,start_colx=0, end_colx=201))
     strategies.append([ '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''])
-    #print wb.sheet_by_index(1).nrows
-    #print wb.sheet_by_index(1).ncols
-    #print len(wb.sheet_by_index(1).row_values(0))
+
     for row_number in range(wb.sheet_by_index(1).nrows):
             lists.append(wb.sheet_by_index(1).row_values(row_number,start_colx=0, end_colx=1001))
 
-
-
     try:
-        #print os.path.join(upload_path,tmp_file_name)
         os.remove(os.path.join(upload_path,tmp_file_name))
     except:
         logger.warning("Error - Can't delete upload file")
