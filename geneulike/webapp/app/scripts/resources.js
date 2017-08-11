@@ -56,10 +56,22 @@
                 isArray: false,
                 cache: false
             },
+            removeFileListUpload : {
+                url: '/removeFileListUpload',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
             getGPLnumber : {
                 url: '/getGPLnumber',
                 method: 'POST',
                 isArray: true,
+                cache: false
+            },
+            checkFile : {
+                url: '/checkFile',
+                method: 'POST',
+                isArray: false,
                 cache: false
             },
             pending: {

@@ -458,7 +458,7 @@ def pending(request):
 def getdata(request):
     form = json.loads(request.body, encoding=request.charset)
     #print form.keys()
-    pprint.pprint(form)
+    #pprint.pprint(form)
     collection = form['collection']
     select_filter = form['filter']
     field = form['field']
@@ -527,6 +527,9 @@ def getdata(request):
 
 @view_config(route_name='ontologies', renderer='json', request_method='POST')
 def ontologies(request):
+
+
+#######################################################################################################################    
     def getParent(obj):
         # getParent : get all parents labels and synonyms for a selected term
         # obj : selected object from NCBO API
@@ -546,7 +549,6 @@ def ontologies(request):
                 url = result["links"]['parents']
                 page = get_json(url)
         return label
-
 
     def get_json(url):
         opener = urllib2.build_opener()
@@ -574,11 +576,12 @@ def ontologies(request):
             newString += str(key) + ":" + ",".join(value) +";"
         return newString
 
+#######################################################################################################################
+
+
     REST_URL = "http://data.bioontology.org"
     API_KEY = "27f3a22f-92f8-4587-a884-e81953e113e6"
     form = json.loads(request.body, encoding=request.charset)
-    
-    
 
     if 'label' in form:
         print 'here labellllll'
@@ -1078,12 +1081,6 @@ def get_str(string):
     else:
         return string.encode('utf-8')
 
-
-
-
-
-
-
 @view_config(route_name="addFileNameToObjectFiles", renderer='json', request_method='POST')
 def addFileNameToObjectFiles(request):
     session_user = is_authenticated(request)
@@ -1093,18 +1090,20 @@ def addFileNameToObjectFiles(request):
     form = json.loads(request.body, encoding=request.charset)
 
     ObjectFiles={}
+    try:
+        for index in range(1,len(form['data_filename'])):
+            if form['data_filename'][index] != "":
+                if form['data_available'][index] == 'Yes':
+                    filenameRequired=form['data_filename'][index].split('.')[0]
+                    ObjectFiles[filenameRequired] = {'identifiant' : form['data_identifiant'][index],'name':"",'file' : None , 'status':"waiting", 'filepath' : "", 'msg':''}
 
-    for index in range(1,len(form['data'])):
-        if form['data'][index] != "":
-            string=form['data'][index].split('.')[0]
-            ObjectFiles[string] = {'name':"",'file' : None}
-            #ObjectFiles[]
-            #ObjectFiles.append({'nameRequired': str(form['data'][index]), 'name':"",'file' : None})
+        return {'ObjectFiles' : ObjectFiles}
 
-    return {'ObjectFiles' : ObjectFiles}
-
-
-
+    except:
+        logger.warning("Error - removeFileListUpload - def addFileNameToObjectFiles()")
+        logger.warning(upload_path)
+        logger.warning(sys.exc_info())
+        return {'ObjectFiles': ObjectFiles, 'msg': "An error has occured. Please contact the administrator !"}
 
 @view_config(route_name="getGPLnumber", renderer='json', request_method='POST')
 def getGPLnumber(request):
@@ -1116,11 +1115,32 @@ def getGPLnumber(request):
     gpl = form['GPL']
     path = 'Template/GPL'
     listGPL=[]
-    with open(os.path.join(path,gpl), 'r') as output:   
-        for item in output:
-            listGPL.append({'id':str(item.split('\n')[0]), 'name': str(item.split('\n')[0])})
+    try:
+        with open(os.path.join(path,gpl), 'r') as output:   
+            for item in output:
+                listGPL.append({'id':str(item.split('\n')[0]), 'name': str(item.split('\n')[0])})
+        return listGPL
+    except:
+        logger.warning("Error - removeFileListUpload - def getGPLnumber()")
+        logger.warning(upload_path)
+        logger.warning(sys.exc_info())
+        return ['An error','has occured.', "Please contact", "the administrator!"]
 
-    return listGPL
+@view_config(route_name="removeFileListUpload", renderer='json', request_method='POST')
+def removeFileListUpload(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    form=json.loads(request.body, encoding=request.charset)
+    try:
+        os.remove(form['filepath'])
+        return {'msg' : "This file has been removed. Add a new one.", 'boolean' : True}
+    except:
+        logger.warning("Error - removeFileListUpload - def removeFileListUpload()")
+        logger.warning(form['filepath'])
+        logger.warning(sys.exc_info())
+        return {'msg': "This file has not been removed. Try Again. If this error persist please contact the adminastrator", 'boolean' : False}
 
 @view_config(route_name="fileListUpload", renderer='json', request_method='POST')
 def fileListUpload(request):
@@ -1131,9 +1151,35 @@ def fileListUpload(request):
     input_file = None
     try:
         input_file = request.POST['file'].file
-        pprint.pprint(input_file)
+        number=json.loads(request.POST['data'], encoding=request.charset)['info']
+
     except Exception:
         return HTTPForbidden('no input file')
+
+    try :
+        tmp_file_name = uuid.uuid4().hex +".xlsx"
+        file_path = os.path.join('/tmp', '%s.sig' % tmp_file_name)
+        temp_file_path = file_path + '~'
+
+        # Finally write the data to a temporary file
+        with open(temp_file_path, 'wb') as output_file:
+            shutil.copyfileobj(input_file, output_file)
+        # Now that we know the file has been fully saved to disk move it into place.
+
+        upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
+
+        if not os.path.exists(upload_path):
+            os.makedirs(upload_path)
+        shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
+
+        return {'filepath' : os.path.join(upload_path, tmp_file_name) , 'status' : 'success', 'number':number ,'msg':'File Uploaded and conform'}
+    except:
+        logger.warning("Error - Upload path - def fileListUpload()")
+        logger.warning(upload_path)
+        logger.warning(sys.exc_info())
+        return {'msg':'An error occurred while uploading your file. If the error persists please contact GeneULike support ','status':'warning', 'number':number}
+
+
 
 ################HERE###########
 @view_config(route_name='excel_upload', renderer='json', request_method='POST')
@@ -1167,7 +1213,7 @@ def excel_signature_upload(request):
         shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
 
     except:
-        logger.warning("Error - Upload path")
+        logger.warning("Error - Upload path - def excel_signature_upload()")
         logger.warning(upload_path)
         logger.warning(sys.exc_info())
         return {'msg':'An error occurred while uploading your file. If the error persists please contact GeneULike support ','status':'1'}
@@ -1192,7 +1238,7 @@ def excel_signature_upload(request):
     try:
         os.remove(os.path.join(upload_path,tmp_file_name))
     except:
-        logger.warning("Error - Can't delete upload file")
+        logger.warning("Error - Can't delete upload file - def excel_signature_upload()")
         logger.warning(os.path.join(upload_path,tmp_file_name))
         logger.warning(sys.exc_info())
        
@@ -1982,7 +2028,7 @@ def checkData(request):
         if is_not_empty(strategy):
             has_strategy_error(strategy, str(xlsxwriter.utility.xl_col_to_name(index)))
             associatedProjectID.append(strategy[1])
-            
+
             if len(strategy[2].split(',')) == 0:
                 _input[str(xlsxwriter.utility.xl_col_to_name(index))] = ""
             else:
@@ -2112,7 +2158,10 @@ def checkData(request):
         return {'msg' : 'An error has occured. Please contact the administrator of GeneUlike'}
 
 
-        
+# @view_config(route_name='checkData', renderer='json', request_method='POST')
+# def exportToXLXSfile(request)  
+
+
 import pprint
 
 class Project:
@@ -2785,7 +2834,7 @@ def save_excel(request):
                 _study=study
         
         for project in projects:
-            pprint.pprint(study)
+            #pprint.pprint(study)
             if _study.id[0] == project.id[0]:
                 _project=project
 

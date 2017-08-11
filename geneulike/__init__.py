@@ -85,8 +85,10 @@ def main(global_config, **settings):
     config.add_route('excel_upload', '/upload/{id}/excelupload')
 
     config.add_route('addFileNameToObjectFiles', '/addFileNameToObjectFiles')
+    config.add_route('removeFileListUpload' , '/removeFileListUpload')
 
     config.add_route('getGPLnumber', '/getGPLnumber')
+    #config.add_route('checkFile', '/checkFile')
 
     config.add_route('fileListUpload', '/upload/{id}/fileListUpload')
 

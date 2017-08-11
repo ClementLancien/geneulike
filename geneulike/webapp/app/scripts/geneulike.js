@@ -2453,7 +2453,6 @@ app.controller('createCtrl',
                         });
 
                         $.each(changes, function (index, element) {
-                            
                             data_projects[element[0]][element[1]] = element[3];
                             //element[4] value before changement
                         });
@@ -2656,11 +2655,9 @@ app.controller('createCtrl',
                         });
 
                         $.each(changes, function (index, element) {
-                            console.log(element)
                             data_lists[element[0]][element[1]] = element[3];
                             //element[4] value before changement
                         });
-                        console.log(data_lists)
                     },
                     afterSelection: function (r, c, r2, c2) {
                         if(r == 4 && c !=0){
@@ -2951,7 +2948,7 @@ app.controller('createCtrl',
             $scope.next = function() {
                 $scope.uploadList=!$scope.uploadList;
                 $scope.stepProgressBar_CheckData="active";
-                Dataset.addFileNameToObjectFiles({},{'data':data_lists[8]}).$promise.then(function(data){
+                Dataset.addFileNameToObjectFiles({},{'data_identifiant' : data_lists[0], 'data_available' : data_lists[7], 'data_filename':data_lists[8]}).$promise.then(function(data){
                     $scope.objectFiles=data['ObjectFiles'];
                 });
             };
@@ -2986,15 +2983,17 @@ app.controller('createCtrl',
                     return
                 }
                 for(var i = 0; i < files.length; i++){
-                    addFileToObjectFiles(files[i])
-                
+                    addFileToObjectFiles(files[i])                
                 }
             };
 
             function addFileToObjectFiles(object){
                 if(object.name.split('.')[0] in $scope.objectFiles){
-                    $scope.objectFiles[object.name.split('.')[0]].name = object.name.split('.')[0];
-                    $scope.objectFiles[object.name.split('.')[0]].file = object.file;
+                    if($scope.objectFiles[object.name.split('.')[0]].name ==""){
+                        $scope.objectFiles[object.name.split('.')[0]].name = object.name.split('.')[0];
+                        $scope.objectFiles[object.name.split('.')[0]].file = object;
+                        $scope.objectFiles[object.name.split('.')[0]].status='waiting';
+                    }
                 }
                 else{
                     console.log( object.name.split('.')[0] +' file is not in your Filename List');
@@ -3002,7 +3001,54 @@ app.controller('createCtrl',
             };
 
             $scope.remove = function(filename){
-                $scope.objectFiles[filename] = {'name' : "", 'file': null}
+                if($scope.objectFiles[filename].filepath == ""){
+                    $scope.objectFiles[filename].name="";// = {'name' : "", 'file': null}
+                    $scope.objectFiles[filename].file=null;
+                    $scope.objectFiles[filename].status="waiting";
+                    $scope.objectFiles[filename].msg="";
+                }
+                else{
+                    Dataset.removeFileListUpload({},{'filepath' : $scope.objectFiles[filename].filepath}).$promise.then(function(data){
+                        if(data['boolean'] == true){
+                            $scope.objectFiles[filename].name="";// = {'name' : "", 'file': null}
+                            $scope.objectFiles[filename].file=null;
+                            $scope.objectFiles[filename].status="waiting";
+                            $scope.objectFiles[filename].filepath="";
+                            $scope.objectFiles[filename].msg=data['msg'];
+                        }
+                        else{
+                            $scope.objectFiles[filename].status="warning";
+                            $scope.objectFiles[filename].msg=data['msg'];
+                        }
+                    });
+                }
+            };
+
+            $scope.checkFile = function(){
+
+                $scope.listKey= Object.keys($scope.objectFiles)
+                for(var i = 0; i < $scope.listKey.length; i++){
+
+                    if($scope.objectFiles[$scope.listKey[i]].name != "" && $scope.objectFiles[$scope.listKey[i]].filepath == ""){
+
+                        Upload.upload({
+                            url: '/upload/'+$scope.user.id+'/fileListUpload',
+                            fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+                            file : $scope.objectFiles[$scope.listKey[i]].file,
+                            data : {'info':i}
+                            
+                        }).progress(function (evt) {
+
+                        }).success(function (data, status, headers, config) {
+                            
+                            $scope.objectFiles[$scope.listKey[data['number']]].status=data['status'];
+                            $scope.objectFiles[$scope.listKey[data['number']]].filepath=data['filepath'];
+                            $scope.objectFiles[$scope.listKey[data['number']]].msg=data['msg'];
+
+                        }).error(function (data, status, headers, config) {
+                        })
+                    }
+                }
             };
 
         });
