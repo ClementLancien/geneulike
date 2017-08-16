@@ -160,8 +160,8 @@ hr {
       <br>
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projects ({{projects_number}})</a></li>
-          <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
           <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
+          <li><a data-toggle="tab" href="#list" target="_self" ng-click="showLists()">Lists ({{lists_number}})</a></li>
           <li><a data-toggle="tab" href="#strategy" ng-show="report" target="_self" ng-click="showReport()">Error Report ({{critical}})</a></li>
         </ul>
 
@@ -316,7 +316,10 @@ hr {
     <div class="row">
 
       <div class ="col-xs-3 "><button type="button" class="btn btn-default btn pull-left" ng-show="!uploadList" ng-click="previous()">Previous</button></div>
-      <div class = "col-xs-6 text-center"><button type="button" class="btn btn-warning" ng-disabled="!canSubmit()"  ng-show="!uploadList" ng-click="next()">Submit</button></div>
+      <div class = "col-xs-6 text-center">
+        <button type="button" class="btn btn-warning" ng-if ="!canSubmit.boolean" disabled="true"  ng-show="!uploadList">Submit</button>
+        <button type="button" class="btn btn-warning" ng-if ="canSubmit.boolean"  ng-show="!uploadList" ng-click="submit()">Submit</button>
+      </div>
       <div class = "col-xs-3 ">
         <button type="button" class="btn btn-default btn pull-right" ng-if="hasError.boolean" disabled="true" ng-show="uploadList" >Next</button>
         <button type="button" class="btn btn-default btn pull-right" ng-if="!hasError.boolean" ng-show="uploadList" ng-click="next()">Next</button>

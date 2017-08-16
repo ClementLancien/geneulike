@@ -2251,7 +2251,7 @@ app.controller('createCtrl',
                 {id : "UniProt"             , name : "UniProt"},
                 {id : "Vega_gene"           , name : "Vega gene"},
                 {id : "Vega_protein"        , name : "Vega protein"},
-                {id : "Vega_transcript"     , name : "Vegatranscript"},
+                {id : "Vega_transcript"     , name : "Vega transcript"},
             ];
             $scope.DBDatabaseSelected = { value : "" };
 
@@ -2958,21 +2958,21 @@ app.controller('createCtrl',
                 $scope.stepProgressBar_CheckData="";
             };
 
-            $scope.submit = function (){
-                for(var i = 0; i < $scope.arrayFiles.length; i++){
-                    var resultInfo={'error':"",'critical':""};
-                    Upload.upload({
-                        url: '/upload/'+$scope.user.id+'/fileListUpload',
-                        fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
-                        file: $scope.arrayFiles[i]
-                    }).progress(function (evt) {
+            // $scope.submit = function (){
+            //     for(var i = 0; i < $scope.arrayFiles.length; i++){
+            //         var resultInfo={'error':"",'critical':""};
+            //         Upload.upload({
+            //             url: '/upload/'+$scope.user.id+'/fileListUpload',
+            //             fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
+            //             file: $scope.arrayFiles[i]
+            //         }).progress(function (evt) {
 
-                    }).success(function (data, status, headers, config) {
+            //         }).success(function (data, status, headers, config) {
 
-                    }).error(function (data, status, headers, config) {
-                    })
-                }
-            };
+            //         }).error(function (data, status, headers, config) {
+            //         })
+            //     }
+            // };
 
             $scope.dropFiles = function(files){
                 console.log(files);
@@ -3009,6 +3009,7 @@ app.controller('createCtrl',
                 }
                 else{
                     Dataset.removeFileListUpload({},{'filepath' : $scope.objectFiles[filename].filepath}).$promise.then(function(data){
+                        $scope.canSubmit= {boolean : false};
                         if(data['boolean'] == true){
                             $scope.objectFiles[filename].name="";// = {'name' : "", 'file': null}
                             $scope.objectFiles[filename].file=null;
@@ -3024,6 +3025,7 @@ app.controller('createCtrl',
                 }
             };
 
+            $scope.canSubmit= {boolean : false};
             $scope.checkFile = function(){
 
                 $scope.listKey= Object.keys($scope.objectFiles)
@@ -3031,7 +3033,7 @@ app.controller('createCtrl',
 
                     if($scope.objectFiles[$scope.listKey[i]].name != "" && $scope.objectFiles[$scope.listKey[i]].filepath == ""){
 
-                        Upload.upload({
+                        var upload = Upload.upload({
                             url: '/upload/'+$scope.user.id+'/fileListUpload',
                             fields: {'uid': $scope.user.id, 'dataset': 'tmp'},
                             file : $scope.objectFiles[$scope.listKey[i]].file,
@@ -3040,15 +3042,34 @@ app.controller('createCtrl',
                         }).progress(function (evt) {
 
                         }).success(function (data, status, headers, config) {
-                            
-                            $scope.objectFiles[$scope.listKey[data['number']]].status=data['status'];
-                            $scope.objectFiles[$scope.listKey[data['number']]].filepath=data['filepath'];
-                            $scope.objectFiles[$scope.listKey[data['number']]].msg=data['msg'];
 
                         }).error(function (data, status, headers, config) {
+
                         })
+
+                        upload.then(function(data){
+                            $scope.objectFiles[$scope.listKey[data['data']['number']]].status   = data['data']['status'];
+                            $scope.objectFiles[$scope.listKey[data['data']['number']]].filepath = data['data']['filepath'];
+                            $scope.objectFiles[$scope.listKey[data['data']['number']]].msg      = data['data']['msg'];
+                            canSubmit();
+                        });
                     }
                 }
+            };
+
+            function canSubmit() {
+
+                Dataset.canSubmit({},{"objectFiles" :  $scope.objectFiles}).$promise.then(function(data){
+                    $scope.canSubmit.boolean = data['canSubmit'];
+                });
+            };
+
+            $scope.submit = function() {
+                console.log($scope.objectFiles)
+                //Dataset.submit({},{'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, "objectFiles" : $scope.objectFiles }).$promise.then(function(data){
+
+
+                //});
             };
 
         });

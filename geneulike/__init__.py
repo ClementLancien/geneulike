@@ -92,8 +92,8 @@ def main(global_config, **settings):
 
     config.add_route('fileListUpload', '/upload/{id}/fileListUpload')
 
-
-
+    config. add_route('canSubmit', '/canSubmit')
+    config.add_route('submit', '/submit')
 
     config.add_route('createExcel', '/user/create_Excel')
     config.add_route('checkData', '/checkData')

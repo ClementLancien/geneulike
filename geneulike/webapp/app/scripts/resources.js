@@ -74,6 +74,18 @@
                 isArray: false,
                 cache: false
             },
+            canSubmit : {
+                url: '/canSubmit',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
+            submit : {
+                url: '/submit',
+                method: 'POST',
+                isArray: false,
+                cache: false
+            },
             pending: {
                 url: '/pending',
                 method: 'POST',

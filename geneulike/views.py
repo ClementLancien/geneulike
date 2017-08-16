@@ -1142,6 +1142,8 @@ def removeFileListUpload(request):
         logger.warning(sys.exc_info())
         return {'msg': "This file has not been removed. Try Again. If this error persist please contact the adminastrator", 'boolean' : False}
 
+
+
 @view_config(route_name="fileListUpload", renderer='json', request_method='POST')
 def fileListUpload(request):
     session_user = is_authenticated(request)
@@ -1178,7 +1180,6 @@ def fileListUpload(request):
         logger.warning(upload_path)
         logger.warning(sys.exc_info())
         return {'msg':'An error occurred while uploading your file. If the error persists please contact GeneULike support ','status':'warning', 'number':number}
-
 
 
 ################HERE###########
@@ -2156,6 +2157,81 @@ def checkData(request):
         logger.warning("Error - Check Data (Create new)")
         logger.warning(sys.exc_info())
         return {'msg' : 'An error has occured. Please contact the administrator of GeneUlike'}
+
+
+
+@view_config(route_name='canSubmit', renderer='json', request_method='POST')
+def canSubmit(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    #print 'herer'
+    form=json.loads(request.body, encoding=request.charset)
+
+    for (key, values) in form['objectFiles'].items():
+        if values['status'] != 'success':
+            return {'canSubmit' : False}
+
+    return {'canSubmit' : True}
+
+
+
+class Project:
+
+    compteur_project=0
+    def __init__(self, parent_project_id, contributors, title,\
+                 description, ontologies, crosslink, add_info, \
+                 pubmed_id, filepath, last_update, submission_date, identifiant ):
+
+        self.project_id = "GPR" + str(Project.compteur_project)
+        self.parent_project_id = parent_project_id
+        self.contributors = contributors
+        self.title = title
+        self.description = description
+        self.ontologies = ontologies
+        self.crosslink = crosslink
+        self.add_info = add_info
+        self.pubmed_id = pubmed_id
+        self.filetpath = filepath
+        self.author = author
+        self.status= "private"
+        self.last_update = last_update
+        self.submission_date = submission_date
+        self.identifiant = identifiant
+        self.tags = ""
+        Project.compteur_project += 1
+
+        # self.studies_id=[]
+        # self.strategies_id=[]
+        # self.lists_id=[]
+        # self.title = title
+        # self.description = description
+        # self.pubmed = pubmed
+        # self.contributors = contributors
+        # self.crosslinks = crosslinks
+        # self.last_update = last_update
+        # self.submission_date = submission_date
+        # self.owner = owner
+        # self.author = author
+        # self.file_path = file_path
+        # self.status= "private"
+        # self.tags = ""
+        # Project.compteur_project += 1
+        # #self.id=identifiant
+
+
+
+@view_config(route_name='submit', renderer='json', request_method='POST')
+def submit(request):
+    session_user = is_authenticated(request)
+    if session_user is None:
+        return 'HTTPForbidden()'
+
+    form=json.loads(request.body, encoding=request.charset)
+
+    print 'here' 
+
 
 
 # @view_config(route_name='checkData', renderer='json', request_method='POST')
