@@ -3065,11 +3065,11 @@ app.controller('createCtrl',
             };
 
             $scope.submit = function() {
-                console.log($scope.objectFiles)
-                //Dataset.submit({},{'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, "objectFiles" : $scope.objectFiles }).$promise.then(function(data){
+                //console.log($scope.objectFiles)
+                Dataset.submit({},{'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, "objectFiles" : $scope.objectFiles }).$promise.then(function(data){
 
 
-                //});
+                });
             };
 
         });

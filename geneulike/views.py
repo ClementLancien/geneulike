@@ -1894,6 +1894,10 @@ def checkData(request):
             if project[1] == "Root":
                 root.append(project[0])
 
+            if project[0] == project[1]:
+                projects_errors['Critical'].append("Column " + index + " -  Parent ProjectID can't be identical with ProjectID")
+                critical += 1
+
             if is_not_ProjectID(project[1]):
                 projects_errors['Critical'].append("Column " + index + " -  no Parent ProjectID Found")
                 critical += 1
@@ -2176,16 +2180,19 @@ def canSubmit(request):
     return {'canSubmit' : True}
 
 
-
 class Project:
 
     compteur_project=0
     def __init__(self, parent_project_id, contributors, title,\
                  description, ontologies, crosslink, add_info, \
-                 pubmed_id, filepath, last_update, submission_date, identifiant ):
+                 pubmed_id, filepath, last_update, submission_date, author, identifiant ):
 
         self.project_id = "GPR" + str(Project.compteur_project)
         self.parent_project_id = parent_project_id
+        self.project_parent = ""
+        self.project_child = ""
+        self.strategies_id = ""
+        self.output_lists_id = ""
         self.contributors = contributors
         self.title = title
         self.description = description
@@ -2194,32 +2201,265 @@ class Project:
         self.add_info = add_info
         self.pubmed_id = pubmed_id
         self.filetpath = filepath
-        self.author = author
         self.status= "private"
         self.last_update = last_update
         self.submission_date = submission_date
+        self.author = author
         self.identifiant = identifiant
         self.tags = ""
         Project.compteur_project += 1
 
-        # self.studies_id=[]
-        # self.strategies_id=[]
-        # self.lists_id=[]
-        # self.title = title
-        # self.description = description
-        # self.pubmed = pubmed
-        # self.contributors = contributors
-        # self.crosslinks = crosslinks
-        # self.last_update = last_update
-        # self.submission_date = submission_date
-        # self.owner = owner
-        # self.author = author
-        # self.file_path = file_path
-        # self.status= "private"
-        # self.tags = ""
-        # Project.compteur_project += 1
-        # #self.id=identifiant
 
+    def lire(self):
+        pprint.pprint({
+                            'project_id'            :   self.project_id,
+                            'parent_project_id'     :   self.parent_project_id,
+                            'project_parent'        :   self.project_parent,
+                            'project_child'         :   self.project_child,
+                            'contributors'          :   self.contributors,
+                            'title'                 :   self.title,
+                            'description'           :   self.description,
+                            'ontologies'            :   self.ontologies,
+                            'crosslink'             :   self.crosslink,
+                            'add_info'              :   self.add_info,
+                            'pubmed_id'             :   self.pubmed_id,
+                            'filetpath'             :   self.filetpath,
+                            'status'                :   self.status,
+                            'last_update'           :   self.last_update,
+                            'submission_date'       :   self.submission_date,
+                            'author'                :   self.author,
+                            'identifiant'           :   self.identifiant,
+                            'tags'                  :   self.tags
+            }, width=1)
+
+class Strategy:
+
+    compteur_strategy=0
+    def __init__(   self, associated_project_id, input_list_id, output_list_id, title,\
+                    material_and_method, ontologies, add_info, \
+                    filepath, last_update, submission_date, author, identifiant ):
+
+        self.strategy_id = "GUS" + str(Strategy.compteur_strategy)
+        self.associated_project_id = associated_project_id
+        self.input_list_id = input_list_id
+        self.output_list_id = output_list_id
+        self.title = title
+        self.material_and_method = material_and_method
+        self.ontologies = ontologies
+
+        self.add_info = add_info
+
+        self.filetpath = filepath
+
+        self.status= "private"
+        self.last_update = last_update
+        self.submission_date = submission_date
+        self.author = author
+        self.identifiant = identifiant
+        self.tags = ""
+        Strategy.compteur_strategy += 1
+
+    def lire(self):
+
+        pprint.pprint({
+                        'strategy_id'             :   self.strategy_id,
+                        'associated_project_id'   :   self.associated_project_id,
+                        'input_list_id'           :   self.input_list_id,
+                        'output_list_id'          :   self.output_list_id,
+                        'title'                   :   self.title,
+                        'material_and_method'     :   self.material_and_method,
+                        'ontologies'              :   self.ontologies,
+                        'add_info'                :   self.add_info,
+                        'filetpath'               :   self.filetpath,
+                        'status'                  :   self.status,
+                        'last_update'             :   self.last_update,
+                        'submission_date'         :   self.submission_date,
+                        'author'                  :   self.author,
+                        'identifiant'             :   self.identifiant,
+                        'tags'                    :   self.tags
+        },width=1)
+
+
+class List:
+
+    compteur_list=0
+    def __init__(   self, title, description, results_and_interpretation,\
+                    ontologies, database, add_info, make_it_available, filename, \
+                    filepath, last_update, submission_date, author, identifiant ):
+
+        self.list_id = "GUL" + str(List.compteur_list)
+        self.title = title
+        self.description = description
+        self.results_and_interpretation = results_and_interpretation
+        self.ontologies = ontologies
+        self.database = database
+        self.add_info = add_info
+        self.make_it_available = make_it_available
+        self.filename = filename
+        self.filetpath = filepath
+
+        self.status= "private"
+        self.last_update = last_update
+        self.submission_date = submission_date
+        self.author = author
+        self.identifiant = identifiant
+        self.tags = ""
+        List.compteur_list += 1
+
+
+    def lire(self):
+
+        pprint.pprint({
+                        'list_id'                     :       self.list_id,
+                        'title'                       :       self.title,
+                        'description'                 :       self.description,
+                        'results_and_interpretation'  :       self.results_and_interpretation,
+                        'ontologies'                  :       self.ontologies,
+                        'database'                    :       self.database,
+                        'add_info'                    :       self.add_info,
+                        'make_it_available'           :       self.make_it_available,
+                        'filename'                    :       self.filename,
+                        'filetpath'                   :       self.filetpath,
+                        'status'                      :       self.status,
+                        'last_update'                 :       self.last_update,
+                        'submission_date'             :       self.submission_date,
+                        'author'                      :       self.author,
+                        'identifiant'                 :       self.identifiant,
+                        'tags'                        :       self.tags
+            },width=1)
+
+
+"""We need to reconstruct the association between Super Project and project 
+    example :
+    Each node is equal to a tuple : ( parent_project_id, project_id )
+
+                                           (Root, GPR1)         (Root, GPR7)
+                                               /                     |
+                                              /                      |
+                                             /                       |
+                                            /                        |
+                                           /                         |
+                                          /                          |
+                                         /                           |
+                                   (GPR1,GPR2)                  (GPR7, GPR8)
+                                       /\ 
+                                      /  \
+                                     /    \
+                                    /      \
+                                   /        \
+                                  /          \
+                                 /            \
+        (GRP3, GPR9)-------(GPR2,GRP3)      (GPR2, GPR4)
+                               /\
+                              /  \
+                             /    \
+                            /      \
+                           /        \
+                          /          \
+                         /            \
+                   (GPR3, GPR5)   (GPR3, GPR6)
+                    
+    We can have mulitple Root in one Super Project"""
+from treelib import Node, Tree
+from collections import defaultdict
+class Arbre:
+
+    def __init__(self, data_list):
+        self.data_list = data_list
+        self.tree_dict = defaultdict(Tree) #To understand what is Tree go : http://treelib.readthedocs.io/en/latest/examples.html
+
+        self._root()
+        self.for_each_root()
+        #self.show()
+
+    def _root(self):
+        """ return List of Project which are root  
+            and a new Data List without root Project"""
+
+        new_data_list=[]
+        i=0
+        for index in range(len(self.data_list)):
+            if (self.data_list[index]).parent_project_id == 'Root':
+                #self.tree_dict["tree"+str(i)] = Tree()
+                self.tree_dict["tree"+str(i)].create_node((self.data_list[index]).project_id, (self.data_list[index]).project_id) #root node
+                i=i+1
+            else:
+                new_data_list.append(self.data_list[index])
+
+        self.data_list=new_data_list
+
+
+    def for_each_root(self):
+
+        for item in self.tree_dict.keys():
+            self.create_node_to_root(item)
+
+    def create_node_to_root(self,item):
+        boolean=True
+        while boolean:
+            boolean = self.add_node(item)
+
+    def add_node(self,item):
+        boolean=False
+        new_data_list=[]
+        for child in self.data_list:
+            if self.tree_dict[item].contains(child.parent_project_id):
+                self.tree_dict[item].create_node(child.project_id, child.project_id, parent=child.parent_project_id)
+                boolean=True
+            else:
+                new_data_list.append(child)
+        self.data_list=new_data_list
+        return boolean
+
+    def parent_path(self, nodeIdentifier):
+
+        for item in self.tree_dict.keys():
+            if self.tree_dict[item].contains(nodeIdentifier):
+                boolean=True
+                return self.get_parent(nodeIdentifier, item)
+                
+        
+        return False
+
+    def get_parent(self, nodeIdentifier, item):
+
+        if self.is_root(nodeIdentifier, item):
+            return nodeIdentifier
+        else:
+            return  self.get_parent(self.tree_dict[item].parent(nodeIdentifier).identifier,item)+'/'+nodeIdentifier
+            # print self.tree_dict[item].parent(nodeIdentifier)
+            # print self.tree_dict[item].get_node(nodeIdentifier)
+            # path=self.get_parent(self.tree_dict[item].parent(nodeIdentifier),item)+'/'+self.tree_dict[item].get_node(nodeIdentifier).identifier
+            # print path
+    
+    def child_path(self,nodeIdentifier):
+        """ Multiple child from one node can exist so mulitple path"""
+
+        for item in self.tree_dict.keys():
+            if self.tree_dict[item].contains(nodeIdentifier):
+                boolean=True
+                return self.get_child(nodeIdentifier, item)
+
+        return False
+
+    def get_child(self, nodeIdentifier,item):
+        _list = self.tree_dict[item].subtree(nodeIdentifier).paths_to_leaves()
+        paths=""
+        for path in _list:
+            newPath=""
+            for node in path:
+                newPath=newPath+node+"/"
+            paths = paths+newPath[:-1]+";"
+        return paths[:-1]
+
+    def is_root(self, nodeIdentifier, item):
+        if self.tree_dict[item].parent(nodeIdentifier) == None:
+            return True
+        return False
+
+    def show(self):
+        for value in self.tree_dict.values():
+            value.show()
 
 
 @view_config(route_name='submit', renderer='json', request_method='POST')
@@ -2230,9 +2470,266 @@ def submit(request):
 
     form=json.loads(request.body, encoding=request.charset)
 
-    print 'here' 
+    data_projects=form['data_projects']
+    data_strategies=form['data_strategies'] 
+    data_lists=form['data_lists']
+    objectFiles=form['objectFiles']
+
+    project_last_new_id={}
+    list_last_new_id={}
+    user = "toto" #form['uid'] #append JS dataUSER
+
+    dt = datetime.datetime.utcnow()
+    date = time.mktime(dt.timetuple())
 
 
+
+    projects = []
+    projects_location={}
+    strategies = []
+    lists= []
+
+    filepath="" # create function to save excel_file from data
+
+    def is_not_empty(_list):
+
+        for element in _list[1:]:
+            if element != "":
+                return True
+        return False
+
+    import unicodedata as ucd
+
+
+    def get_str(string):
+        if isinstance(string, float):
+            return str(int(string)).encode('utf-8')
+        elif string == '':
+            return str("").encode('utf-8')
+        else:
+            return string.encode('utf-8')
+
+
+    def add_project(data_projects):
+
+        if Project.compteur_project == 0:
+            Project.compteur_project = int(request.registry.db_mongo['projects'].find().count())
+
+
+
+        for index in range(1,len(data_projects[0])):
+
+            one_project_values = [  data_projects[0][index],
+                                    data_projects[1][index],
+                                    data_projects[2][index],
+                                    data_projects[3][index],
+                                    data_projects[4][index],
+                                    data_projects[5][index],
+                                    data_projects[6][index],
+                                    data_projects[7][index],
+                                    data_projects[8][index]
+                                 ]
+            if is_not_empty(one_project_values):
+                newProject= Project (   get_str(one_project_values[1]),
+                                        get_str(one_project_values[2]),
+                                        get_str(one_project_values[3]),
+                                        get_str(one_project_values[4]),
+                                        get_str(one_project_values[5]),
+                                        get_str(one_project_values[6]),
+                                        get_str(one_project_values[7]),
+                                        get_str(one_project_values[8]),
+                                        str(filepath),
+                                        str(date),
+                                        str(date),
+                                        str(user),
+                                        get_str(one_project_values[0])
+                                    )
+
+                
+                project_last_new_id[get_str(one_project_values[0])] = newProject.project_id
+                projects.append(newProject)
+
+
+    def replaceOldParentProjectIDByNEw():
+        for project in projects:
+            if project.parent_project_id != 'Root':
+                project.parent_project_id = project_last_new_id[project.parent_project_id]
+
+
+    def location():
+        for index in range(len(projects)):
+            projects_location[projects[index].project_id] = index
+
+    def addChildAndParentPathForProject():
+        # self.project_parent = ""
+        # self.project_child = ""
+        # myTree.parent_path("GPR42") 
+        # (myTree.child_path(item).split(";"))[:-1]
+
+        for project in projects:
+            parent_path = myTree.parent_path(project.project_id)
+            project_child = myTree.child_path(project.project_id)
+
+            if parent_path == project.project_id:
+                project.project_parent = ""
+            else:
+                project.project_parent = parent_path
+
+            if project_child == project.project_id:
+                project.project_child = ""
+            else:
+                project.project_child = project_child
+
+    def add_strategy(data_strategies):
+        if Strategy.compteur_strategy == 0:
+            Strategy.compteur_strategy = int(request.registry.db_mongo['strategies'].find().count())
+
+        for index in range(1, len(data_strategies[0])):
+            one_strategy_values = [     data_strategies[0][index],
+                                        data_strategies[1][index],
+                                        data_strategies[2][index],
+                                        data_strategies[3][index],
+                                        data_strategies[4][index],
+                                        data_strategies[5][index],
+                                        data_strategies[6][index],
+                                        data_strategies[7][index]
+                                ]
+
+            if is_not_empty(one_strategy_values):
+
+                strategies.append(Strategy (    get_str(one_strategy_values[1]),
+                                                get_str(one_strategy_values[2]).split(','),
+                                                get_str(one_strategy_values[3]).split(','),
+                                                get_str(one_strategy_values[4]),
+                                                get_str(one_strategy_values[5]),
+                                                get_str(one_strategy_values[6]),
+                                                get_str(one_strategy_values[7]),
+                                                str(filepath),
+                                                str(date),
+                                                str(date),
+                                                str(user),
+                                                get_str(one_strategy_values[0])
+                                            )
+                                )
+    def replaceOldInputOuputIDByNEw():
+        newInput=[]
+        newOutput=[]
+        for strategy in strategies:
+
+            for item in strategy.input_list_id:
+                if item == "Root":
+                    newInput.append(item)
+                else:
+                    newInput.append(list_last_new_id[item])
+
+            strategy.input_list_id=newInput
+
+            for item in strategy.output_list_id:
+                if item == "Root":
+                    newOutput.append(item)
+                else:
+                    newOutput.append(list_last_new_id[item])
+
+            strategy.output_list_id=newOutput
+
+
+    def associateStrategyWithProject():
+        """ replace old associated project id by new and add strat id to project.strategies_id and list output"""
+        for strategy in strategies:
+            print strategy.associated_project_id
+            strategy.associated_project_id = project_last_new_id[strategy.associated_project_id]
+            print strategy.associated_project_id
+
+            project_location=projects_location[strategy.associated_project_id]
+
+            projects[project_location].strategies_id = projects[project_location].strategies_id + strategy.strategy_id
+
+            print projects[projects_location[strategy.associated_project_id]].strategies_id
+
+            if projects[project_location].output_lists_id == "":
+                projects[project_location].output_lists_id = strategy.output_list_id
+            else:
+                projects[project_location].output_lists_id = projects[project_location].output_lists_id + ';' +strategy.output_list_id
+
+    def associateListWithStrategy():
+        for _list in lists:
+            pass
+
+    def add_list(data_lists):
+        if List.compteur_list == 0:
+            List.compteur_list = int(request.registry.db_mongo['lists'].find().count())
+
+        for index in range(1,len(data_lists[0])):
+            one_list_values =   [   data_lists[0][index],
+                                    data_lists[1][index],
+                                    data_lists[2][index],
+                                    data_lists[3][index],
+                                    data_lists[4][index],
+                                    data_lists[5][index],
+                                    data_lists[6][index],
+                                    data_lists[7][index],
+                                    data_lists[8][index]
+                                ]
+
+            if is_not_empty(one_list_values):
+                if get_str(one_list_values[7]) == 'Yes':
+                    filename = objectFiles[one_list_values[8].split('.')[0]]['filepath']
+
+                else:
+                    filename=""
+
+                newList = List (    get_str(one_list_values[1]),
+                                    get_str(one_list_values[2]).split(','),
+                                    get_str(one_list_values[3]).split(','),
+                                    get_str(one_list_values[4]),
+                                    get_str(one_list_values[5]),
+                                    get_str(one_list_values[6]),
+                                    get_str(one_list_values[7]),
+                                    str(filename),
+                                    str(filepath),
+                                    str(date),
+                                    str(date),
+                                    str(user),
+                                    get_str(one_list_values[0])
+                                )
+
+                list_last_new_id[get_str(one_list_values[0])] = newList.list_id
+
+                lists.append(newList)
+
+    #try:
+
+    add_project(data_projects)
+    replaceOldParentProjectIDByNEw()
+    location()
+    pprint.pprint(projects_location)
+    add_strategy(data_strategies)
+    add_list(data_lists)
+    replaceOldInputOuputIDByNEw() #for each strategy's input and ouput
+    associateStrategyWithProject()
+    #associateListWithStrategy()
+    
+    myTree = Arbre(projects)
+    myTree.show()
+    addChildAndParentPathForProject()
+    # for item in projects:
+    #     item.lire()
+    # print "Parent"
+    # print "GPR42 : " , myTree.parent_path("GPR42") 
+    # print "GPR43 : " , myTree.parent_path("GPR43")
+    # print "GPR44 : " , myTree.parent_path("GPR44")
+    # print "GPR41 : " , myTree.parent_path("GPR41")
+    # print "GPR40 : " , myTree.parent_path("GPR40")
+    # print "GPR39 : " , myTree.parent_path("GPR39")
+    # print "Child"
+    # _list= ["GPR40","GPR43","GPR44","GPR41","GPR40", "GPR39"]
+    # for item in _list:
+    #     paths = (myTree.child_path(item).split(";"))
+    #     for path in paths:
+    #         print "{} : {}".format(item, path)
+
+    #except:
+    #    print "error"
 
 # @view_config(route_name='checkData', renderer='json', request_method='POST')
 # def exportToXLXSfile(request)  
@@ -2240,418 +2737,418 @@ def submit(request):
 
 import pprint
 
-class Project:
+# class Project:
 
-    compteur_project= 0
-    def __init__(self,\
-        title,\
-        description,\
-        pubmed,\
-        contributors,\
-        crosslinks,\
-        last_update,\
-        submission_date,\
-        owner,\
-        author,\
-        file_path,\
-        identifiant):
+#     compteur_project= 0
+#     def __init__(self,\
+#         title,\
+#         description,\
+#         pubmed,\
+#         contributors,\
+#         crosslinks,\
+#         last_update,\
+#         submission_date,\
+#         owner,\
+#         author,\
+#         file_path,\
+#         identifiant):
 
-        self.project_id = "GPR" + str(Project.compteur_project)
-        self.studies_id=[]
-        self.strategies_id=[]
-        self.lists_id=[]
-        self.title = title
-        self.description = description
-        self.pubmed = pubmed
-        self.contributors = contributors
-        self.crosslinks = crosslinks
-        self.last_update = last_update
-        self.submission_date = submission_date
-        self.owner = owner
-        self.author = author
-        self.file_path = file_path
-        self.status= "private"
-        self.tags = ""
-        Project.compteur_project += 1
-        self.id=identifiant
+#         self.project_id = "GPR" + str(Project.compteur_project)
+#         self.studies_id=[]
+#         self.strategies_id=[]
+#         self.lists_id=[]
+#         self.title = title
+#         self.description = description
+#         self.pubmed = pubmed
+#         self.contributors = contributors
+#         self.crosslinks = crosslinks
+#         self.last_update = last_update
+#         self.submission_date = submission_date
+#         self.owner = owner
+#         self.author = author
+#         self.file_path = file_path
+#         self.status= "private"
+#         self.tags = ""
+#         Project.compteur_project += 1
+#         self.id=identifiant
 
-    def get_dico(self):
+#     def get_dico(self):
 
-        if len(self.studies_id) == 1:
-            _studies= str(self.studies_id[0])
-        else:
-            _studies= ' , '.join(self.studies_id)
+#         if len(self.studies_id) == 1:
+#             _studies= str(self.studies_id[0])
+#         else:
+#             _studies= ' , '.join(self.studies_id)
 
-        if len(self.strategies_id) == 1:
-            _strategies = str(self.strategies_id[0])
-        else:
-            _strategies = ' , '.join(self.strategies_id)
+#         if len(self.strategies_id) == 1:
+#             _strategies = str(self.strategies_id[0])
+#         else:
+#             _strategies = ' , '.join(self.strategies_id)
 
-        if len(self.studies_id) == 1:
-            _studies = str(self.studies_id[0])
-        else:
-            _studies= ' , '.join(self.studies_id)
+#         if len(self.studies_id) == 1:
+#             _studies = str(self.studies_id[0])
+#         else:
+#             _studies= ' , '.join(self.studies_id)
 
-        if len(self.lists_id) == 1:
-            _lists = str(self.lists_id[0])
-        else:
-            _lists = ' , '.join(self.lists_id)
-
-
-        return {'project_id' : self.project_id,
-                'studies_id' : _studies,
-                'strategies_id' : _strategies,
-                'lists_id' : _lists,
-                'title' : self.title,
-                'description' : self.description,
-                'pubmed' : self.pubmed,
-                'contributors' : self.contributors,
-                'crosslinks' : self.crosslinks,
-                'last_update' : self.last_update,
-                'submission_date' : self.submission_date,
-                'owner' : self.owner,
-                'author' : self.author,
-                'file_path' : self.file_path,
-                'status' : self.status,
-                'tags' : self.tags,
-    }
-
-    def lire(self):
-        pprint.pprint({'project_id' : self.project_id,
-                'studies_id' : self.studies_id,
-                'strategies_id' : self.strategies_id,
-                'lists_id' : self.lists_id,
-                'title' : self.title,
-                'description' : self.description,
-                'pubmed' : self.pubmed,
-                'contributors' : self.contributors,
-                'crosslinks' : self.crosslinks,
-                'last_update' : self.last_update,
-                'submission_date' : self.submission_date,
-                'owner' : self.owner,
-                'author' : self.author,
-                'file_path' : self.file_path,
-                'tags' : self.tags
-    }, width=1)
-
-    def get_write(self, path_filename):
+#         if len(self.lists_id) == 1:
+#             _lists = str(self.lists_id[0])
+#         else:
+#             _lists = ' , '.join(self.lists_id)
 
 
-        if len(self.studies_id) == 1:
-            _studies= str(self.studies_id[0])
-        else:
-            _studies= ' , '.join(self.studies_id)
+#         return {'project_id' : self.project_id,
+#                 'studies_id' : _studies,
+#                 'strategies_id' : _strategies,
+#                 'lists_id' : _lists,
+#                 'title' : self.title,
+#                 'description' : self.description,
+#                 'pubmed' : self.pubmed,
+#                 'contributors' : self.contributors,
+#                 'crosslinks' : self.crosslinks,
+#                 'last_update' : self.last_update,
+#                 'submission_date' : self.submission_date,
+#                 'owner' : self.owner,
+#                 'author' : self.author,
+#                 'file_path' : self.file_path,
+#                 'status' : self.status,
+#                 'tags' : self.tags,
+#     }
 
-        if len(self.strategies_id) == 1:
-            _strategies = str(self.strategies_id[0])
-        else:
-            _strategies = ' , '.join(self.strategies_id)
+#     def lire(self):
+#         pprint.pprint({'project_id' : self.project_id,
+#                 'studies_id' : self.studies_id,
+#                 'strategies_id' : self.strategies_id,
+#                 'lists_id' : self.lists_id,
+#                 'title' : self.title,
+#                 'description' : self.description,
+#                 'pubmed' : self.pubmed,
+#                 'contributors' : self.contributors,
+#                 'crosslinks' : self.crosslinks,
+#                 'last_update' : self.last_update,
+#                 'submission_date' : self.submission_date,
+#                 'owner' : self.owner,
+#                 'author' : self.author,
+#                 'file_path' : self.file_path,
+#                 'tags' : self.tags
+#     }, width=1)
 
-        if len(self.studies_id) == 1:
-            _studies = str(self.studies_id[0])
-        else:
-            _studies= ' , '.join(self.studies_id)
-
-        if len(self.lists_id) == 1:
-            _lists = str(self.lists_id[0])
-        else:
-            _lists = ' , '.join(self.lists_id)
-
-        liste = ' , '.join(self.id)
-
-        with open(path_filename, 'a') as output:
-            output.write(   self.project_id+"\t"+
-                            _studies +"\t"+
-                            _strategies + "\t" +
-                            _lists + "\t" +
-                            self.title + "\t" +
-                            self.description + "\t"+
-                            self.pubmed + "\t"+
-                            self.contributors + "\t"+
-                            self.crosslinks+ "\t"+
-                            self.last_update+ "\t" +
-                            self.submission_date +"\t" +
-                            self.owner +"\t" +
-                            self.author + "\t"+
-                            self.file_path + "\t" +
-                            self.status + "\t" +
-                            self.tags + "\t"+
-                            liste+"\n" )
+#     def get_write(self, path_filename):
 
 
-class Study:
+#         if len(self.studies_id) == 1:
+#             _studies= str(self.studies_id[0])
+#         else:
+#             _studies= ' , '.join(self.studies_id)
 
-    compteur_study=0
-    def __init__(self,\
-        title,\
-        description,\
-        phenotype_desease,\
-        go_term,\
-        organism,\
-        development_stage,\
-        pubmed,\
-        add_info,\
-        last_update,\
-        owner,\
-        file_path,\
-        identifiant):
+#         if len(self.strategies_id) == 1:
+#             _strategies = str(self.strategies_id[0])
+#         else:
+#             _strategies = ' , '.join(self.strategies_id)
 
-        self.project_id = ""
-        self.studies_id="GST" + str(Study.compteur_study)
-        self.strategies_id=[]
-        self.lists_id=[]
-        self.title = title
-        self.description = description
-        self.phenotype_desease = phenotype_desease
-        self.go_term = go_term
-        self.organism = organism
-        self.development_stage = development_stage
-        self.pubmed = pubmed
-        self.add_info = add_info
-        self.last_update = last_update
-        self.owner = owner
-        self.file_path = file_path
-        self.status = "private"
-        self.tags = ""
-        Study.compteur_study += 1
-        self.id=identifiant
+#         if len(self.studies_id) == 1:
+#             _studies = str(self.studies_id[0])
+#         else:
+#             _studies= ' , '.join(self.studies_id)
 
+#         if len(self.lists_id) == 1:
+#             _lists = str(self.lists_id[0])
+#         else:
+#             _lists = ' , '.join(self.lists_id)
 
-    def get_dico(self):
-        if len(self.strategies_id) == 1:
-            _strategies = str(self.strategies_id[0])
-        else:
-            _strategies = ' , '.join(self.strategies_id)
+#         liste = ' , '.join(self.id)
+
+#         with open(path_filename, 'a') as output:
+#             output.write(   self.project_id+"\t"+
+#                             _studies +"\t"+
+#                             _strategies + "\t" +
+#                             _lists + "\t" +
+#                             self.title + "\t" +
+#                             self.description + "\t"+
+#                             self.pubmed + "\t"+
+#                             self.contributors + "\t"+
+#                             self.crosslinks+ "\t"+
+#                             self.last_update+ "\t" +
+#                             self.submission_date +"\t" +
+#                             self.owner +"\t" +
+#                             self.author + "\t"+
+#                             self.file_path + "\t" +
+#                             self.status + "\t" +
+#                             self.tags + "\t"+
+#                             liste+"\n" )
 
 
-        if len(self.lists_id) == 1:
-            _lists = str(self.lists_id[0])
-        else:
-            _lists = ' , '.join(self.lists_id)
+# class Study:
 
-        return {'project_id' : self.project_id,
-                'studies_id' : self.studies_id,
-                'strategies_id' : _strategies,
-                'lists_id' : _lists,
-                'title' : self.title,
-                'description' : self.description,
-                'phenotype_desease' : self.phenotype_desease,
-                'go_term' : self.go_term,
-                'organism' : self.organism,
-                'development_stage' : self.development_stage,
-                'pubmed' : self.pubmed,
-                'last_update' : self.last_update,
-                'add_info' : self.add_info,
-                'status' : self.status,
-                'owner' : self.owner,
-                'file_path' : self.file_path,
-                'status' : self.status,
-                'tags' : self.tags,
-        }
+#     compteur_study=0
+#     def __init__(self,\
+#         title,\
+#         description,\
+#         phenotype_desease,\
+#         go_term,\
+#         organism,\
+#         development_stage,\
+#         pubmed,\
+#         add_info,\
+#         last_update,\
+#         owner,\
+#         file_path,\
+#         identifiant):
 
-    def get_write(self, path_filename):
-
-        if len(self.strategies_id) == 1:
-            _strategies = str(self.strategies_id[0])
-        else:
-            _strategies = ' , '.join(self.strategies_id)
-
-
-        if len(self.lists_id) == 1:
-            _lists = str(self.lists_id[0])
-        else:
-            _lists = ' , '.join(self.lists_id)
-
-        liste = ' , '.join(self.id)
-
-        with open(path_filename, 'a') as output:
-            output.write(   self.project_id+"\t"+
-                            self.studies_id +"\t"+
-                            _strategies + "\t" +
-                            _lists + "\t" +
-                            self.title + "\t" +
-                            self.description + "\t"+
-                            self.phenotype_desease + "\t"+
-                            self.go_term + "\t"+
-                            self.organism+ "\t"+
-                            self.development_stage+ "\t" +
-                            self.pubmed +"\t" +
-                            self.add_info +"\t" +
-                            self.last_update + "\t"+
-                            self.file_path + "\t" +
-                            self.status + "\t" +
-                            self.tags + "\t"+
-                            liste+"\n" )
-
-class Strategy:
-
-    compteur_strategy=0
-    def __init__(self,\
-        title,\
-        description,\
-        type_of_experiment,\
-        technology,\
-        process,\
-        add_info,\
-        last_update,\
-        owner,\
-        file_path,\
-        identifiant):
-
-        self.project_id = ""
-        self.studies_id=""
-        self.strategies_id="GSR" + str(Strategy.compteur_strategy)
-        self.lists_id=[]
-        self.title = title
-        self.description = description
-        self.type_of_experiment = type_of_experiment
-        self.technology = technology
-        self.process = process
-        self.add_info = add_info
-        self.last_update = last_update
-        self.owner = owner,
-        self.file_path = file_path
-        self.status = "private"
-        self.tags = ""
-        Strategy.compteur_strategy += 1
-        self.id=identifiant
-
-    def get_dico(self):
-        if len(self.lists_id) == 1:
-            _lists = str(self.lists_id[0])
-        else:
-            _lists = ' , '.join(self.lists_id)
-
-        return {'project_id' : self.project_id,
-                'studies_id' : self.studies_id,
-                'strategies_id' : self.strategies_id,
-                'lists_id' : _lists,
-                'title' : self.title,
-                'description' : self.description,
-                'type_of_experiment' : self.type_of_experiment,
-                'technology' : self.technology,
-                'process' : self.process,
-                'last_update' : self.last_update,
-                'add_info' : self.add_info,
-                'status' : self.status,
-                'owner' : self.owner,
-                'file_path' : self.file_path,
-                'status' : self.status,
-                'tags' : self.tags,
-        }
-
-    def get_write(self, path_filename):
+#         self.project_id = ""
+#         self.studies_id="GST" + str(Study.compteur_study)
+#         self.strategies_id=[]
+#         self.lists_id=[]
+#         self.title = title
+#         self.description = description
+#         self.phenotype_desease = phenotype_desease
+#         self.go_term = go_term
+#         self.organism = organism
+#         self.development_stage = development_stage
+#         self.pubmed = pubmed
+#         self.add_info = add_info
+#         self.last_update = last_update
+#         self.owner = owner
+#         self.file_path = file_path
+#         self.status = "private"
+#         self.tags = ""
+#         Study.compteur_study += 1
+#         self.id=identifiant
 
 
-        if len(self.lists_id) == 1:
-            _lists = str(self.lists_id[0])
-        else:
-            _lists = ' , '.join(self.lists_id)
-
-        liste = ' , '.join(self.id)
-
-        with open(path_filename, 'a') as output:
-            output.write(   self.project_id+"\t"+
-                            self.studies_id +"\t"+
-                            self.strategies_id + "\t" +
-                            _lists + "\t" +
-                            self.title + "\t" +
-                            self.description + "\t"+
-                            self.type_of_experiment + "\t"+
-                            self.technology + "\t"+
-                            self.process+ "\t"+
-                            self.add_info+ "\t" +
-                            self.last_update + "\t"+
-                            self.file_path + "\t" +
-                            self.status + "\t" +
-                            self.tags + "\t"+
-                            liste+"\n" )
+#     def get_dico(self):
+#         if len(self.strategies_id) == 1:
+#             _strategies = str(self.strategies_id[0])
+#         else:
+#             _strategies = ' , '.join(self.strategies_id)
 
 
+#         if len(self.lists_id) == 1:
+#             _lists = str(self.lists_id[0])
+#         else:
+#             _lists = ' , '.join(self.lists_id)
 
-class List:
+#         return {'project_id' : self.project_id,
+#                 'studies_id' : self.studies_id,
+#                 'strategies_id' : _strategies,
+#                 'lists_id' : _lists,
+#                 'title' : self.title,
+#                 'description' : self.description,
+#                 'phenotype_desease' : self.phenotype_desease,
+#                 'go_term' : self.go_term,
+#                 'organism' : self.organism,
+#                 'development_stage' : self.development_stage,
+#                 'pubmed' : self.pubmed,
+#                 'last_update' : self.last_update,
+#                 'add_info' : self.add_info,
+#                 'status' : self.status,
+#                 'owner' : self.owner,
+#                 'file_path' : self.file_path,
+#                 'status' : self.status,
+#                 'tags' : self.tags,
+#         }
 
-    compteur_list=0
-    def __init__(self,\
-        title,\
-        description,\
-        identifiers,\
-        identifier_extended,\
-        list_parent_id,\
-        list_child_id,\
-        comparable,\
-        _list,\
-        add_info,\
-        last_update,\
-        owner,\
-        file_path,\
-        identifiant):
+#     def get_write(self, path_filename):
 
-        self.project_id = ""
-        self.studies_id=""
-        self.strategies_id=""
-        self.lists_id="GUL" + str(List.compteur_list)
-        self.title = title
-        self.description = description
-        self.identifiers = identifiers
-        self.identifier_extended = identifier_extended
-        self.list_parent_id = list_parent_id
-        self.list_child_id = list_child_id
-        self.comparable = comparable
-        self.list = _list
-        self.add_info = add_info
-        self.last_update = last_update
-        self.owner = owner
-        self.file_path = file_path
-        self.status = "private"    
-        self.tags = ""
-        List.compteur_list += 1
+#         if len(self.strategies_id) == 1:
+#             _strategies = str(self.strategies_id[0])
+#         else:
+#             _strategies = ' , '.join(self.strategies_id)
 
-        self.id = identifiant
 
-    def get_dico(self):
+#         if len(self.lists_id) == 1:
+#             _lists = str(self.lists_id[0])
+#         else:
+#             _lists = ' , '.join(self.lists_id)
+
+#         liste = ' , '.join(self.id)
+
+#         with open(path_filename, 'a') as output:
+#             output.write(   self.project_id+"\t"+
+#                             self.studies_id +"\t"+
+#                             _strategies + "\t" +
+#                             _lists + "\t" +
+#                             self.title + "\t" +
+#                             self.description + "\t"+
+#                             self.phenotype_desease + "\t"+
+#                             self.go_term + "\t"+
+#                             self.organism+ "\t"+
+#                             self.development_stage+ "\t" +
+#                             self.pubmed +"\t" +
+#                             self.add_info +"\t" +
+#                             self.last_update + "\t"+
+#                             self.file_path + "\t" +
+#                             self.status + "\t" +
+#                             self.tags + "\t"+
+#                             liste+"\n" )
+
+# class Strategy:
+
+#     compteur_strategy=0
+#     def __init__(self,\
+#         title,\
+#         description,\
+#         type_of_experiment,\
+#         technology,\
+#         process,\
+#         add_info,\
+#         last_update,\
+#         owner,\
+#         file_path,\
+#         identifiant):
+
+#         self.project_id = ""
+#         self.studies_id=""
+#         self.strategies_id="GSR" + str(Strategy.compteur_strategy)
+#         self.lists_id=[]
+#         self.title = title
+#         self.description = description
+#         self.type_of_experiment = type_of_experiment
+#         self.technology = technology
+#         self.process = process
+#         self.add_info = add_info
+#         self.last_update = last_update
+#         self.owner = owner,
+#         self.file_path = file_path
+#         self.status = "private"
+#         self.tags = ""
+#         Strategy.compteur_strategy += 1
+#         self.id=identifiant
+
+#     def get_dico(self):
+#         if len(self.lists_id) == 1:
+#             _lists = str(self.lists_id[0])
+#         else:
+#             _lists = ' , '.join(self.lists_id)
+
+#         return {'project_id' : self.project_id,
+#                 'studies_id' : self.studies_id,
+#                 'strategies_id' : self.strategies_id,
+#                 'lists_id' : _lists,
+#                 'title' : self.title,
+#                 'description' : self.description,
+#                 'type_of_experiment' : self.type_of_experiment,
+#                 'technology' : self.technology,
+#                 'process' : self.process,
+#                 'last_update' : self.last_update,
+#                 'add_info' : self.add_info,
+#                 'status' : self.status,
+#                 'owner' : self.owner,
+#                 'file_path' : self.file_path,
+#                 'status' : self.status,
+#                 'tags' : self.tags,
+#         }
+
+#     def get_write(self, path_filename):
+
+
+#         if len(self.lists_id) == 1:
+#             _lists = str(self.lists_id[0])
+#         else:
+#             _lists = ' , '.join(self.lists_id)
+
+#         liste = ' , '.join(self.id)
+
+#         with open(path_filename, 'a') as output:
+#             output.write(   self.project_id+"\t"+
+#                             self.studies_id +"\t"+
+#                             self.strategies_id + "\t" +
+#                             _lists + "\t" +
+#                             self.title + "\t" +
+#                             self.description + "\t"+
+#                             self.type_of_experiment + "\t"+
+#                             self.technology + "\t"+
+#                             self.process+ "\t"+
+#                             self.add_info+ "\t" +
+#                             self.last_update + "\t"+
+#                             self.file_path + "\t" +
+#                             self.status + "\t" +
+#                             self.tags + "\t"+
+#                             liste+"\n" )
+
+
+
+# class List:
+
+#     compteur_list=0
+#     def __init__(self,\
+#         title,\
+#         description,\
+#         identifiers,\
+#         identifier_extended,\
+#         list_parent_id,\
+#         list_child_id,\
+#         comparable,\
+#         _list,\
+#         add_info,\
+#         last_update,\
+#         owner,\
+#         file_path,\
+#         identifiant):
+
+#         self.project_id = ""
+#         self.studies_id=""
+#         self.strategies_id=""
+#         self.lists_id="GUL" + str(List.compteur_list)
+#         self.title = title
+#         self.description = description
+#         self.identifiers = identifiers
+#         self.identifier_extended = identifier_extended
+#         self.list_parent_id = list_parent_id
+#         self.list_child_id = list_child_id
+#         self.comparable = comparable
+#         self.list = _list
+#         self.add_info = add_info
+#         self.last_update = last_update
+#         self.owner = owner
+#         self.file_path = file_path
+#         self.status = "private"    
+#         self.tags = ""
+#         List.compteur_list += 1
+
+#         self.id = identifiant
+
+#     def get_dico(self):
 
 
             
-        return {'project_id' : self.project_id,
-                'studies_id' : self.studies_id,
-                'strategies_id' : self.strategies_id,
-                'lists_id' : self.lists_id,
-                'title' : self.title,
-                'description' : self.description,
-                'identifiers' : self.identifiers,
-                'identifier_extended' : self.identifier_extended,
-                'list_parent_id' : self.list_parent_id,
-                'list_child_id' : self.list_child_id,
-                'comparable' : self.comparable,
-                'list' : self.list,
-                'last_update' : self.last_update,
-                'add_info' : self.add_info,
-                'owner' : self.owner,
-                'file_path' : self.file_path,
-                'status' : self.status,
-                'tags' : self.tags,
-        }
+#         return {'project_id' : self.project_id,
+#                 'studies_id' : self.studies_id,
+#                 'strategies_id' : self.strategies_id,
+#                 'lists_id' : self.lists_id,
+#                 'title' : self.title,
+#                 'description' : self.description,
+#                 'identifiers' : self.identifiers,
+#                 'identifier_extended' : self.identifier_extended,
+#                 'list_parent_id' : self.list_parent_id,
+#                 'list_child_id' : self.list_child_id,
+#                 'comparable' : self.comparable,
+#                 'list' : self.list,
+#                 'last_update' : self.last_update,
+#                 'add_info' : self.add_info,
+#                 'owner' : self.owner,
+#                 'file_path' : self.file_path,
+#                 'status' : self.status,
+#                 'tags' : self.tags,
+#         }
 
-    def get_write(self, path_filename):
+#     def get_write(self, path_filename):
 
-        with open(path_filename, 'a') as output:
-            output.write(   self.project_id+"\t"+
-                            self.studies_id +"\t"+
-                            self.strategies_id + "\t" +
-                            self.lists_id + "\t" +
-                            self.title + "\t" +
-                            self.description + "\t"+
-                            self.identifiers + "\t"+
-                            self.identifier_extended + "\t"+
-                            self.list_parent_id+ "\t"+
-                            self.list_child_id+ "\t" +
-                            self.comparable + "\t"+
-                            self.add_info+"\t"+
-                            self.last_update+"\t"+
-                            self.file_path + "\t" +
-                            self.status + "\t" +
-                            self.tags +"\n" )
+#         with open(path_filename, 'a') as output:
+#             output.write(   self.project_id+"\t"+
+#                             self.studies_id +"\t"+
+#                             self.strategies_id + "\t" +
+#                             self.lists_id + "\t" +
+#                             self.title + "\t" +
+#                             self.description + "\t"+
+#                             self.identifiers + "\t"+
+#                             self.identifier_extended + "\t"+
+#                             self.list_parent_id+ "\t"+
+#                             self.list_child_id+ "\t" +
+#                             self.comparable + "\t"+
+#                             self.add_info+"\t"+
+#                             self.last_update+"\t"+
+#                             self.file_path + "\t" +
+#                             self.status + "\t" +
+#                             self.tags +"\n" )
 
 
 
@@ -2731,6 +3228,7 @@ def save_excel(request):
             if row_value != "":
                 return True
         return boolean
+
     def add_project(project_sheet):
         if Project.compteur_project == 0:
             #print str(request.registry.db_mongo['projects'].find().count())
