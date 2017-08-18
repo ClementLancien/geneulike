@@ -43,6 +43,13 @@ else:
     from email.mime.text import MIMEText
 from logging.handlers import RotatingFileHandler
  
+
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
+
+
 # création de l'objet logger qui va nous servir à écrire dans les logs
 logger = logging.getLogger()
 # on met le niveau du logger à DEBUG, comme ça il écrit tout
@@ -1209,6 +1216,7 @@ def excel_signature_upload(request):
 
         upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
 
+
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
         shutil.move(temp_file_path, os.path.join(upload_path, tmp_file_name))
@@ -2187,7 +2195,7 @@ class Project:
                  description, ontologies, crosslink, add_info, \
                  pubmed_id, filepath, last_update, submission_date, author, identifiant ):
 
-        self.project_id = "GPR" + str(Project.compteur_project)
+        self.project_id = "GUP" + str(Project.compteur_project)
         self.parent_project_id = parent_project_id
         self.project_parent = ""
         self.project_child = ""
@@ -2216,6 +2224,7 @@ class Project:
                             'parent_project_id'     :   self.parent_project_id,
                             'project_parent'        :   self.project_parent,
                             'project_child'         :   self.project_child,
+                            'strategies_id'         :   self.strategies_id,
                             'contributors'          :   self.contributors,
                             'title'                 :   self.title,
                             'description'           :   self.description,
@@ -2259,11 +2268,14 @@ class Strategy:
         self.tags = ""
         Strategy.compteur_strategy += 1
 
+        self.project_parent = ""
+
     def lire(self):
 
         pprint.pprint({
                         'strategy_id'             :   self.strategy_id,
                         'associated_project_id'   :   self.associated_project_id,
+                        'project_parent'          :   self.project_parent,
                         'input_list_id'           :   self.input_list_id,
                         'output_list_id'          :   self.output_list_id,
                         'title'                   :   self.title,
@@ -2306,6 +2318,12 @@ class List:
         self.tags = ""
         List.compteur_list += 1
 
+        self.strategy_id=""
+        self.strategy_output_id=""  #siblings
+        self.project_id=""
+        self.project_parent=""  #path
+
+
 
     def lire(self):
 
@@ -2325,7 +2343,11 @@ class List:
                         'submission_date'             :       self.submission_date,
                         'author'                      :       self.author,
                         'identifiant'                 :       self.identifiant,
-                        'tags'                        :       self.tags
+                        'tags'                        :       self.tags,
+                        'strategy_id'                 :       self.strategy_id,
+                        'strategy_output_id'          :       self.strategy_output_id,
+                        'project_id'                  :       self.project_id,
+                        'project_parent'              :       self.project_parent
             },width=1)
 
 
@@ -2461,6 +2483,187 @@ class Arbre:
         for value in self.tree_dict.values():
             value.show()
 
+import unicodedata as ucd
+
+# def file_dataset(request):
+#     print "Get Dataset"
+#     directory = request.matchdict['dir']
+#     downfile = request.matchdict['file']
+#     url_file = os.path.join(request.registry.dataset_path,directory,downfile)
+#     (handle, tmp_file) = tempfile.mkstemp('.zip')
+#     z = zipfile.ZipFile(tmp_file, "w")
+#     z.write(url_file,os.path.basename(url_file))
+#     z.close()
+#     return FileResponse(tmp_file,
+#                         request=request,
+#                         content_type='application/zip')
+
+@view_config(route_name='createExcelForExport', renderer='json', request_method='POST')
+def createExcelForExport(request):
+
+    form=json.loads(request.body, encoding=request.charset)
+
+    data_projects = form['data_projects']
+    data_strategies = form['data_strategies']
+    data_lists = form['data_lists']
+    uid= form['uid']
+    filename = uuid.uuid4().hex +".xlsx"
+    filepath = os.path.join(request.registry.upload_path, uid, "tmp", filename)
+
+    workbook = xlsxwriter.Workbook(filepath, {'constant_memory': True})
+
+    project_worksheet = workbook.add_worksheet("Project")
+    for row in range(len(data_projects)):
+        for col in range(len(data_projects[row])):
+            project_worksheet.write(row, col, data_projects[row][col])
+
+    strategy_worksheet = workbook.add_worksheet("Strategy")
+    for row in range(len(data_strategies)):
+        for col in range(len(data_strategies[row])):
+            strategy_worksheet.write(row, col, data_strategies[row][col])
+
+    list_worksheet = workbook.add_worksheet("List")
+    for row in range(len(data_lists)):
+        for col in range(len(data_lists[row])):
+            list_worksheet.write(row, col, data_lists[row][col])
+
+    workbook.close()
+    return { 'filepath':os.path.join(request.registry.upload_path, uid, "tmp", filename),'uid' : uid, 'tmp': 'tmp', 'filename' : filename}
+
+@view_config(route_name='removeExcel',renderer='json',request_method='GET')
+def removeExcel(request):
+    print "removeExcel"
+    uid = request.matchdict['uid']
+    tmp = request.matchdict['tmp']
+    filename = request.matchdict['filename']
+    
+    print os.path.join(request.registry.upload_path,uid,tmp,filename)
+    os.remove(os.path.join(request.registry.upload_path,uid,tmp,filename))
+
+@view_config(route_name='exportExcel', request_method='GET')
+def exportExcel(request):
+    print "herer"
+    #upload_path = request.matchdict['upload_path']
+    uid = request.matchdict['uid']
+    tmp = request.matchdict['tmp']
+    filename = request.matchdict['filename']
+    filepath= os.path.join(request.registry.upload_path,uid,tmp,filename)
+
+
+
+    response = Response(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+    response = FileResponse(os.path.abspath(filepath))
+    return response
+
+    return FileResponse(filepath,
+                         request=request,
+                         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+    #pprint.pprint(json.loads(request.body, encoding=request.charset))
+    # from tempfile import NamedTemporaryFile
+
+    # #uuid.uuid4().hex #+".xlsx"
+    # # data_projects, data_strategies, data_lists, path, filename
+    # print "here"
+    # form=json.loads(request.body, encoding=request.charset)
+    # #pprint.pprint(form['data_projects'])
+    # #pprint.pprint(request.json.loads(request.body))
+    # #form=json.loads(request.POST['data'], encoding=request.charset)
+    # #pprint.pprint(form)
+    # #pprint.pprint(data_projects)
+    # #pprint.pprint(request.POST['method'])
+    # #form=json.loads(request.POST['params'], encoding=request.charset)
+
+    # #pprint.pprint(form)
+    # #return {'data':"ok"} 
+    # #path = os.path.join(request.registry.upload_path, form['uid'], "tmp")
+    # response = Response(content_type='application/csv')
+    # with NamedTemporaryFile(prefix='XML_Export_%s' % datetime.datetime.now(),
+    #                         suffix='.xml', delete=True) as f:
+    #     f.write('test')
+    #     # this is where I usually put stuff in the file
+    #     response.app_iter = f
+    #     response.headers['Content-Disposition'] = ("attachment; filename=Export.xml")
+    #     return json.dumps({'response': response.app_iter})
+
+    # filename = "toto"#uuid.uuid4().hex #+".xlsx"
+
+
+    # #your view logic here
+
+    # # create a workbook in memory
+    # data_projects = form['data_projects']
+    # data_strategies = form['data_strategies']
+    # data_lists = form['data_lists']
+    # output = StringIO.StringIO()
+
+    # workbook = xlsxwriter.Workbook(output)
+
+    # project_worksheet = workbook.add_worksheet("Project")
+    # for row in range(len(data_projects)):
+    #     for col in range(len(data_projects[row])):
+    #         project_worksheet.write(0, 0, data_projects[row][col])
+
+    # strategy_worksheet = workbook.add_worksheet("Strategy")
+    # for row in range(len(data_strategies)):
+    #     for col in range(len(data_strategies[row])):
+    #         strategy_worksheet.write(0, 0, data_strategies[row][col])
+
+    # list_worksheet = workbook.add_worksheet("List")
+    # for row in range(len(data_lists)):
+    #     for col in range(len(data_lists[row])):
+    #         list_worksheet.write(0, 0, data_lists[row][col])
+
+    # workbook.close()
+
+    # # construct response
+    # output.seek(0)
+    # #return {"msg":"ok"}
+    # return {"file" : output.read()}
+    # FileResponse(output.read(),
+    #                     request=request)
+    #                     #content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+    # response = HttpResponse(output.read(), mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    # response['Content-Disposition'] = "attachment; filename="+ filename
+    # return response
+
+
+
+    # workbook  = xlsxwriter.Workbook(filename)
+
+    # path_filename = os.path(os.join(path,filename))
+     
+    # project_worksheet = workbook.add_worksheet("Project")
+    # for row in range(len(data_projects)):
+    #     for col in range(len(data_project[row])):
+    #         project_worksheet.write(0, 0, data_project[row][col])
+
+    # strategy_worksheet = workbook.add_worksheet("Strategy")
+    # for row in range(len(data_strategies)):
+    #     for col in range(len(data_strategies[row])):
+    #         strategy_worksheet.write(0, 0, data_strategies[row][col])
+
+    # list_worksheet = workbook.add_worksheet("List")
+    # for row in range(len(data_lists)):
+    #     for col in range(len(data_lists[row])):
+    #         list_worksheet.write(0, 0, data_lists[row][col])
+
+    # workbook.close()
+
+    # return FileResponse(tmp_file,
+    #                      request=request,
+    #                      content_type='application/zip')
+
+    # # upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
+    # # upload_path = os.path.join(request.registry.upload_path, request.params['uid'], request.params['dataset'])
+    # # print upload_path
+    # # print "request.registry.upload_path : ", request.registry.upload_path
+    # # print "uid : ", request.params['uid']
+    # # print "tmp : ", request.params['dataset']
+
+
 
 @view_config(route_name='submit', renderer='json', request_method='POST')
 def submit(request):
@@ -2477,15 +2680,14 @@ def submit(request):
 
     project_last_new_id={}
     list_last_new_id={}
-    user = "toto" #form['uid'] #append JS dataUSER
+    user = form['uid'] #append JS dataUSER
 
     dt = datetime.datetime.utcnow()
     date = time.mktime(dt.timetuple())
 
-
-
     projects = []
     projects_location={}
+    lists_location={}
     strategies = []
     lists= []
 
@@ -2497,10 +2699,7 @@ def submit(request):
             if element != "":
                 return True
         return False
-
-    import unicodedata as ucd
-
-
+   
     def get_str(string):
         if isinstance(string, float):
             return str(int(string)).encode('utf-8')
@@ -2515,8 +2714,6 @@ def submit(request):
         if Project.compteur_project == 0:
             Project.compteur_project = int(request.registry.db_mongo['projects'].find().count())
 
-
-
         for index in range(1,len(data_projects[0])):
 
             one_project_values = [  data_projects[0][index],
@@ -2530,6 +2727,7 @@ def submit(request):
                                     data_projects[8][index]
                                  ]
             if is_not_empty(one_project_values):
+
                 newProject= Project (   get_str(one_project_values[1]),
                                         get_str(one_project_values[2]),
                                         get_str(one_project_values[3]),
@@ -2544,8 +2742,7 @@ def submit(request):
                                         str(user),
                                         get_str(one_project_values[0])
                                     )
-
-                
+ 
                 project_last_new_id[get_str(one_project_values[0])] = newProject.project_id
                 projects.append(newProject)
 
@@ -2571,12 +2768,12 @@ def submit(request):
             project_child = myTree.child_path(project.project_id)
 
             if parent_path == project.project_id:
-                project.project_parent = ""
+                project.project_parent = "Root"
             else:
                 project.project_parent = parent_path
 
             if project_child == project.project_id:
-                project.project_child = ""
+                project.project_child = "Root"
             else:
                 project.project_child = project_child
 
@@ -2611,16 +2808,19 @@ def submit(request):
                                                 get_str(one_strategy_values[0])
                                             )
                                 )
+
     def replaceOldInputOuputIDByNEw():
-        newInput=[]
-        newOutput=[]
+
         for strategy in strategies:
+            newInput=[]
+            newOutput=[]
 
             for item in strategy.input_list_id:
                 if item == "Root":
                     newInput.append(item)
                 else:
                     newInput.append(list_last_new_id[item])
+
 
             strategy.input_list_id=newInput
 
@@ -2636,24 +2836,48 @@ def submit(request):
     def associateStrategyWithProject():
         """ replace old associated project id by new and add strat id to project.strategies_id and list output"""
         for strategy in strategies:
-            print strategy.associated_project_id
+            ###############################
+            #       Add to project        #
+            ###############################
+
+            #print strategy.associated_project_id
             strategy.associated_project_id = project_last_new_id[strategy.associated_project_id]
-            print strategy.associated_project_id
+            #print strategy.associated_project_id
 
             project_location=projects_location[strategy.associated_project_id]
 
             projects[project_location].strategies_id = projects[project_location].strategies_id + strategy.strategy_id
 
-            print projects[projects_location[strategy.associated_project_id]].strategies_id
+            #print projects[projects_location[strategy.associated_project_id]].strategies_id
 
             if projects[project_location].output_lists_id == "":
                 projects[project_location].output_lists_id = strategy.output_list_id
             else:
-                projects[project_location].output_lists_id = projects[project_location].output_lists_id + ';' +strategy.output_list_id
+                projects[project_location].output_lists_id = projects[project_location].output_lists_id + ';' +strategy.output_list_id        
+
+            if projects[project_location].project_parent == "":
+                strategy.project_parent = "Root"
+            else:
+                strategy.project_parent = projects[project_location].project_parent
 
     def associateListWithStrategy():
-        for _list in lists:
-            pass
+
+        ###############################
+        #       Add to strategy       #
+        ###############################
+
+
+        # To work need to do Add to error List (see ToDo List)
+        for strategy in strategies:
+            for item in strategy.output_list_id:
+
+                    lists[lists_location[item]].strategy_id             = strategy.strategy_id
+
+                    lists[lists_location[item]].project_id              = strategy.associated_project_id
+
+                    lists[lists_location[item]].project_parent          = strategy.project_parent
+                    lists[lists_location[item]].strategy_output_id      = strategy.output_list_id
+
 
     def add_list(data_lists):
         if List.compteur_list == 0:
@@ -2698,20 +2922,83 @@ def submit(request):
                 lists.append(newList)
 
     #try:
+    def location_list():
+        for index in range(len(lists)):
+            lists_location[lists[index].list_id] = index
 
     add_project(data_projects)
-    replaceOldParentProjectIDByNEw()
-    location()
-    pprint.pprint(projects_location)
     add_strategy(data_strategies)
     add_list(data_lists)
+    location()
+    location_list()
+
+    replaceOldParentProjectIDByNEw()
     replaceOldInputOuputIDByNEw() #for each strategy's input and ouput
-    associateStrategyWithProject()
-    #associateListWithStrategy()
-    
+
+
     myTree = Arbre(projects)
     myTree.show()
     addChildAndParentPathForProject()
+
+    #pprint.pprint(projects_location)
+  
+    associateStrategyWithProject()
+    associateListWithStrategy()
+    
+    # print "##########################################################"
+    # print "Project"
+    # print "##########################################################"
+    # print ""
+    # for project in projects:
+    #     project.lire()
+    #     print "\n"
+
+    # print ""
+    # print "##########################################################"
+    # print "Strategy"
+    # print "##########################################################"
+    # print ""
+
+    # for strategy in strategies:
+    #     strategy.lire()
+    #     print "\n"
+
+    # print ""
+    # print "##########################################################"
+    # print "List"
+    # print "##########################################################"
+    # print ""
+
+    # for _list in lists:
+    #     _list.lire()
+    #     print "\n"
+    
+    
+
+
+
+
+    # add_project(data_projects)
+    # replaceOldParentProjectIDByNEw()
+    # location()
+    
+    # #pprint.pprint(projects_location)
+    # add_strategy(data_strategies)
+    # add_list(data_lists)
+    # location_list()
+    # replaceOldInputOuputIDByNEw() #for each strategy's input and ouput
+    # associateStrategyWithProject()
+    # associateListWithStrategy()
+    
+    # myTree = Arbre(projects)
+    # myTree.show()
+    # addChildAndParentPathForProject()
+
+
+
+
+
+
     # for item in projects:
     #     item.lire()
     # print "Parent"

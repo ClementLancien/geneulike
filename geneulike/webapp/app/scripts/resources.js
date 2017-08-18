@@ -74,6 +74,12 @@
                 isArray: false,
                 cache: false
             },
+            // exportToExcel : {
+            //     url: '/exportToExcel',
+            //     method: 'POST',
+            //     isArray: false,
+            //     cache: false
+            // },
             canSubmit : {
                 url: '/canSubmit',
                 method: 'POST',

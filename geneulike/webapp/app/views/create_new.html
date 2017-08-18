@@ -156,7 +156,12 @@ hr {
         </div>
 
       </div>
-
+      <div class="row">
+      <div class="col-xs-6">
+            <a  ng-click="download()"><i class ="fa fa-file-excel-o"></i>Coucou</a>
+            {{pathFile}}
+        </div>
+      </div>
       <br>
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projects ({{projects_number}})</a></li>
@@ -190,6 +195,8 @@ hr {
                 </tr>
               </thead>
               <tbody>
+              <!-- Error: ngRepeat:dupes Duplicate Key in Repeater so we use track by $index -->
+
                 <tr class="danger" ng-repeat="danger in data_project_error.Critical track by $index">
                   <td>Project</td>
                   <td>Critical</td>

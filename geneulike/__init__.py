@@ -101,9 +101,10 @@ def main(global_config, **settings):
     config.add_route('file_upload','/upload/{uid}/{sid}/file_upload')
     config.add_route('file_signature', '/signature/{project}/{signature}/{file}/download')
     config.add_route('file_dataset','/dataset_download/{dir}/{file}')
-   
 
-
+    config.add_route('createExcelForExport', '/createExcelForExport')
+    config.add_route('exportExcel' , '/exportExcel/{uid}/{tmp}/{filename}')
+    config.add_route('removeExcel', '/removeExcel/{uid}/{tmp}/{filename}')
     #config.add_route('dataset_signature_download', '/user/{uid}/dataset/{dataset}/study/{treatment}/download/{signature}')
 
 

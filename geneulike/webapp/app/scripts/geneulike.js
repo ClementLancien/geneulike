@@ -2091,7 +2091,7 @@ app.controller('userprojectCtrl',
 });
 
 app.controller('compareCtrl',
-    function ($scope,$rootScope, $log, Auth, User, Dataset,$cookies,$window, $cookieStore, ngDialog, $location) {
+    function ($scope,$rootScope, $log, Auth, User, Dataset,$cookies, $window, $cookieStore, ngDialog, $location) {
         $scope.msg = "Dashboard Tools";
 
         $scope.open_info = function(id){
@@ -2194,7 +2194,7 @@ app.controller('compareCtrl',
 //https://github.com/handsontable/handsontable/issues/2675
 //http://techqa.info/programming/tag/handsontable?after=41589506
 app.controller('createCtrl',
-    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User, Upload, ngDialog, $timeout) {
+    function ($scope, $rootScope, $routeParams, $location, Auth, Dataset, User, Upload, ngDialog, $timeout, $http, $window) {
 
     $scope.$watch('$viewContentLoaded', function() {
         $timeout( function(){
@@ -2234,6 +2234,7 @@ app.controller('createCtrl',
             $scope.message="";
             $scope.uploadList=true;
             $scope.objectFiles;
+            $scope.canSubmit= {boolean : false};
 
             $scope.DBDatabaseArray = [
                 {id : "Entrez"              , name : "Entrez Gene"},
@@ -3025,7 +3026,7 @@ app.controller('createCtrl',
                 }
             };
 
-            $scope.canSubmit= {boolean : false};
+            
             $scope.checkFile = function(){
 
                 $scope.listKey= Object.keys($scope.objectFiles)
@@ -3066,12 +3067,46 @@ app.controller('createCtrl',
 
             $scope.submit = function() {
                 //console.log($scope.objectFiles)
-                Dataset.submit({},{'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, "objectFiles" : $scope.objectFiles }).$promise.then(function(data){
-
-
+                Dataset.submit({},{'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, "objectFiles" : $scope.objectFiles, "uid" : $scope.user.id }).$promise.then(function(data){
                 });
             };
 
+            $scope.uid= "";
+            $scope.filename="";
+            $scope.download = function() {
+                var toto = ['here we are']
+                console.log($scope.user.id)
+                $http({
+                    method: 'POST',
+                    contentType: "application/json",
+                    url: '/createExcelForExport',
+                    data : {'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, 'uid' : $scope.user.id},
+                }).success(function (data, status, headers){
+                    $scope.uid= data['uid'];
+                    $scope.filename=data['filename'];
+                    window.open('/exportExcel'+'/'+data['uid']+'/'+data['tmp']+'/'+data['filename'] , '_self' , '')
+                })
+            };
+            $(window).on('beforeunload',function(){alert('By now!')});
+            window.onunload = function(e){
+                console.log("heretoto222")
+                console.log($scope.uid)
+                console.log($scope.filename)
+                 $http({
+                            method: 'GET',
+                            contentType: "application/json",
+                            url: '/removeExcel'+'/'+$scope.uid+'/'+"tmp"+'/'+$scope.filename,
+                            
+                        }).success(function(data, status, event){
+                            console.log(data)
+                        })
+                //e.returnValue = 'Coucou'
+
+            }
+
+            $scope.onExit = function(){
+                console.log("heretoto1111")
+            };
         });
     });
 });
