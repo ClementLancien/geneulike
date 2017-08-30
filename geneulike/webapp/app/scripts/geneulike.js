@@ -3089,9 +3089,7 @@ app.controller('createCtrl',
             };
             $(window).on('beforeunload',function(){alert('By now!')});
             window.onunload = function(e){
-                console.log("heretoto222")
-                console.log($scope.uid)
-                console.log($scope.filename)
+                
                  $http({
                             method: 'GET',
                             contentType: "application/json",
@@ -3099,7 +3097,7 @@ app.controller('createCtrl',
                             
                         }).success(function(data, status, event){
                             console.log(data)
-                        })
+                        }).the
                 //e.returnValue = 'Coucou'
 
             }

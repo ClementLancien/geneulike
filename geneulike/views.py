@@ -1166,7 +1166,7 @@ def fileListUpload(request):
         return HTTPForbidden('no input file')
 
     try :
-        tmp_file_name = uuid.uuid4().hex +".xlsx"
+        tmp_file_name = uuid.uuid4().hex +".txt"
         file_path = os.path.join('/tmp', '%s.sig' % tmp_file_name)
         temp_file_path = file_path + '~'
 
@@ -2193,7 +2193,7 @@ class Project:
     compteur_project=0
     def __init__(self, parent_project_id, contributors, title,\
                  description, ontologies, crosslink, add_info, \
-                 pubmed_id, filepath, last_update, submission_date, author, identifiant ):
+                 pubmed_id, filepathExcel, last_update, submission_date, author, identifiant ):
 
         self.project_id = "GUP" + str(Project.compteur_project)
         self.parent_project_id = parent_project_id
@@ -2208,7 +2208,7 @@ class Project:
         self.crosslink = crosslink
         self.add_info = add_info
         self.pubmed_id = pubmed_id
-        self.filetpath = filepath
+        self.filepathExcel = filepathExcel
         self.status= "private"
         self.last_update = last_update
         self.submission_date = submission_date
@@ -2232,7 +2232,7 @@ class Project:
                             'crosslink'             :   self.crosslink,
                             'add_info'              :   self.add_info,
                             'pubmed_id'             :   self.pubmed_id,
-                            'filetpath'             :   self.filetpath,
+                            'filepathExcel'         :   self.filepathExcel,
                             'status'                :   self.status,
                             'last_update'           :   self.last_update,
                             'submission_date'       :   self.submission_date,
@@ -2241,12 +2241,38 @@ class Project:
                             'tags'                  :   self.tags
             }, width=1)
 
+
+    def get_dico(self):
+
+        return {
+                    'project_id'            :   self.project_id,
+                    'parent_project_id'     :   self.parent_project_id,
+                    'project_parent'        :   self.project_parent,
+                    'project_child'         :   self.project_child,
+                    'strategies_id'         :   self.strategies_id,
+                    'contributors'          :   self.contributors,
+                    'title'                 :   self.title,
+                    'description'           :   self.description,
+                    'ontologies'            :   self.ontologies,
+                    'crosslink'             :   self.crosslink,
+                    'add_info'              :   self.add_info,
+                    'pubmed_id'             :   self.pubmed_id,
+                    'filepathExcel'         :   self.filepathExcel,
+                    'status'                :   self.status,
+                    'last_update'           :   self.last_update,
+                    'submission_date'       :   self.submission_date,
+                    'author'                :   self.author,
+                    'identifiant'           :   self.identifiant,
+                    'tags'                  :   self.tags
+        }
+
+
 class Strategy:
 
     compteur_strategy=0
     def __init__(   self, associated_project_id, input_list_id, output_list_id, title,\
                     material_and_method, ontologies, add_info, \
-                    filepath, last_update, submission_date, author, identifiant ):
+                    filepathExcel, last_update, submission_date, author, identifiant ):
 
         self.strategy_id = "GUS" + str(Strategy.compteur_strategy)
         self.associated_project_id = associated_project_id
@@ -2258,7 +2284,7 @@ class Strategy:
 
         self.add_info = add_info
 
-        self.filetpath = filepath
+        self.filepathExcel = filepathExcel
 
         self.status= "private"
         self.last_update = last_update
@@ -2282,7 +2308,7 @@ class Strategy:
                         'material_and_method'     :   self.material_and_method,
                         'ontologies'              :   self.ontologies,
                         'add_info'                :   self.add_info,
-                        'filetpath'               :   self.filetpath,
+                        'filepathExcel'           :   self.filepathExcel,
                         'status'                  :   self.status,
                         'last_update'             :   self.last_update,
                         'submission_date'         :   self.submission_date,
@@ -2292,12 +2318,34 @@ class Strategy:
         },width=1)
 
 
+    def get_dico(self):
+
+        return {
+                    'strategy_id'             :   self.strategy_id,
+                    'associated_project_id'   :   self.associated_project_id,
+                    'project_parent'          :   self.project_parent,
+                    'input_list_id'           :   ";".join(self.input_list_id),
+                    'output_list_id'          :   ";".join(self.output_list_id),
+                    'title'                   :   self.title,
+                    'material_and_method'     :   self.material_and_method,
+                    'ontologies'              :   self.ontologies,
+                    'add_info'                :   self.add_info,
+                    'filepathExcel'           :   self.filepathExcel,
+                    'status'                  :   self.status,
+                    'last_update'             :   self.last_update,
+                    'submission_date'         :   self.submission_date,
+                    'author'                  :   self.author,
+                    'identifiant'             :   self.identifiant,
+                    'tags'                    :   self.tags
+        }
+
+
 class List:
 
     compteur_list=0
     def __init__(   self, title, description, results_and_interpretation,\
-                    ontologies, database, add_info, make_it_available, filename, \
-                    filepath, last_update, submission_date, author, identifiant ):
+                    ontologies, database, add_info, make_it_available, filepathExcel, \
+                    filepathList, last_update, submission_date, author, identifiant ):
 
         self.list_id = "GUL" + str(List.compteur_list)
         self.title = title
@@ -2307,8 +2355,9 @@ class List:
         self.database = database
         self.add_info = add_info
         self.make_it_available = make_it_available
-        self.filename = filename
-        self.filetpath = filepath
+        self.filepathExcel = filepathExcel
+        self.filepathList = filepathList
+        self.filepathListConvert= ""
 
         self.status= "private"
         self.last_update = last_update
@@ -2336,8 +2385,9 @@ class List:
                         'database'                    :       self.database,
                         'add_info'                    :       self.add_info,
                         'make_it_available'           :       self.make_it_available,
-                        'filename'                    :       self.filename,
-                        'filetpath'                   :       self.filetpath,
+                        'filepathExcel'               :       self.filepathExcel,
+                        'filepathList'                :       self.filepathList,
+                        'filepathListConvert'         :       self.filepathListConvert,
                         'status'                      :       self.status,
                         'last_update'                 :       self.last_update,
                         'submission_date'             :       self.submission_date,
@@ -2349,6 +2399,32 @@ class List:
                         'project_id'                  :       self.project_id,
                         'project_parent'              :       self.project_parent
             },width=1)
+
+    def get_dico(self):
+
+        return {
+                        'list_id'                     :       self.list_id,
+                        'title'                       :       self.title,
+                        'description'                 :       ";".join(self.description),
+                        'results_and_interpretation'  :       ";".join(self.results_and_interpretation),
+                        'ontologies'                  :       self.ontologies,
+                        'database'                    :       self.database,
+                        'add_info'                    :       self.add_info,
+                        'make_it_available'           :       self.make_it_available,
+                        'filepathExcel'               :       self.filepathExcel,
+                        'filepathList'                :       self.filepathList,
+                        'filepathListConvert'         :       self.filepathListConvert,
+                        'status'                      :       self.status,
+                        'last_update'                 :       self.last_update,
+                        'submission_date'             :       self.submission_date,
+                        'author'                      :       self.author,
+                        'identifiant'                 :       self.identifiant,
+                        'tags'                        :       self.tags,
+                        'strategy_id'                 :       self.strategy_id,
+                        'strategy_output_id'          :       ";".join(self.strategy_output_id),
+                        'project_id'                  :       self.project_id,
+                        'project_parent'              :       self.project_parent
+        }
 
 
 """We need to reconstruct the association between Super Project and project 
@@ -2384,6 +2460,7 @@ class List:
     We can have mulitple Root in one Super Project"""
 from treelib import Node, Tree
 from collections import defaultdict
+
 class Arbre:
 
     def __init__(self, data_list):
@@ -2663,7 +2740,221 @@ def exportExcel(request):
     # # print "uid : ", request.params['uid']
     # # print "tmp : ", request.params['dataset']
 
+import pandas
 
+class ConvertToEntrezGene():
+
+    def __init__(self, ObjectList,request):
+        self.list = ObjectList
+        self.filepathList = ObjectList.filepathList
+        self.filepathListConvert = ObjectList.filepathListConvert
+        self.database = ObjectList.database.split(';')
+        self.request=request
+        self.identifiers = []
+        self.dataframe= None
+
+
+        self.get_conversion()
+
+    def get_identifiers(self):
+        _list=[]
+        with open(self.filepathList , 'r') as inputFile:
+            for line in inputFile:
+                self.identifiers.append(line.split('\n')[0])
+        
+        self.dataframe = pandas.DataFrame({
+                                            'BDID' : list(set(self.identifiers))
+                                         })
+    def search(self, listID, database):
+        
+        if database.startswith('GPL'):
+            res = list(self.request['GPL'].find({'PLATFORM' : str(database),'BDID':{"$in":list(listID)}},{'EGID' : 1, 'BDID' :1, '_id' :0}))
+        
+        else:
+            res = list(self.request[database].find({'BDID':{"$in" :list(listID)}},{'EGID' : 1, 'BDID' : 1, '_id' :0}))
+
+        not_found=[]
+        for elt in res:
+            not_found.append(elt['BDID'])
+        
+
+        not_found=list(set(listID).symmetric_difference(set(not_found)))  
+
+        return res, not_found
+
+    def loopDatabase(self):
+        
+
+        listID = list(self.identifiers)
+        resultat = None
+
+        for db in self.database:
+
+            res, not_found = self.search(listID, db)
+            resultat = resultat = res
+            listID=not_found
+
+        bdid=[]
+        egid=[]
+        for elt in resultat:
+            bdid.append(elt['BDID'])
+            egid.append(elt['EGID'])
+        self.dataframe = self.dataframe.merge(
+                                                 pandas.DataFrame({
+                                                                    'BDID' : bdid,
+                                                                    'EGID' : egid
+                                                                 }),
+                                                 how='outer',
+                                                 left_on='BDID',
+                                                 right_on='BDID',
+
+                                             ).fillna('-')
+    def searchInfo(self):
+        searchegid = list(self.dataframe['EGID'][ (self.dataframe['EGID'] != '-' )])
+        res = list(self.request['GeneInfo'].find(
+                                                                {
+                                                                    'EGID' :{
+                                                                                "$in": searchegid
+                                                                            }
+                                                                },
+                                                                
+                                                                {
+                                                                    'EGID'          : 1, 
+                                                                    'TAXID'         : 1,
+                                                                    "SYMBOL"        : 1,
+                                                                    "DESCRIPTION"   : 1,
+                                                                    "HOMOLOGENE"    : 1,
+                                                                    '_id'           : 0
+                                                                }
+                                                             )
+                  )
+
+        egid=[]
+        taxid=[]
+        symbol=[]
+        description=[]
+        homologene=[]
+        for elt in res:
+            egid.append(elt['EGID'])
+            taxid.append(elt['TAXID'])
+            symbol.append(elt['SYMBOL'])
+            description.append(elt['DESCRIPTION'])
+            homologene.append(elt['HOMOLOGENE'])
+
+        self.dataframe = self.dataframe.merge(
+                                                 pandas.DataFrame({
+                                                                    'EGID'        : egid,
+                                                                    'TAXID'       : taxid,
+                                                                    'SYMBOL'      : symbol,
+                                                                    'DESCRIPTION' : description,
+                                                                    'HOMOLOGENE'  : homologene
+                                                                 }),
+                                                 how='left',
+                                                 left_on='EGID',
+                                                 right_on='EGID',
+
+                                             ).fillna('-')
+    def write(self):
+
+        self.dataframe = self.dataframe[['BDID', 'EGID', 'TAXID', 'SYMBOL', 'DESCRIPTION', 'HOMOLOGENE']]
+        self.dataframe.to_csv(self.filepathListConvert, header=True, index=None, sep='\t', mode='w')
+
+
+    def get_conversion(self):
+        self.get_identifiers()
+        self.loopDatabase()
+        self.searchInfo()
+        self.write()
+
+        
+            
+
+    
+# def get_Convert(upload_path):
+
+#         """ajouter une exception pour collections qui sont des entiers naturels positifs"""
+
+#         print "enter get_convert"
+#         raw=[]
+#         entrez=[]
+#         homologene=[]
+#         gpl='GPL'
+
+#         for _list in lists:
+
+#             identifiers=_list.identifiers.split(' , ')
+#             newIdentifiers = []
+           
+#             for index in range(len(identifiers)):
+#                 if identifiers[index] == 'GPL':
+#                     newIdentifiers.append(_list.identifier_extended.split(',')[index])
+
+#                 else:
+#                     newIdentifiers.append(identifiers[index])
+
+#             print "newidentfiers : ",newIdentifiers
+#             #dico=[]
+#             #print _list.list.split(',')
+
+#             #list_identifiers = _list.list.split
+
+
+
+#             # t0 = time.time()
+#             # list(request.registry.db_mongo[identifiers[index]].find({'BDname' : {"$regex" : str(newIdentifiers[index])},'BDID':{"$in" : _list.list.split(',')}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+#             # print time.time() - t0, "seconds wall time"
+#             # result=[]
+#             # query=list(request.registry.db_mongo['BDname'].find({'BDname' : {"$regex" : str(newIdentifiers[index])},"BDID":{"$nin": _list.list.split(',')}}, {'GeneID' : 1 , '_id' :0}))
+#             # for i in query:
+#             #     result.append(i['GeneID'])
+#             # print str(len(result))
+
+            
+#             def search(collection, BDname, _list):
+
+#                 if collection == "GPL":
+#                     print BDname
+#                     res= list(request.registry.db_mongo[collection].find({'GPLname' : {"$regex" : str(BDname)},'BDID':{"$in":_list}}))#,{'Homologene':1, 'BDID' : 1, 'GeneName':1, 'GeneDescription':1,  'GeneID' : 1 ,'TaxID':1, '_id' :0}))
+
+#                 else:
+#                     res = list(request.registry.db_mongo[collection].find({'BDID':{"$in" :_list}},{'HomoloGene':1, 'BDID' : 1, 'GeneID' : 1 , '_id' :0}))
+                
+#                 not_found=[]
+#                 for elt in res:
+#                     not_found.append(elt['BDID'])
+#                 not_found=list(set(_list).symmetric_difference(set(not_found)))   
+#                 # newSearch=[]
+#                 # for elt in res:
+#                 #     #print elt
+#                 #     if elt['GeneID'] not in newSearch:
+#                 #         newSearch.append(elt['GeneID'])
+#                 # #print newSearch[:5]
+#                 # not_found=[]
+#                 # for item in _list:
+#                 #     if item not in newSearch:
+#                 #         not_found.append(str(item))
+#                 return res, not_found
+                
+#             res, not_found =search(identifiers[0], newIdentifiers[0],_list.list.split(','))
+#            # print not_found
+#             #return
+#             if len(identifiers) > 1:
+#                 for i in range(1,len(identifiers),1):
+#                     if not_found:
+#                         break
+#                     else:
+#                         _res, _not_found= search(identifiers[i], newIdentifiers[i], not_found)
+#                     for elt in _res:
+#                         res.append(elt)
+#                     not_found=_not_found
+#                # while next(identifiers) and not_found is :
+                    
+            
+#             with open(os.path.join(upload_path, str(_list.project_id), str(_list.lists_id), str(_list.lists_id))+".txt" , 'w') as output:
+#                 for elt in res:
+#                     output.write(str(elt['BDID']) + "\t" + str(elt['GeneID']) + "\t" + str(elt['Homologene']) + "\t" + str(elt['GeneName'])+ "\t" + str(elt['GeneDescription'])+ "\t" + str(elt['TaxID'])+"\n" )
+#                 for elt in not_found:
+#                     output.write(str(elt) + "\t" + "-" + "\t" + "-" +  "\t" + "-" + "\t" + "-" +"\t" + "-" +"\n")
 
 @view_config(route_name='submit', renderer='json', request_method='POST')
 def submit(request):
@@ -2680,7 +2971,7 @@ def submit(request):
 
     project_last_new_id={}
     list_last_new_id={}
-    user = form['uid'] #append JS dataUSER
+    user = form['uid']
 
     dt = datetime.datetime.utcnow()
     date = time.mktime(dt.timetuple())
@@ -2689,9 +2980,29 @@ def submit(request):
     projects_location={}
     lists_location={}
     strategies = []
-    lists= []
+    lists = []
 
-    filepath="" # create function to save excel_file from data
+    ####Create excel project
+    filename = uuid.uuid4().hex +".xlsx"
+    filepathExcel = os.path.join(request.registry.upload_path, user, "tmp", filename)
+
+    workbook = xlsxwriter.Workbook(filepathExcel, {'constant_memory': True})
+
+    project_worksheet = workbook.add_worksheet("Project")
+    for row in range(len(data_projects)):
+       for col in range(len(data_projects[row])):
+           project_worksheet.write(row, col, data_projects[row][col])
+
+    strategy_worksheet = workbook.add_worksheet("Strategy")
+    for row in range(len(data_strategies)):
+       for col in range(len(data_strategies[row])):
+           strategy_worksheet.write(row, col, data_strategies[row][col])
+
+    list_worksheet = workbook.add_worksheet("List")
+    for row in range(len(data_lists)):
+       for col in range(len(data_lists[row])):
+           list_worksheet.write(row, col, data_lists[row][col])
+    workbook.close()
 
     def is_not_empty(_list):
 
@@ -2736,7 +3047,7 @@ def submit(request):
                                         get_str(one_project_values[6]),
                                         get_str(one_project_values[7]),
                                         get_str(one_project_values[8]),
-                                        str(filepath),
+                                        str(filepathExcel),
                                         str(date),
                                         str(date),
                                         str(user),
@@ -2801,7 +3112,7 @@ def submit(request):
                                                 get_str(one_strategy_values[5]),
                                                 get_str(one_strategy_values[6]),
                                                 get_str(one_strategy_values[7]),
-                                                str(filepath),
+                                                str(filepathExcel),
                                                 str(date),
                                                 str(date),
                                                 str(user),
@@ -2909,8 +3220,8 @@ def submit(request):
                                     get_str(one_list_values[5]),
                                     get_str(one_list_values[6]),
                                     get_str(one_list_values[7]),
-                                    str(filename),
-                                    str(filepath),
+                                    str(filepathExcel),
+                                    str(""),
                                     str(date),
                                     str(date),
                                     str(user),
@@ -2921,30 +3232,119 @@ def submit(request):
 
                 lists.append(newList)
 
-    #try:
     def location_list():
         for index in range(len(lists)):
             lists_location[lists[index].list_id] = index
 
-    add_project(data_projects)
-    add_strategy(data_strategies)
-    add_list(data_lists)
-    location()
-    location_list()
+    try:
+        add_project(data_projects)
+        add_strategy(data_strategies)
 
-    replaceOldParentProjectIDByNEw()
-    replaceOldInputOuputIDByNEw() #for each strategy's input and ouput
+        add_list(data_lists)
+        location()
+        location_list()
+
+        replaceOldParentProjectIDByNEw()
+        replaceOldInputOuputIDByNEw() #for each strategy's input and ouput
 
 
-    myTree = Arbre(projects)
-    myTree.show()
-    addChildAndParentPathForProject()
+        myTree = Arbre(projects)
+        #myTree.show()
+        addChildAndParentPathForProject()
 
-    #pprint.pprint(projects_location)
-  
-    associateStrategyWithProject()
-    associateListWithStrategy()
-    
+        #pprint.pprint(projects_location)
+      
+        associateStrategyWithProject()
+        associateListWithStrategy()
+        
+
+        path = os.path.join(request.registry.upload_path, user, 'dashboard')
+
+        dirname= "-".join(sorted(list(project_last_new_id.values())))
+        if not os.path.isdir(os.path.join(path, dirname)):
+            os.makedirs(os.path.join(path, dirname))
+            os.makedirs(os.path.join(path, dirname, 'raw'))
+            os.makedirs(os.path.join(path, dirname, 'convert'))
+
+        #new path for teh excel file in the dashboard directory
+        newpathExcel = os.path.join(path, dirname, 'raw', 'ExcelProject_'+filename)
+
+        os.rename(filepathExcel,newpathExcel)
+
+
+        # rename filepathList and FilepatListConvert 
+        # move file pathList to dashboard
+        
+        for key in objectFiles.keys(): 
+
+            old_filepath=objectFiles[key]['filepath']
+            new_filepath=os.path.join(path, dirname, 'raw',objectFiles[key]['identifiant']+ "_" + str(lists[lists_location[list_last_new_id[objectFiles[key]['identifiant']]]].list_id)+ "_" + old_filepath.rsplit('/',1)[1])
+            lists[lists_location[list_last_new_id[objectFiles[key]['identifiant']]]].filepathList = new_filepath
+            lists[lists_location[list_last_new_id[objectFiles[key]['identifiant']]]].filepathListConvert = os.path.join(path, dirname, 'convert', objectFiles[key]['identifiant']+"_"+str(lists[lists_location[list_last_new_id[objectFiles[key]['identifiant']]]].list_id)+ "_Convert_"  + old_filepath.rsplit('/',1)[1])
+            os.rename(old_filepath,new_filepath)
+
+        # rename filepath Excel + for list we convert
+        for project in projects:
+            project.filepathExcel=newpathExcel
+
+        for strategy in strategies:
+            strategy.filepathExcel=newpathExcel
+
+        for _list in lists:
+            _list.filepathExcel=newpathExcel
+            ConvertToEntrezGene(_list,request.registry.db_mongo)
+            #new_filepathExcel
+        
+        
+        ###Add to database 
+        ###for better performance include this to previous loop (at the end of the loop)
+        for project in projects:
+            request.registry.db_mongo['projects'].insert(project.get_dico())
+
+
+        for strategy in strategies:
+            request.registry.db_mongo['strategies'].insert(strategy.get_dico())
+
+
+        for _list in lists:
+            request.registry.db_mongo['lists'].insert(_list.get_dico())
+        
+
+    except:
+        return {'message' : 'An error has occured'}
+
+    # upload_path = os.path.join(request.registry.upload_path, user, 'dashboard')
+    # for project in projects:
+    #     request.registry.db_mongo['projects'].insert(project.get_dico())
+    #         #v=os.path.join(upload_path, project.project_id)
+    #         #print str(v)
+    #     if not os.path.exists(os.path.join(upload_path, project.project_id)):
+
+    #         os.makedirs(os.path.join(upload_path, project.project_id))
+    #         print "create project directory"
+
+    # for study in studies:
+    #     request.registry.db_mongo['studies'].insert(study.get_dico())
+
+    # for strategy in strategies:
+    #     request.registry.db_mongo['strategies'].insert(strategy.get_dico())
+
+    # for _list in lists:
+    #     request.registry.db_mongo['lists'].insert(_list.get_dico())
+    #         #v=os.path.join(upload_path, project.project_id,_list.lists_id)
+    #         #print str(v)
+    #     if not os.path.exists(os.path.join(upload_path, _list.project_id,_list.lists_id)):
+    #         os.makedirs(os.path.join(upload_path, _list.project_id, _list.lists_id))
+    #         #os.rename(os.path.join(upload_path, _list.lists_id, name_file))
+    #         #v = get_str(os.path.join(upload_path, _list.project_id, _list.lists_id)) #, namefile))
+    #         #print v
+    #         #_list.file_path= get_str(os.path.join(upload_path, _list.project_id, _list.lists_id, namefile))
+    #         #pprint.pprint(request.registry.db_mongo['lists'].find_one({'project_id' : 'GPR0'}))
+    # print "try"
+    # #t0 = time.time()
+    # get_Convert(upload_path)
+    # #print time.time() - t0, "seconds wall time"
+    # return {'msg':"File checked and uploded !", 'status':'0'}
     # print "##########################################################"
     # print "Project"
     # print "##########################################################"

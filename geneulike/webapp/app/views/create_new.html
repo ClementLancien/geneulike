@@ -141,14 +141,23 @@ hr {
 
       <div class="row">
 
-        <div class="col-xs-6">
+        <div class="col-xs-3">
             <div class="btn btn-success fileinput-button" ngf-select="signature_upload($file)" ngf-multiple="false" ng-click="newData()" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
               <i class="glyphicon glyphicon-plus"></i>
               <span>Load New File</span>
             </div>
         </div>
 
-        <div class="col-xs-6">
+        <div class="col-xs-6 text-center">
+          
+            <a ng-click="download()" class="btn">
+                        <span class="glyphicon glyphicon-export"></span>Save and Export</a>
+          
+
+<!--               <button ng-click="download()"><i class ="glyphicon glyphicon-export"></i>Save and Export</button>
+ -->    </div>
+        
+        <div class="col-xs-3">
           <div class="btn btn-primary btn pull-right" ng-click="checkData()" >
             <i class="glyphicon glyphicon-refresh"></i>
             <span>Check Data</span>
@@ -156,13 +165,9 @@ hr {
         </div>
 
       </div>
-      <div class="row">
-      <div class="col-xs-6">
-            <a  ng-click="download()"><i class ="fa fa-file-excel-o"></i>Coucou</a>
-            {{pathFile}}
-        </div>
-      </div>
+      
       <br>
+
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#project" target="_self" ng-click="showProjects()">Projects ({{projects_number}})</a></li>
           <li><a data-toggle="tab" href="#strategy"  target="_self" ng-click="showStrategies()">Strategies ({{strategies_number}})</a></li>
