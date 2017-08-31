@@ -1903,7 +1903,6 @@ app.controller('userInfoCtrl',
  
         User.get({'uid': $routeParams['id']}).$promise.then(function(data){
             $scope.user = data;
-            console.log($scope.user)
             $scope.joined=data['joined'].substr(0,10);
 
             
@@ -3065,9 +3064,102 @@ app.controller('createCtrl',
                 });
             };
 
+
             $scope.submit = function() {
-                //console.log($scope.objectFiles)
+                //https://nakupanda.github.io/bootstrap3-dialog/
+
+        //         $scope.dialog = new BootstrapDialog({
+        //     message: function(dialogRef){
+        //         var $message = $('<div>OK, this dialog has no header and footer, but you can close the dialog using this button: </div>');
+        //         var $button = $('<button class="btn btn-primary btn-lg btn-block">Close the dialog</button>');
+        //         $button.on('click', {dialogRef: dialogRef}, function(event){
+        //             event.data.dialogRef.close();
+        //         });
+        //         $message.append($button);
+        
+        //         return $message;
+        //     },
+        //     closable: false
+        // });
+        // $scope.realize();
+        // $scope.getModalHeader().hide();
+        // $scope.getModalFooter().hide();
+        // $scope.getModalBody().css('background-color', '#0088cc');
+        // $scope.getModalBody().css('color', '#fff');
+        // dialog.open();
+
+                $scope.$textAndPic = $('<div></div>');
+                $scope.$textAndPic.append('Please wait during the upload of your project<br />');
+        
+                $scope.dlg =   new BootstrapDialog({
+                                title: 'Information',
+                                message: $scope.$textAndPic,
+                                buttons: [{
+                                    label: 'close',
+                                    action: function(dialogRef){
+                                        dialogRef.close();
+                                    }
+                                }]
+                            });
+                $scope.dlg.realize();
+                //$scope.dlg.getModalHeader().hide();
+                $scope.dlg.getModalHeader().css('background-color', '#cccccc');
+                $scope.dlg.open()
+
+                // BootstrapDialog.show({
+                //     title: 'Information',
+                //     message: $textAndPic,
+                //     buttons: [{
+                //         label: 'close',
+                //         action: function(dialogRef){
+                //             dialogRef.close();
+                //         }
+                //     }]
+                // });
+
+                // var dlg = new BootstrapDialog({
+
+                //     title: ' Notification',
+                //     message: $('<div>!!!!Please wait during the upload of your project</div><div class="containesdots"><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span><span class="dots"></span></div>'),
+                //     //message: $('');
+
+                // })
+
+                // dlg.open();
                 Dataset.submit({},{'data_projects' : data_projects, 'data_strategies' : data_strategies, 'data_lists' : data_lists, "objectFiles" : $scope.objectFiles, "uid" : $scope.user.id }).$promise.then(function(data){
+                    
+                    $scope.dlg.close();
+
+                    var color;
+                    if (data['status'] == 'Danger'){
+                        color= '#e6323d'
+                    }
+                    else{
+                        color= '#3fac54'
+                    }
+                    
+
+                    $scope.$textAndPic = $('<div></div>');
+                    $scope.$textAndPic.append(data['message'] + '<br />');
+                    $scope.$textAndPic.append('You are going to be relocated in 5 seconds');
+                    $scope.dlg =   new BootstrapDialog({
+                                title: data['status'],
+                                message: $scope.$textAndPic,
+                                buttons: [{
+                                    label: 'close',
+                                    action: function(dialogRef){
+                                        dialogRef.close();
+                                    }
+                                }]
+                            });
+                    $scope.dlg.realize();
+                    $scope.dlg.getModalHeader().css('background-color', color);
+                    $scope.dlg.open()
+
+                    $timeout(function(){ 
+                          $scope.dlg.close();
+                          $location.path('/user/'+$scope.user.id+'/myproject'); 
+                          },5000);
                 });
             };
 

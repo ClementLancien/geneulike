@@ -2188,6 +2188,212 @@ def canSubmit(request):
     return {'canSubmit' : True}
 
 
+class Ontology():
+    """ use to get all paernt and synonyms from a string of ontology
+    
+        Example : "CHEBI:phosphatoquinone A;NCBITAXON:Rattus,Rattus Novergicus;"
+            
+    """
+
+
+    def __init__(self, ontology): #string ontology can be project, strategy or list
+        self.ontology = ontology
+        self.dictOntology = self.stringToDict()
+        self.REST_URL = "http://data.bioontology.org"
+        self.API_KEY = "27f3a22f-92f8-4587-a884-e81953e113e6"
+
+        
+
+    def stringToDict(self):
+        
+        if self.ontology == "":
+            return {}
+
+        dico={}
+        for item in self.ontology.split(";")[:-1]:
+            dico[item.split(":")[0]]=item.split(":")[1].split(',')
+
+        return dico
+
+    def get_json(self, url):
+        
+        try:
+
+            opener = urllib2.build_opener()
+            opener.addheaders = [('Authorization', 'apikey token=' + self.API_KEY)]
+            return json.loads(opener.open(url).read())
+        except:
+            print "Exception at the line : {}".format(sys.exc_info()[-1].tb_lineno)
+            print sys.exc_info()
+
+    
+
+    def get_Ontology(self):
+        """From label get synonym and parent"""
+        syn = ""
+        lab = ""
+        try:
+            preflabel= self.stringToDict()
+            for key, value in preflabel.items():
+                syn += key + ":"
+                lab += key +":"
+                for val in value: #val is preflabel
+                    obj = self.get_Object(val, self.get_json(self.REST_URL + "/search?q=" + val.replace(" ","+")+'&ontologies=' + key)['collection'])
+                    synonyme, label = self.get_Parent(obj)
+                    syn += "/".join(synonyme) + ";"
+                    lab += "/".join(label) + ";"
+            return syn[:-1], lab[:-1]
+
+        except:
+            print "Exception at the line : {}".format(sys.exc_info()[-1].tb_lineno)
+            print sys.exc_info()
+
+    def get_Object(self, preflabel, dictionnary): # dictionnary contains all result from our match
+        """ retrieve our object which match our preflabel """
+
+        try:
+            for obj in  dictionnary:
+                if obj['prefLabel'] == preflabel:
+                    return obj
+        except:
+            print "Exception at the line : {}".format(sys.exc_info()[-1].tb_lineno)
+            print sys.exc_info()
+
+
+
+
+    def get_Parent(self, obj):
+        # getParent : get all parents labels and synonyms for a selected term
+        # obj : selected object from NCBO API
+        # WARNING: works only from child to parent (one paent by child)
+        # RETURN label : list of all label and synonyms (including selected term label & synonym)
+        try:
+            url = obj["links"]['parents']
+            label = []
+            synonym=[]
+            label.append(obj["prefLabel"])
+            if "synonym" in obj.keys():
+                obj['synonym'] != []
+
+                if obj['synonym'] != []:
+                    t0 = time.time()
+                    syno=""
+                    for syn in obj['synonym']:
+                        syno+= syn + ','
+
+                    synonym.append(syno[:-1])
+                    
+                
+                else:
+                    synonym.append('-')
+            else:
+
+                synonym.append('-')
+
+
+            page = self.get_json(url)
+
+            while page != []:
+
+                for result in page :
+
+                    label.append(result['prefLabel'])
+                    if "synonym" in obj.keys():
+
+                        if obj['synonym'] != []:
+                            syno=""
+                            for syn in obj['synonym']:
+                                syno+= syn + ','
+
+                            synonym.append(syno[:-1])
+                        
+                        else:
+                            synonym.append('-')
+                    else:
+                        synonym.append('-')
+                    url = result["links"]['parents']
+                    page = self.get_json(url)
+
+            return synonym,label
+
+        except:
+            print "Exception at the line : {}".format(sys.exc_info()[-1].tb_lineno)
+            print sys.exc_info()
+
+
+# def getParent(obj):
+#         # getParent : get all parents labels and synonyms for a selected term
+#         # obj : selected object from NCBO API
+#         # WARNING: works only from child to parent (one paent by child)
+#         # RETURN label : list of all label and synonyms (including selected term label & synonym)
+#         url = obj["links"]['parents']
+#         label = []
+#         label.append(obj["prefLabel"])
+#         if obj['synonym'] != []:
+#                     label.extend(obj['synonym'])
+#         page = get_json(url)
+#         while page != []:
+#             for result in page :
+#                 label.append(result['prefLabel'])
+#                 if result['synonym'] != []:
+#                     label.extend(result['synonym'])
+#                 url = result["links"]['parents']
+#                 page = get_json(url)
+#         return label
+
+#     def get_json(url):
+#         opener = urllib2.build_opener()
+#         opener.addheaders = [('Authorization', 'apikey token=' + API_KEY)]
+#         return json.loads(opener.open(url).read())
+
+#     def stringToDict(string):
+#         if string == "":
+#             return {}
+
+#         dico={}
+#         for item in string.split(";")[:-1]:
+#             dico[item.split(":")[0]]=item.split(":")[1].split(',')
+
+#         return dico
+
+#     def dictToString(dico):
+
+#         if not bool(dico): #if dico is empty
+#             return ""
+
+#         newString="" 
+
+#         for key, value in dico.items():
+#             newString += str(key) + ":" + ",".join(value) +";"
+#         return newString
+
+# #######################################################################################################################
+
+
+#     REST_URL = "http://data.bioontology.org"
+#     API_KEY = "27f3a22f-92f8-4587-a884-e81953e113e6"
+#     form = json.loads(request.body, encoding=request.charset)
+
+#     if 'label' in form:
+#         print 'here labellllll'
+#         #print getParent(form['label'])
+
+#     elif 'stringToDict' in form:
+#         return [stringToDict(form['string'])]
+
+#     elif 'dictToString' in form:
+#         return [dictToString(form['dico'])]
+        
+#     else:
+#         term = form['search'].replace(' ','+') #%20
+#         database = form['database']
+#         search_results = []
+#         search_results.append(get_json(REST_URL + "/search?q=" + term+'&ontologies=' + database)['collection'])
+
+#         return search_results
+
+
+
 class Project:
 
     compteur_project=0
@@ -2244,6 +2450,8 @@ class Project:
 
     def get_dico(self):
 
+        syn, lab = Ontology(self.ontologies).get_Ontology()
+
         return {
                     'project_id'            :   self.project_id,
                     'parent_project_id'     :   self.parent_project_id,
@@ -2254,6 +2462,8 @@ class Project:
                     'title'                 :   self.title,
                     'description'           :   self.description,
                     'ontologies'            :   self.ontologies,
+                    'ontologiesSynonym'     :   syn,
+                    'ontologiesLabel'       :   lab,
                     'crosslink'             :   self.crosslink,
                     'add_info'              :   self.add_info,
                     'pubmed_id'             :   self.pubmed_id,
@@ -2265,6 +2475,12 @@ class Project:
                     'identifiant'           :   self.identifiant,
                     'tags'                  :   self.tags
         }
+
+    
+
+
+
+
 
 
 class Strategy:
@@ -2320,6 +2536,8 @@ class Strategy:
 
     def get_dico(self):
 
+        syn, lab = Ontology(self.ontologies).get_Ontology()
+
         return {
                     'strategy_id'             :   self.strategy_id,
                     'associated_project_id'   :   self.associated_project_id,
@@ -2329,6 +2547,8 @@ class Strategy:
                     'title'                   :   self.title,
                     'material_and_method'     :   self.material_and_method,
                     'ontologies'              :   self.ontologies,
+                    'ontologiesSynonym'       :   syn,
+                    'ontologiesLabel'         :   lab,
                     'add_info'                :   self.add_info,
                     'filepathExcel'           :   self.filepathExcel,
                     'status'                  :   self.status,
@@ -2402,12 +2622,16 @@ class List:
 
     def get_dico(self):
 
+        syn, lab = Ontology(self.ontologies).get_Ontology()
+
         return {
                         'list_id'                     :       self.list_id,
                         'title'                       :       self.title,
                         'description'                 :       ";".join(self.description),
                         'results_and_interpretation'  :       ";".join(self.results_and_interpretation),
                         'ontologies'                  :       self.ontologies,
+                        'ontologiesSynonym'           :       syn,
+                        'ontologiesLabel'             :       lab,
                         'database'                    :       self.database,
                         'add_info'                    :       self.add_info,
                         'make_it_available'           :       self.make_it_available,
@@ -3309,9 +3533,9 @@ def submit(request):
         for _list in lists:
             request.registry.db_mongo['lists'].insert(_list.get_dico())
         
-
+        return {'message' : 'Your project has been saved !', 'status':'Success'}
     except:
-        return {'message' : 'An error has occured'}
+        return {'message' : 'An error has occured', 'status':'Danger'}
 
     # upload_path = os.path.join(request.registry.upload_path, user, 'dashboard')
     # for project in projects:
